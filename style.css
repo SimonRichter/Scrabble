@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+
+*, *:before, *:after {
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+
+body {
+  margin: 10px;
+  font-family: 'Oswald', sans-serif;
+}
+
+.board {
+  border: 10px solid #245a4c;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.board > div {
+  border: 1px solid #dbfff8;
+  width: 6.2vh;
+  height: 6.2vh;
+  background-color: #54aa79;
+  float: left;
+}
+
+.board > div:nth-child(15n+1){
+  clear: both;
+}
+
+.board > div::after {
+  display:block;
+  text-align: center;
+}
+
+.players {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.stand {
+  background-color: rgb(94, 34, 34);
+  padding: 10px;
+  width: 53vh;
+}
+
+.stand::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.stand .tile {
+  cursor: pointer;
+}
+
+.tile {
+  z-index: 1;
+  position: relative;
+  text-align:center;
+  width: 5.6vh;
+  height: 5.6vh;
+  float: left;
+  background-color: #fff; 
+  border: 1px solid #000;
+  border-radius: 3px;
+  margin: 0 2px;
+  font-size: 3.5vh;
+}
+
+.board .tile {
+  position: absolute;
+  margin: 1px;
+}
+
+.tile span {
+  position: absolute;
+  font-size: 1.5vh;
+  right: 3px;
+  bottom: 3px;
+}
+
+.tile.none {
+  border: 0;
+  background-color: transparent;
+}
+
+.pname {
+  margin-bottom: 20px;
+}
