@@ -1,11 +1,9 @@
 // When a tile is placed on the board,
 // the tile object for that tile is copied into this array
 // The tile object should contain information on where
-// on the board it has been placed
+// on the board it has been placed, for example with the
+// field boardIndex in the tile object
 let putTiles = [];
-// We then need the array/matrix with the tiles of the board in correct order
-// (index of 0 is the top left tile, index 225 is the bottom right tile)
-let board = [];
 function checkXYAxis() {
   // First we hopefully sort the putTiles array so that the tile with
   // the lowest index number on the board is first and the tile
@@ -20,6 +18,11 @@ function checkXYAxis() {
       putTiles[0].boardIndex === putTiles[1].boardIndex - 1
     ) {
       return true;
+    } else {
+      alert(
+        "You did not put down your tiles next to eachother. Please try again."
+      );
+      return false;
     }
   }
   // Case if the word is horizontally placed on the board
