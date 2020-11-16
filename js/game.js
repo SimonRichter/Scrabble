@@ -5,7 +5,9 @@ import Bag from "./Bag.js";
 
 export default class Game {
   async start() {
-    this.createBoard();
+    new Board().render();
+    //this.createBoard(); MAURO: COMMENETED OUT THOMAS CODE.
+
     await this.tilesFromFile();
     // console.table is a nice way
     // to log arrays and objects
@@ -15,28 +17,12 @@ export default class Game {
     this.players = [new Player(this, "Player 1"), new Player(this, "Player 2")];
     console.table(this.players);
     // render the board + players
+    //this.render();   MAURO: COMMENETED OUT THOMAS CODE.
     this.render();
   }
 
-  createBoard() {
-    // note: the real board has a lot of special squares
-    // and is symmetrical - maybe we could generate it from a file
-    // with data about the squares?
+  //MAURO :  DELETED THOMAS FUNCTION.
 
-    // but for now just make an two-dimensional array
-    // with the same object values for each item
-    this.board = [...new Array(15)].map((x) =>
-      new Array(15).fill({
-        specialValue: "2w", // might be 3w or 2l or 3l or center as well
-        // (2w = 2x word points, 2l = 2 x letters etc)
-        // you need different values for diffrent squares
-        // - not implemented yet ;)
-        tile: undefined, // replace with a tile object when it is
-        // is dragged to the square
-        // - not implemented yet ;)
-      })
-    );
-  }
 
   async tilesFromFile() {
     this.bag = new Bag();
@@ -66,13 +52,11 @@ export default class Game {
 
   render() {
     // Create the board and players divs
-    $(".board, .players").remove();
-    let $board = $('<div class="board"/>').appendTo("body");
+    $(".players").remove();
     let $players = $('<div class="players"/>').appendTo("body");
     // Render the board
     // (will be more code when we know how to represent
     //  the special squares)
-    this.board.flat().forEach((x) => $board.append("<div/>"));
     // Render the players
     this.players.forEach((player) => $players.append(player.render()));
     this.addDragEvents();
