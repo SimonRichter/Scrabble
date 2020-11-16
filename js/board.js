@@ -21,7 +21,7 @@ export default class Board {
     if (putTilesThisRound.length === 2) {
       if (
         putTilesThisRound[0].boardIndex ===
-          putTilesThisRound[1].boardIndex - 15 ||
+        putTilesThisRound[1].boardIndex - 15 ||
         putTilesThisRound[0].boardIndex === putTilesThisRound[1].boardIndex - 1
       ) {
         return true;
@@ -32,7 +32,7 @@ export default class Board {
         return false;
       }
     }
-    // Case if the word is horizontally placed on the board
+    // Case if the word is vertically placed on the board
     // First we check if the second letter is below the first one
     else if (
       putTilesThisRound[0].boardIndex ===
@@ -69,7 +69,7 @@ export default class Board {
         }
       }
     }
-    // Case if the word is vertically placed on the board
+    // Case if the word is horizontally placed on the board
     // First we check if the second letter is to the right of the first one
     else if (
       putTilesThisRound[0].boardIndex ===
