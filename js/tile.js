@@ -1,10 +1,10 @@
 export default class Tile {
-  constructor(specialCharacter, boardIndex) {
-    this.specialCharacter = specialCharacter;
-    let hasBeenPlaced = false;
-    let whichPlayerPlacedMe;
-    let letter = "__";
-    let points = 0;
-    this.boardIndex = boardIndex;
+  constructor(char, points) {
+    this.specialSquare;
+    this.hasBeenPlaced = false;
+    this.whichPlayerPlacedMe;
+    this.char = char;
+    this.points = points;
+    this.boardIndex;
   }
 }
