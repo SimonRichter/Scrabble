@@ -91,3 +91,23 @@ body {
 .pname {
   margin-bottom: 20px;
 }
+
+
+.btn {
+
+  border: none;
+  background-color: inherit;
+  padding: 14px 28px;
+  font-size: 17px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.skip {
+  color: rgb(105, 36, 36);
+}
+
+.skip:hover {
+  background: #5f1717;
+  color: white;
+}
