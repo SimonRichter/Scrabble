@@ -6,12 +6,12 @@ import Bag from "./Bag.js";
 export default class Game {
   async start() {
     new Board().render();
+
     //this.createBoard(); MAURO: COMMENETED OUT THOMAS CODE.
 
     await this.tilesFromFile();
     // console.table is a nice way
     // to log arrays and objects
-    console.log(this.board);
     console.table(this.tiles);
     // create players
     this.players = [new Player(this, "Player 1"), new Player(this, "Player 2")];
