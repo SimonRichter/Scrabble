@@ -116,3 +116,19 @@ body {
   background: #5f1717;
   color: white;
 }
+
+.TW{
+  background-color: rgb(255, 166, 0);
+}
+.DW{
+  background-color: rgb(197, 32, 32);
+}
+.DL{
+  background-color: rgb(25, 156, 231);
+}
+.TL{
+  background-color: rgb(109, 206, 70);
+}
+.CS{
+  background-color: rgb(195, 0, 255);
+}
