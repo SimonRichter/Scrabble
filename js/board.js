@@ -16,12 +16,12 @@ export default class Board {
     // with the highest index number on the board is last
     // This is to make sure the function is "reading" the word
     // correctly no matter what order the player puts down the tiles
-    putTilesThisRound.sort((a, b) => a.boardIndex - b.boardIndex);
+    putTilesThisRound.sort((a, b) => (a.boardIndex > b.boardIndex ? 1 : -1));
     // Case if the word is two letters long:
     if (putTilesThisRound.length === 2) {
       if (
         putTilesThisRound[0].boardIndex ===
-        putTilesThisRound[1].boardIndex - 15 ||
+          putTilesThisRound[1].boardIndex - 15 ||
         putTilesThisRound[0].boardIndex === putTilesThisRound[1].boardIndex - 1
       ) {
         return true;
