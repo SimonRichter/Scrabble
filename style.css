@@ -10,20 +10,25 @@
 body {
   margin: 10px;
   font-family: 'Oswald', sans-serif;
+  background-color: rgb(133, 101, 72);
+
 }
 
 .board {
-  border: 10px solid #245a4c;
-  border-radius: 3px;
+  border: 5px solid #000000;
+  border-radius: 5px;
   display: inline-block;
+  background-color: rgb(176, 194, 218);
 }
 
 .board > div {
-  border: 1px solid #dbfff8;
+   border: 1px solid #000000;
   width: 6.2vh;
   height: 6.2vh;
-  background-color: #54aa79;
   float: left;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 5px;
 }
 
 .board > div:nth-child(15n+1){

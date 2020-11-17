@@ -2,7 +2,7 @@ export default class Player {
   constructor(game, name) {
     this.game = game;
     this.name = name;
-    let score = 0;
+    this.score = 0;
     this.tiles = [...this.game.getTiles(), " "];
   }
 
