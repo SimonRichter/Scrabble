@@ -112,7 +112,9 @@ export default class Board {
           }' id='cell${x.index}'>
           ${
             x.tile
-              ? `<div class="tile" data-index='${x.index}'>${x.tile.char}</div>`
+              ? `<div class="tile" data-index='${x.index}'>${
+                  x.tile.char
+                } <span>${x.tile.points || ""}</span></div>`
               : `${x.specialS ? x.specialS : ""}`
           }
         </div>
