@@ -5,9 +5,9 @@ import Bag from "./Bag.js";
 
 export default class Game {
   async start() {
-    new Board().render();
-
-    //this.createBoard(); MAURO: COMMENETED OUT THOMAS CODE.
+    this.board = new Board();
+    this.board.createBoard();
+    this.playerTurn = 0;
 
     await this.tilesFromFile();
     // console.table is a nice way
@@ -17,12 +17,9 @@ export default class Game {
     this.players = [new Player(this, "Player 1"), new Player(this, "Player 2")];
     console.table(this.players);
     // render the board + players
-    //this.render();   MAURO: COMMENETED OUT THOMAS CODE.
-    this.render();
+    this.board.render();
+    this.gameLoop();
   }
-
-  //MAURO :  DELETED THOMAS FUNCTION.
-
 
   async tilesFromFile() {
     this.bag = new Bag();
@@ -50,7 +47,7 @@ export default class Game {
     return this.bag.tiles.splice(0, howMany);
   }
 
-  render() {
+  gameLoop() {
     // Create the board and players divs
     $(".players").remove();
     let $players = $('<div class="players"/>').appendTo("body");
@@ -58,7 +55,7 @@ export default class Game {
     // (will be more code when we know how to represent
     //  the special squares)
     // Render the players
-    this.players.forEach((player) => $players.append(player.render()));
+    $players.append(this.players[this.playerTurn].render());
     this.addDragEvents();
   }
 
@@ -69,7 +66,7 @@ export default class Game {
       .not(".none")
       .draggabilly({ containment: "body" })
       .on("dragStart", function () {
-        // set a high z-index so that the tile being drag
+        // set a high z-index so that the tile being dragged
         // is on top of everything
         $(this).css({ zIndex: 100 });
       })
@@ -83,14 +80,14 @@ export default class Game {
       })
       .on("dragEnd", function (e, pointer) {
         let { pageX, pageY } = pointer;
-        let me = $(this);
+        let me = $(e.currentTarget);
 
         // reset the z-index
         me.css({ zIndex: "" });
 
-        let player = that.players[+me.attr("data-player")];
-        let tileIndex = +me.attr("data-tile");
-        let tile = player.tiles[tileIndex];
+        let player = that.players[this.playerTurn];
+        let tileIndex = +me.attr("data-index");
+        let tile = this.bag.tiles[tileIndex];
 
         // we will need code that reacts
         // if you have moved a tile to a square on the board
@@ -118,10 +115,7 @@ export default class Game {
             );
           }
         }
-        that.render();
+        that.gameLoop();
       });
   }
-
-
-
 }

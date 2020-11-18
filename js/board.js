@@ -8,66 +8,107 @@ export default class Board {
     // on the board it has been placed, for example with the
     // field boardIndex in the tile object
     this.putTilesThisRound = [];
-  }
 
-
-
-  render() {
-    // All the indexes of Special Squares (pain in the a**)
-    let specialSquares = {
+    this.specialSquares = {
       // Triple Word pts
-      0: 'TW', 7: 'TW', 14: 'TW', 105: 'TW', 119: 'TW', 210: 'TW', 217: 'TW', 224: 'TW',
+      0: "TW",
+      7: "TW",
+      14: "TW",
+      105: "TW",
+      119: "TW",
+      210: "TW",
+      217: "TW",
+      224: "TW",
       // Triple letter pts
-      20: 'TL', 24: 'TL', 76: 'TL', 80: 'TL', 84: 'TL', 88: 'TL', 136: 'TL', 140: 'TL',
-      144: 'TL', 148: 'TL', 200: 'TL', 204: 'TL',
+      20: "TL",
+      24: "TL",
+      76: "TL",
+      80: "TL",
+      84: "TL",
+      88: "TL",
+      136: "TL",
+      140: "TL",
+      144: "TL",
+      148: "TL",
+      200: "TL",
+      204: "TL",
       //Double Word pts
-      16: 'DW', 32: 'DW', 48: 'DW', 64: 'DW', 64: 'DW', 196: 'DW', 182: 'DW', 168: 'DW',
-      154: 'DW', 28: 'DW', 42: 'DW', 56: 'DW', 70: 'DW', 160: 'DW', 176: 'DW', 192: 'DW', 208: 'DW',
+      16: "DW",
+      32: "DW",
+      48: "DW",
+      64: "DW",
+      64: "DW",
+      196: "DW",
+      182: "DW",
+      168: "DW",
+      154: "DW",
+      28: "DW",
+      42: "DW",
+      56: "DW",
+      70: "DW",
+      160: "DW",
+      176: "DW",
+      192: "DW",
+      208: "DW",
 
       //Double letter pts
-      3: 'DL', 36: 'DL', 45: 'DL', 52: 'DL', 92: 'DL', 96: 'DL', 108: 'DL', 11: 'DL', 38: 'DL',
-      59: 'DL', 98: 'DL', 102: 'DL', 122: 'DL', 126: 'DL', 128: 'DL', 165: 'DL', 172: 'DL',
-      179: 'DL', 186: 'DL', 188: 'DL', 213: 'DL', 221: 'DL', 116: 'DL', 132: 'DL',
+      3: "DL",
+      36: "DL",
+      45: "DL",
+      52: "DL",
+      92: "DL",
+      96: "DL",
+      108: "DL",
+      11: "DL",
+      38: "DL",
+      59: "DL",
+      98: "DL",
+      102: "DL",
+      122: "DL",
+      126: "DL",
+      128: "DL",
+      165: "DL",
+      172: "DL",
+      179: "DL",
+      186: "DL",
+      188: "DL",
+      213: "DL",
+      221: "DL",
+      116: "DL",
+      132: "DL",
 
-      112: 'CS' // Middle of the board
-    }
-
-    let createBoard = () => {
-      this.board = [...new Array(15)].map(x => [...new Array(15)].fill({}));
-
+      112: "CS", // Middle of the board
     };
+  }
+  createBoard() {
+    this.board = [...new Array(15)].map((x) =>
+      [...new Array(15)].map((x) => ({}))
+    );
+  }
 
-    //createBoard now inside render().
-    // It create the matrix and the html code to DOM at once.
-    createBoard();
-
+  render() {
     let board_container = $('<div class="board"/>').appendTo("body");
-    let buildBoard = () => {
-      let bs = 15;
-      let squareIdx = 0; // counter that will go from 0 -224
-      for (let i = 0; i < bs; i++) {
-        if ($(board_container).html()) {
-          //html will replace any element (similar to .text)
-          $(board_container).html($(board_container).html());
+    let bs = 15;
+    let squareIdx = 0; // counter that will go from 0 - 224
+    for (let i = 0; i < bs; i++) {
+      for (let j = 0; j < bs; j++) {
+        let specialS = this.specialSquares[squareIdx];
+        if (specialS) {
+          $(board_container).append(
+            `<div id='cell${squareIdx}' class='${specialS}' data-index='${squareIdx}'>${specialS}</div>`
+          ); // Appened ID to cells and CSS class
+          this.board[i][j].specialS = specialS; // added special square to exact position(x,y)
+          this.board[i][j].index = squareIdx;
+        } else {
+          this.board[i][j].index = squareIdx;
+          $(board_container).append(
+            `<div id='cell${squareIdx}' data-index='${squareIdx}'></div>`
+          ); // we will use the ID of the cell later to identfy and select the square
         }
-        for (let j = 0; j < bs; j++) {
-          let specialS = specialSquares[squareIdx];
-          if (specialS) {
-            $(board_container).append(
-              `<div id='cell${squareIdx}' class='${specialS}'>${specialS}</div>`
-            ); // Appened ID to cells and CSS class
-            this.board[i][j] = specialS;// added special square to exact position(x,y)
-          } else {
-            $(board_container).append(`<div id='cell${squareIdx}'></div>`); // we will use the ID of the cell later to identfy and select the square
-          }
-          squareIdx++;
-        }
+        squareIdx++;
       }
-    };
-
-    buildBoard();
+    }
     console.log(this.board); // it shows the matrix on the Console
-
   }
 
   checkXYAxis() {
@@ -100,7 +141,7 @@ export default class Board {
     if (this.putTilesThisRound.length === 2) {
       if (
         this.putTilesThisRound[0].boardIndex ===
-        this.putTilesThisRound[1].boardIndex - 15 ||
+          this.putTilesThisRound[1].boardIndex - 15 ||
         (this.putTilesThisRound[0].boardIndex ===
           this.putTilesThisRound[1].boardIndex - 1 &&
           !firstIndexInRow.includes(this.putTilesThisRound[1].boardIndex))
@@ -154,7 +195,7 @@ export default class Board {
     // First we check if the second letter is to the right of the first one
     else if (
       this.putTilesThisRound[0].boardIndex ===
-      this.putTilesThisRound[1].boardIndex - 1 &&
+        this.putTilesThisRound[1].boardIndex - 1 &&
       !firstIndexInRow.includes(this.putTilesThisRound[1].boardIndex)
     ) {
       for (let i = 0; i < this.putTilesThisRound.length - 1; i++) {
@@ -162,7 +203,7 @@ export default class Board {
         if (i < this.putTilesThisRound.length - 2) {
           if (
             this.putTilesThisRound[i].boardIndex ===
-            this.putTilesThisRound[i + 1].boardIndex - 1 &&
+              this.putTilesThisRound[i + 1].boardIndex - 1 &&
             !firstIndexInRow.includes(this.putTilesThisRound[i + 1].boardIndex)
           ) {
             // It's a match so we move on to the next letter
@@ -177,7 +218,7 @@ export default class Board {
         } else {
           if (
             this.putTilesThisRound[i].boardIndex ===
-            this.putTilesThisRound[i + 1].boardIndex - 1 &&
+              this.putTilesThisRound[i + 1].boardIndex - 1 &&
             !firstIndexInRow.includes(this.putTilesThisRound[i + 1].boardIndex)
           ) {
             return true;
