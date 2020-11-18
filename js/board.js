@@ -84,30 +84,42 @@ export default class Board {
     this.board = [...new Array(15)].map((x) =>
       [...new Array(15)].map((x) => ({}))
     );
-  }
-
-  render() {
-    let board_container = $('<div class="board"/>').appendTo("body");
-    let bs = 15;
     let squareIdx = 0; // counter that will go from 0 - 224
-    for (let i = 0; i < bs; i++) {
-      for (let j = 0; j < bs; j++) {
+    for (let i = 0; i < 15; i++) {
+      for (let j = 0; j < 15; j++) {
         let specialS = this.specialSquares[squareIdx];
         if (specialS) {
-          $(board_container).append(
-            `<div id='cell${squareIdx}' class='${specialS}' data-index='${squareIdx}'>${specialS}</div>`
-          ); // Appened ID to cells and CSS class
           this.board[i][j].specialS = specialS; // added special square to exact position(x,y)
           this.board[i][j].index = squareIdx;
         } else {
           this.board[i][j].index = squareIdx;
-          $(board_container).append(
-            `<div id='cell${squareIdx}' data-index='${squareIdx}'></div>`
-          ); // we will use the ID of the cell later to identfy and select the square
         }
         squareIdx++;
       }
     }
+  }
+
+  render() {
+    $(".board").remove();
+    $("body").append('<div class="board"/>');
+    $(".board").html(
+      this.board
+        .flat()
+        .map(
+          (x) => `
+        <div class="${x.specialS ? x.specialS : ""}" data-index='${
+            x.index
+          }' id='cell${x.index}'>
+          ${
+            x.tile
+              ? `<div class="tile" data-index='${x.index}'>${x.tile.char}</div>`
+              : `${x.specialS ? x.specialS : ""}`
+          }
+        </div>
+      `
+        )
+        .join("")
+    );
     console.log(this.board); // it shows the matrix on the Console
   }
 

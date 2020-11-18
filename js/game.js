@@ -18,7 +18,7 @@ export default class Game {
     console.table(this.players);
     // render the board + players
     this.board.render();
-    this.gameLoop();
+    this.renderStand();
   }
 
   async tilesFromFile() {
@@ -47,7 +47,7 @@ export default class Game {
     return this.bag.tiles.splice(0, howMany);
   }
 
-  gameLoop() {
+  renderStand() {
     // Create the board and players divs
     $(".players").remove();
     let $players = $('<div class="players"/>').appendTo("body");
@@ -60,62 +60,47 @@ export default class Game {
   }
 
   addDragEvents() {
-    let that = this;
-    // let tile in the stands be draggable
+    // Set a css-class hover on the square the mouse is above
+    // if we are dragging and there is no tile in the square
+    $(".board > div").mouseenter((e) => {
+      let me = $(e.currentTarget);
+      if ($(".is-dragging").length && !me.find(".tile").length) {
+        me.addClass("hover");
+      }
+    });
+    $(".board > div").mouseleave((e) =>
+      $(e.currentTarget).removeClass("hover")
+    );
+
+    // Drag-events: We only check if a tile is in place on dragEnd
     $(".stand .tile")
       .not(".none")
-      .draggabilly({ containment: "body" })
-      .on("dragStart", function () {
-        // set a high z-index so that the tile being dragged
-        // is on top of everything
-        $(this).css({ zIndex: 100 });
-      })
-      .on("dragMove", function (e, pointer) {
-        let { pageX, pageY } = pointer;
-
-        // we will need code that reacts
-        // if you have moved a tile to a square on the board
-        // (light it up so the player knows where the tile will drop)
-        // but that code is not written yet ;)
-      })
-      .on("dragEnd", function (e, pointer) {
-        let { pageX, pageY } = pointer;
-        let me = $(e.currentTarget);
-
-        // reset the z-index
-        me.css({ zIndex: "" });
-
-        let player = that.players[this.playerTurn];
-        let tileIndex = +me.attr("data-index");
-        let tile = this.bag.tiles[tileIndex];
-
-        // we will need code that reacts
-        // if you have moved a tile to a square on the board
-        // (add the square to the board, remove it from the stand)
-        // but that code is not written yet ;)
-
-        // but we do have the code that let you
-        // drag the tiles in a different order in the stands
-        let $stand = me.parent(".stand");
-        let { top, left } = $stand.offset();
-        let bottom = top + $stand.height();
-        let right = left + $stand.width();
-        // if dragged within the limit of the stand
-        if (pageX > left && pageX < right && pageY > top && pageY < bottom) {
-          let newIndex = Math.floor((8 * (pageX - left)) / $stand.width());
-          let pt = player.tiles;
-          // move around
-          pt.splice(tileIndex, 1, " ");
-          pt.splice(newIndex, 0, tile);
-          //preserve the space where the tile used to be
-          while (pt.length > 8) {
-            pt.splice(
-              pt[tileIndex > newIndex ? "indexOf" : "lastIndexOf"](" "),
-              1
-            );
-          }
+      .draggabilly()
+      .on("dragEnd", (e) => {
+        // get the dropZone square - if none render and return
+        let $dropZone = $(".hover");
+        if (!$dropZone.length) {
+          this.renderStand();
+          return;
         }
-        that.gameLoop();
+
+        // the index of the square we are hovering over
+        let squareIndex = $(".board > div").index($dropZone);
+
+        // convert to y and x coords in this.board
+        let y = Math.floor(squareIndex / 15);
+        let x = squareIndex % 15;
+
+        // the index of the chosen tile
+        let $tile = $(e.currentTarget);
+        let tileIndex = $(".stand > div").index($tile);
+
+        // put the tile on the board and re-render
+        this.board.board[y][x].tile = this.players[
+          this.playerTurn
+        ].tiles.splice(tileIndex, 1)[0];
+        this.board.render();
+        this.renderStand();
       });
   }
 }
