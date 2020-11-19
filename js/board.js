@@ -1,5 +1,8 @@
 export default class Board {
   constructor() {
+    // When the game starts, first round is true. When checkMiddleSquare() is called, it changes to false. 
+    // (May have to be moved to game?)
+    this.firstRound = true;
     // All the tiles that have been put on the board are in this array
     this.putTiles = [];
     // When a tile is placed on the board,
@@ -251,9 +254,9 @@ export default class Board {
   }
 
   nextToPutTiles() {
-    // Compares all the old (already placed) tiles to all the newly placed tiles
-    for (let oldTile of this.putTiles) {
-      for (let newTile of this.putTilesThisRound) {
+    // Compares all the newly placed tiles to the old (already placed) tiles
+    for (let newTile of this.putTilesThisRound) {
+      for (let oldTile of this.putTiles) {
         // If the newly placed tile is in the square under or above the old tile, function returns true
         if (oldTile.boardIndex === newTile.boardIndex - 15 || oldTile.boardIndex === newTile.boardIndex + 15) {
           return true;
@@ -263,10 +266,44 @@ export default class Board {
           return true;
         }
         else {
-          alert("You need to connect your tiles with the other tiles on the board.")
-          return false;
+          // If it's the last tile of the putTilesThisRoundArray (not 100% sure if pop works here)
+          if (newTile === this.putTilesThisRound.pop()) {
+            alert("You need to connect your tiles with another already placed tile on the board.")
+            return false;
+          }
+          else {
+            continue;
+          }
+
         }
       }
+    }
+
+  }
+
+  checkMiddleSquare() {
+    // If the first round is being played
+    if (this.firstRound) {
+      for (let tile of this.putTilesThisRound) {
+        // If one of the newly placed tiles is on the middle square, function returns true
+        if (tile.boardIndex === 112) {
+          this.firstRound = false;
+          return true;
+        }
+        else {
+          // Checks if the loop is on the last tile in the putTilesThisRound array
+          if (tile === this.putTilesThisRound.pop()) {
+            alert("You must place one of your tiles in the middle of the board.")
+            return false;
+          }
+          else { continue; }
+        }
+
+
+      }
+    }
+    else {
+      return true;
     }
 
   }
