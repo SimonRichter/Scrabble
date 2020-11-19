@@ -106,8 +106,9 @@ body {
   text-align: right;
   background-color:  rgba(77, 27, 27, 0.705);
   border: none;
-  padding: 5px;
+  padding: 5px 8px 5px 5px;
   width: 325px;
+  border-radius: 5px;
 }
 
 .btn {
@@ -133,7 +134,7 @@ body {
 }
 
 .skip {
-  color: #411b1b;
+  color: #d3cfcf;
   width: 100px;
   border-radius: 5px;
 }
