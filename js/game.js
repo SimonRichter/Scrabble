@@ -55,28 +55,25 @@ export default class Game {
     document.getElementBy("menu").appendChild(div)
     */
     //var body = document.getElementsByTagName("body")[0];
+    var menu = document.getElementsByClassName("menu")[0];
 
     //create buttons
     let spela = document.createElement("button");
     spela.className = "btn skip";
     spela.setAttribute('class', 'btn skip')
     spela.textContent = 'Spela';
-
-    var menu = document.getElementsByClassName("menu")[0];
     menu.appendChild(spela);
 
     let passa = document.createElement("button");
     passa.className = "btn skip";
     passa.setAttribute('class', 'btn skip')
     passa.textContent = 'Passa';
-    var menu = document.getElementsByClassName("menu")[0];
     menu.appendChild(passa);
 
     let byta = document.createElement("button");
     byta.className = "btn skip";
     byta.setAttribute('class', 'btn skip')
     byta.textContent = 'Byta';
-    var menu = document.getElementsByClassName("menu")[0];
     menu.appendChild(byta);
   }
 
