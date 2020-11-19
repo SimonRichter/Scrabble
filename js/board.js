@@ -81,7 +81,7 @@ export default class Board {
     };
   }
   createBoard() {
-    this.board = [...new Array(15)].map((x) =>
+    this.matrix = [...new Array(15)].map((x) =>
       [...new Array(15)].map((x) => ({}))
     );
     let squareIdx = 0; // counter that will go from 0 - 224
@@ -89,10 +89,10 @@ export default class Board {
       for (let j = 0; j < 15; j++) {
         let specialS = this.specialSquares[squareIdx];
         if (specialS) {
-          this.board[i][j].specialS = specialS; // added special square to exact position(x,y)
-          this.board[i][j].index = squareIdx;
+          this.matrix[i][j].specialS = specialS; // added special square to exact position(x,y)
+          this.matrix[i][j].index = squareIdx;
         } else {
-          this.board[i][j].index = squareIdx;
+          this.matrix[i][j].index = squareIdx;
         }
         squareIdx++;
       }
@@ -103,7 +103,7 @@ export default class Board {
     $(".board").remove();
     $("body").append('<div class="board"/>');
     $(".board").html(
-      this.board
+      this.matrix
         .flat()
         .map(
           (x) => `
@@ -112,9 +112,11 @@ export default class Board {
           }' id='cell${x.index}'>
           ${
             x.tile
-              ? `<div class="tile" data-index='${x.index}'>${
-                  x.tile.char
-                } <span>${x.tile.points || ""}</span></div>`
+              ? `<div class="tile${
+                  x.tile.hasBeenPlaced ? " tilePlacedThisRound" : ""
+                }" data-index='${x.index}'>${x.tile.char} <span>${
+                  x.tile.points || ""
+                }</span></div>`
               : `${x.specialS ? x.specialS : ""}`
           }
         </div>
@@ -122,7 +124,7 @@ export default class Board {
         )
         .join("")
     );
-    console.log(this.board); // it shows the matrix on the Console
+    console.log(this.matrix); // it shows the matrix on the Console
   }
 
   checkXYAxis() {

@@ -96,9 +96,69 @@ export default class Game {
         let tileIndex = $(".stand > div").index($tile);
 
         // put the tile on the board and re-render
-        this.board.board[y][x].tile = this.players[
+        this.board.matrix[y][x].tile = this.players[
           this.playerTurn
         ].tiles.splice(tileIndex, 1)[0];
+        this.board.matrix[y][x].tile.hasBeenPlaced = true;
+        this.board.putTilesThisRound.push(this.board.matrix[y][x].tile);
+        this.board.render();
+        this.renderStand();
+      });
+
+    let yStart = 0;
+    let xStart = 0;
+
+    $(".tilePlacedThisRound")
+      .draggabilly()
+      .on("dragStart", (e) => {
+        let $tile = $(e.currentTarget);
+        let tileIndex = $(".board > div").index($tile.parent());
+        $tile.addClass("dragging");
+        // convert to y and x coords in this.board
+        yStart = Math.floor(tileIndex / 15);
+        xStart = tileIndex % 15;
+        $(".stand").mouseenter((e) => {
+          $(e.currentTarget).addClass("hover");
+        });
+        $(".stand").mouseleave((e) => $(e.currentTarget).removeClass("hover"));
+      })
+      .on("dragEnd", (e) => {
+        // get the dropZone square - if none render and return
+        let $dropZone = $(".hover");
+        if (!$dropZone.length) {
+          this.board.render();
+          this.addDragEvents();
+          return;
+        }
+
+        if ($(".stand").hasClass("hover")) {
+          console.log("TEST DONE");
+          this.board.matrix[yStart][xStart].tile.hasBeenPlaced = false;
+          this.players[this.playerTurn].tiles.push(
+            this.board.matrix[yStart][xStart].tile
+          );
+          this.board.putTilesThisRound.pop(
+            this.board.matrix[yStart][xStart].tile
+          );
+          delete this.board.matrix[yStart][xStart].tile;
+        } else {
+          // the index of the square we are hovering over
+          let squareIndex = $(".board > div").index($dropZone);
+
+          // convert to y and x coords in this.board
+          let y = Math.floor(squareIndex / 15);
+          let x = squareIndex % 15;
+
+          // the index of the chosen tile
+
+          // put the tile on the board and re-render
+          this.board.matrix[y][x].tile = this.board.matrix[yStart][xStart].tile;
+          delete this.board.matrix[yStart][xStart].tile;
+          console.log(this.board.matrix[yStart][xStart]);
+          // this.board.matrix[yStart][xStart][].pop(this.board.matrix[yStart][xStart]);
+        }
+        let $tile = $(e.currentTarget);
+        $tile.removeClass("dragging").removeClass("hover");
         this.board.render();
         this.renderStand();
       });

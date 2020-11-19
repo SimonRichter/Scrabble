@@ -169,3 +169,13 @@ body {
   opacity: 0.5;
   background-color: rgb(119, 104, 82);
 }
+
+.stand.hover {
+  opacity: 0.5;
+}
+
+.dragging {
+  z-index: 2 !important;
+  margin-left: -4vh !important;
+  margin-top: -4vh !important;
+}
