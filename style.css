@@ -98,22 +98,49 @@ body {
   margin-bottom: 20px;
 }
 
-.btn {
+.menu {
+  /* float: right;
+  /*position: static; */
+  top: 0vh;
+  left: 0vh;
+  text-align: right;
+  background-color:  rgba(77, 27, 27, 0.705);
   border: none;
-  background-color: inherit;
-  padding: 14px 28px;
+  padding: 5px;
+  width: 325px;
+}
+
+.btn {
+  border: inset;
+  background-color: rgb(143, 50, 50);
+  border-color: rgb(211, 77, 77);
+  /*
+  border-top-color: rgb(255, 202, 202);
+  border-left-color: rgb(236, 190, 190);
+  border-right-color: rgb(105, 31, 31); 
+  border-bottom-color: rgb(78, 17, 17);
+  */
+  border-width: 3px;
+  border-right-width: 3px;
+  margin: 1px;
+  padding: 4px 4px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 17px;
+  font-weight: bold;
+  text-align: center;
   cursor: pointer;
   display: inline-block;
 }
 
 .skip {
-  color: rgb(105, 36, 36);
+  color: #411b1b;
+  width: 100px;
+  border-radius: 5px;
 }
 
 .skip:hover {
-  background: #5f1717;
-  color: white;
+  background: #a74c4c;
+  color: rgb(94, 9, 9);
 }
 
 .TW {
