@@ -82,6 +82,10 @@ body {
   margin: 1px;
 }
 
+.tilePlacedThisRound {
+  cursor: pointer;
+}
+
 .tile span {
   position: absolute;
   font-size: 1.5vh;
@@ -92,6 +96,7 @@ body {
 .tile.none {
   border: 0;
   background-color: transparent;
+  cursor: auto;
 }
 
 .pname {

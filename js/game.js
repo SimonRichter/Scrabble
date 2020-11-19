@@ -114,6 +114,15 @@ export default class Game {
   }
 
   addDragEvents() {
+
+    $('.stand .tile').hover(
+      function () {
+        $(this).css('opacity', '0.9');
+      }, function () {
+        $(this).css('opacity', '');
+      }
+    );
+
     // Set a css-class hover on the square the mouse is above
     // if we are dragging and there is no tile in the square
     $(".board > div").mouseenter((e) => {
@@ -181,6 +190,7 @@ export default class Game {
         let $dropZone = $(".hover");
         if (!$dropZone.length) {
           this.board.render();
+          this.renderStand();
           this.addDragEvents();
           return;
         }
