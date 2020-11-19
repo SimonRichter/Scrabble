@@ -18,10 +18,11 @@ export default class Game {
     // create players
     this.players = [new Player(this, "Player 1"), new Player(this, "Player 2")];
     console.table(this.players);
-    // render the board + players
+    // render the menu + board + players
+    this.renderMenu();
     this.board.render();
     this.renderStand();
-    this.renderMenu();
+
 
   }
 
@@ -50,17 +51,16 @@ export default class Game {
     // Return a number of tiles (and remove from this.tiles)
     return this.bag.tiles.splice(0, howMany);
   }
+
   renderMenu() {
     //create menu div
-    /*
-    let div = document.createElement('div.menu');
-    div.classList.add();
-    document.getElementBy("menu").appendChild(div)
-    */
-    //var body = document.getElementsByTagName("body")[0];
-    var menu = document.getElementsByClassName("menu")[0];
+    let div = document.createElement('div');
+    div.className = "menu";
+    document.body.appendChild(div);
 
     //create buttons
+    let menu = document.getElementsByClassName("menu")[0];
+
     let spela = document.createElement("button");
     spela.setAttribute('class', 'btn skip')
     spela.setAttribute('id', 'submitButton')
@@ -72,10 +72,10 @@ export default class Game {
     passa.textContent = 'Passa';
     menu.appendChild(passa);
 
-    let byta = document.createElement("button");
-    byta.setAttribute('class', 'btn skip')
-    byta.textContent = 'Byta';
-    menu.appendChild(byta);
+    let byt = document.createElement("button");
+    byt.setAttribute('class', 'btn skip')
+    byt.textContent = 'Byt';
+    menu.appendChild(byt);
   }
 
   renderStand() {
