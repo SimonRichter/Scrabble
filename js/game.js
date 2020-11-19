@@ -2,6 +2,8 @@ import Player from "./Player.js";
 import Board from "./Board.js";
 import Tile from "./Tile.js";
 import Bag from "./Bag.js";
+import SAOLchecker from './SAOLchecker.js';
+
 
 export default class Game {
   async start() {
@@ -20,6 +22,7 @@ export default class Game {
     this.board.render();
     this.renderStand();
     this.renderMenu();
+
   }
 
   async tilesFromFile() {
@@ -59,34 +62,55 @@ export default class Game {
 
     //create buttons
     let spela = document.createElement("button");
-    spela.className = "btn skip";
     spela.setAttribute('class', 'btn skip')
+    spela.setAttribute('id', 'submitButton')
     spela.textContent = 'Spela';
     menu.appendChild(spela);
 
     let passa = document.createElement("button");
-    passa.className = "btn skip";
     passa.setAttribute('class', 'btn skip')
     passa.textContent = 'Passa';
     menu.appendChild(passa);
 
     let byta = document.createElement("button");
-    byta.className = "btn skip";
     byta.setAttribute('class', 'btn skip')
     byta.textContent = 'Byta';
     menu.appendChild(byta);
   }
 
   renderStand() {
-    // Create the board and players divs
+    // Create the players divs
     $(".players").remove();
     let $players = $('<div class="players"/>').appendTo("body");
-    // Render the board
-    // (will be more code when we know how to represent
-    //  the special squares)
+
     // Render the players
     $players.append(this.players[this.playerTurn].render());
     this.addDragEvents();
+    this.addClickEvents();
+  }
+
+  // Funtion for SAOL
+  async checkWordSaol(wordTocheck) {
+
+    await SAOLchecker.scrabbleOk(wordToCheck) // if will Be true or false after checking the dictionary
+
+  }
+
+  addClickEvents() {
+    let that = this;
+    $(document).ready(function () {
+      $('#submitButton').click(function () {
+        //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
+        // point 6 and 7 from Trello)
+
+        that.playerTurn === 0 ? that.playerTurn = 1 : that.playerTurn = 0;
+        that.renderStand();
+        this.board.render();
+
+        //skip++ ** counter will go here as well
+
+      });
+    });
   }
 
   addDragEvents() {
@@ -191,6 +215,8 @@ export default class Game {
         $tile.removeClass("dragging").removeClass("hover");
         this.board.render();
         this.renderStand();
+        this.addClickEvents();
+
       });
   }
 }
