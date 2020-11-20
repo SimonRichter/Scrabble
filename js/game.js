@@ -48,12 +48,9 @@ export default class Game {
   }
 
   renderStand() {
-    // Create the board and players divs
+    // Create the players div and render player stand
     $(".players").remove();
     let $players = $('<div class="players"/>').appendTo("body");
-    // Render the board
-    // (will be more code when we know how to represent
-    //  the special squares)
     // Render the players
     $players.append(this.players[this.playerTurn].render());
     this.addDragEvents();
