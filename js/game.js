@@ -225,8 +225,6 @@ export default class Game {
         $tile.removeClass("dragging").removeClass("hover");
         this.board.render();
         this.renderStand();
-        this.addClickEvents();
-
       });
   }
 }
