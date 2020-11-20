@@ -2,6 +2,7 @@ import Player from "./Player.js";
 import Board from "./Board.js";
 import Tile from "./Tile.js";
 import Bag from "./Bag.js";
+import SAOLchecker from "./SAOLchecker.js";
 
 export default class Game {
   async start() {
@@ -16,7 +17,8 @@ export default class Game {
     // create players
     this.players = [new Player(this, "Player 1"), new Player(this, "Player 2")];
     console.table(this.players);
-    // render the board + players
+    // render the menu + board + players
+    this.renderMenu();
     this.board.render();
     this.renderStand();
   }
@@ -47,16 +49,74 @@ export default class Game {
     return this.bag.tiles.splice(0, howMany);
   }
 
+  renderMenu() {
+    //create menu div
+    let div = document.createElement("div");
+    div.className = "menu";
+    document.body.appendChild(div);
+
+    //create buttons
+    let menu = document.getElementsByClassName("menu")[0];
+
+    let spela = document.createElement("button");
+    spela.setAttribute("class", "btn skip");
+    spela.setAttribute("id", "submitButton");
+    spela.textContent = "Spela";
+    menu.appendChild(spela);
+
+    let passa = document.createElement("button");
+    passa.setAttribute("class", "btn skip");
+    passa.textContent = "Passa";
+    menu.appendChild(passa);
+
+    let byt = document.createElement("button");
+    byt.setAttribute("class", "btn skip");
+    byt.textContent = "Byt";
+    menu.appendChild(byt);
+  }
+
   renderStand() {
-    // Create the players div and render player stand
+    // Create the players divs
     $(".players").remove();
     let $players = $('<div class="players"/>').appendTo("body");
+
     // Render the players
     $players.append(this.players[this.playerTurn].render());
     this.addDragEvents();
+    this.addClickEvents();
+  }
+
+  // Funtion for SAOL
+  async checkWordSaol(wordTocheck) {
+    await SAOLchecker.scrabbleOk(wordToCheck); // if will Be true or false after checking the dictionary
+  }
+
+  addClickEvents() {
+    let that = this;
+    $(document).ready(function () {
+      $("#submitButton").click(function () {
+        //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
+        // point 6 and 7 from Trello)
+
+        that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+        that.renderStand();
+        this.board.render();
+
+        //skip++ ** counter will go here as well
+      });
+    });
   }
 
   addDragEvents() {
+    $(".stand .tile").hover(
+      function () {
+        $(this).css("opacity", "0.9");
+      },
+      function () {
+        $(this).css("opacity", "");
+      }
+    );
+
     // Set a css-class hover on the square the mouse is above
     // if we are dragging and there is no tile in the square
     $(".board > div").mouseenter((e) => {
@@ -124,6 +184,7 @@ export default class Game {
         let $dropZone = $(".hover");
         if (!$dropZone.length) {
           this.board.render();
+          this.renderStand();
           this.addDragEvents();
           return;
         }
