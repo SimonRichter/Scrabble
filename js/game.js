@@ -87,7 +87,7 @@ export default class Game {
   }
 
   // Funtion for SAOL
-  async checkWordSaol(wordTocheck) {
+  async checkWordSaol(wordToCheck) {
     await SAOLchecker.scrabbleOk(wordToCheck); // if will Be true or false after checking the dictionary
   }
 
@@ -102,9 +102,7 @@ export default class Game {
       while (that.board.putTilesThisRound.length) {
         that.board.putTiles.push(that.board.putTilesThisRound.pop());
       }
-      console.log("before:", that.playerTurn);
       that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
-      console.log("after:", that.playerTurn);
       that.renderStand();
 
       //skip++ ** counter will go here as well
@@ -194,7 +192,6 @@ export default class Game {
         }
 
         if ($(".stand").hasClass("hover")) {
-          console.log("TEST DONE");
           this.board.matrix[yStart][xStart].tile.hasBeenPlaced = false;
           this.players[this.playerTurn].tiles.push(
             this.board.matrix[yStart][xStart].tile
