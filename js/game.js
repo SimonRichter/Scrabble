@@ -21,6 +21,7 @@ export default class Game {
     this.renderMenu();
     this.board.render();
     this.renderStand();
+    this.addClickEvents();
   }
 
   async tilesFromFile() {
@@ -83,7 +84,6 @@ export default class Game {
     // Render the players
     $players.append(this.players[this.playerTurn].render());
     this.addDragEvents();
-    this.addClickEvents();
   }
 
   // Funtion for SAOL
@@ -93,17 +93,21 @@ export default class Game {
 
   addClickEvents() {
     let that = this;
-    $(document).ready(function () {
-      $("#submitButton").click(function () {
-        //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
-        // point 6 and 7 from Trello)
+    $("#submitButton").click(function () {
+      //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
+      // point 6 and 7 from Trello)
+      for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
+        that.players[that.playerTurn].tiles.push(that.bag.tiles.pop());
+      }
+      while (that.board.putTilesThisRound.length) {
+        that.board.putTiles.push(that.board.putTilesThisRound.pop());
+      }
+      console.log("before:", that.playerTurn);
+      that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+      console.log("after:", that.playerTurn);
+      that.renderStand();
 
-        that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
-        that.renderStand();
-        this.board.render();
-
-        //skip++ ** counter will go here as well
-      });
+      //skip++ ** counter will go here as well
     });
   }
 
