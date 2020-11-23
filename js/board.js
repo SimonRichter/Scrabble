@@ -12,6 +12,7 @@ export default class Board {
     // on the board it has been placed, for example with the
     // field boardIndex in the tile object
     this.putTilesThisRound = [];
+    this.falseCounter = 0;
 
     this.specialSquares = {
       // Triple Word pts
@@ -124,8 +125,7 @@ export default class Board {
         )
         .join("")
     );
-
-    if (this.putTilesThisRound.length) console.log('true or false? ', this.checkIfWord());
+    // this.nextToPutTilesHM();  Un-comment to test optional function
   }
 
   checkXYAxis() {
@@ -255,6 +255,28 @@ export default class Board {
     }
   }
 
+  // Optional function to nextToPutTiles()... To be discussed...
+  nextToPutTilesHM() {
+    if (!this.putTiles.length) { console.log('Nothing to check'); return; }
+    for (let newTile of this.putTilesThisRound) {
+      for (let oldTile of this.putTiles) {
+
+        let newX = Math.floor(newTile.boardIndex / 15);
+        let newY = newTile.boardIndex % 15;
+        let oldX = Math.floor(oldTile.boardIndex / 15);
+        let oldY = oldTile.boardIndex % 15;
+
+        console.log('x and y:s', newX, newY, oldX, oldY);
+
+        if (Math.abs(oldX - newX) === 1 && oldY === newY) { console.log('Same axis Y, touching Y'); return true; }
+        if (Math.abs(oldY - newY) === 1 && oldX === newX) { console.log('Same axis X, touching X'); return true; }
+        else { console.log('Not touching tiles placed in other rounds'); }
+
+      }
+    }
+
+  }
+
   nextToPutTiles() {
     // Compares all the newly placed tiles to the old (already placed) tiles
     for (let newTile of this.putTilesThisRound) {
@@ -312,23 +334,25 @@ export default class Board {
     }
   }
 
-  async checkIfWord() {
-    /*  for (let i = 0; i < this.putTilesThisRound.length; i++) {
-  
-      }*/
-    let newTiles = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1);
-    //console.log(newTiles); 
+  // Function that checks if a word exist or not
+  // changes falseCounter to 1 if a word doesn't exist (needed for spela-button)
+  async checkIfWord(...a) {
+    this.falseCounter = 0;
+
+    let tilesInOrder = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1);
+    let words = []; // For the future
+
     let word = '';
-    for (let i = 0; i < newTiles.length; i++) {
-      word += newTiles[i].char;
+    for (let i = 0; i < tilesInOrder.length; i++) {
+      word += tilesInOrder[i].char;
     }
     console.log('word: ', word)
-    let b = await SAOLchecker.scrabbleOk(word);
-    console.log('b: ', b);
-    return b;
-
+    if (!a.length) { a[0] = word; }
+    for (let i of a) {
+      word = i;
+      this.falseCounter = await SAOLchecker.scrabbleOk(word) ? 0 : 1;
+      if (this.falseCounter === 1) { break; }
+    }
+    console.log('falseCounter ', this.falseCounter);
   }
-
-
-
 }
