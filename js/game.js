@@ -95,6 +95,8 @@ export default class Game {
     $("#submitButton").click(function () {
 
       if (that.board.falseCounter === 0) {
+        that.skipCounter = 0;  //Skip RESETS when a correct word is written.
+
         //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
         // point 6 and 7 from Trello)
         for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
@@ -122,22 +124,17 @@ export default class Game {
     $("#skipButton").click(function () {
 
 
+      that.skipCounter++;   //Global skipCounter +1  when clicked. (4 consecutive times to 'Game Over')
 
-      if (that.players[that.playerTurn].skipCounter >= 3) {
+      if (that.skipCounter > 3) {
 
         $('.game-over').fadeIn(1500);
 
       }
 
-      //accesses the player in players array by the playerTurn number and adds to that players skipCounter.
-      that.players[that.playerTurn].skipCounter++;
-
-
 
       that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
       that.renderStand();
-
-
 
 
     });
