@@ -11,12 +11,8 @@ export default class Game {
     this.playerTurn = 0;
 
     await this.tilesFromFile();
-    // console.table is a nice way
-    // to log arrays and objects
-    console.table(this.tiles);
     // create players
     this.players = [new Player(this, "Player 1"), new Player(this, "Player 2")];
-    console.table(this.players);
     // render the menu + board + players
     this.renderMenu();
     this.board.render();
@@ -100,12 +96,18 @@ export default class Game {
         that.players[that.playerTurn].tiles.push(that.bag.tiles.pop());
       }
       while (that.board.putTilesThisRound.length) {
-        that.board.putTiles.push(that.board.putTilesThisRound.pop());
+        let squareIndex = that.board.putTilesThisRound[0].boardIndex;
+        console.log("squareIndex", squareIndex);
+        let y = Math.floor(squareIndex / 15);
+        let x = squareIndex % 15;
+        that.board.matrix[y][x].tile.hasBeenPlaced = true;
+        that.board.putTiles.push(that.board.putTilesThisRound.shift());
       }
       that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
       that.renderStand();
-
-      //skip++ ** counter will go here as well
+      console.log("How long is the bag lol:", that.bag.tiles.length);
+      that.board.render();
+      console.log("putTiles", that.board.putTiles);
     });
   }
 
@@ -158,7 +160,7 @@ export default class Game {
         this.board.matrix[y][x].tile = this.players[
           this.playerTurn
         ].tiles.splice(tileIndex, 1)[0];
-        this.board.matrix[y][x].tile.hasBeenPlaced = true;
+        this.board.matrix[y][x].tile.boardIndex = squareIndex;
         this.board.putTilesThisRound.push(this.board.matrix[y][x].tile);
         this.board.render();
         this.renderStand();
@@ -208,12 +210,10 @@ export default class Game {
           let y = Math.floor(squareIndex / 15);
           let x = squareIndex % 15;
 
-          // the index of the chosen tile
-
           // put the tile on the board and re-render
           this.board.matrix[y][x].tile = this.board.matrix[yStart][xStart].tile;
+          this.board.matrix[y][x].tile.boardIndex = squareIndex;
           delete this.board.matrix[yStart][xStart].tile;
-          console.log(this.board.matrix[yStart][xStart]);
           // this.board.matrix[yStart][xStart][].pop(this.board.matrix[yStart][xStart]);
         }
         let $tile = $(e.currentTarget);
