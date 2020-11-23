@@ -92,25 +92,31 @@ export default class Game {
   addClickEvents() {
     let that = this;
     $("#submitButton").click(function () {
-      //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
-      // point 6 and 7 from Trello)
-      for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
-        that.players[that.playerTurn].tiles.push(that.bag.tiles.pop());
+
+      console.log('that.board.checkIfWord() ', that.board.checkIfWord());
+      let checkIfWord = that.board.checkIfWord();
+      if (checkIfWord) {
+        //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
+        // point 6 and 7 from Trello)
+        for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
+          that.players[that.playerTurn].tiles.push(that.bag.tiles.pop());
+        }
+        while (that.board.putTilesThisRound.length) {
+          let squareIndex = that.board.putTilesThisRound[0].boardIndex;
+          console.log("squareIndex", squareIndex);
+          let y = Math.floor(squareIndex / 15);
+          let x = squareIndex % 15;
+          that.board.matrix[y][x].tile.hasBeenPlaced = true;
+          that.board.putTiles.push(that.board.putTilesThisRound.shift());
+        }
+        that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+        that.renderStand();
+        console.log("How long is the bag lol:", that.bag.tiles.length);
+        that.board.render();
+        console.log("putTiles", that.board.putTiles);
       }
-      while (that.board.putTilesThisRound.length) {
-        let squareIndex = that.board.putTilesThisRound[0].boardIndex;
-        console.log("squareIndex", squareIndex);
-        let y = Math.floor(squareIndex / 15);
-        let x = squareIndex % 15;
-        that.board.matrix[y][x].tile.hasBeenPlaced = true;
-        that.board.putTiles.push(that.board.putTilesThisRound.shift());
-      }
-      that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
-      that.renderStand();
-      console.log("How long is the bag lol:", that.bag.tiles.length);
-      that.board.render();
-      console.log("putTiles", that.board.putTiles);
     });
+
 
     $("#skipButton").click(function () {
 
@@ -184,6 +190,8 @@ export default class Game {
         this.board.matrix[y][x].tile = this.players[
           this.playerTurn
         ].tiles.splice(tileIndex, 1)[0];
+        console.log("what is this??", squareIndex);
+
         this.board.matrix[y][x].tile.boardIndex = squareIndex;
         this.board.putTilesThisRound.push(this.board.matrix[y][x].tile);
         this.board.render();
@@ -236,6 +244,7 @@ export default class Game {
 
           // put the tile on the board and re-render
           this.board.matrix[y][x].tile = this.board.matrix[yStart][xStart].tile;
+
           this.board.matrix[y][x].tile.boardIndex = squareIndex;
           delete this.board.matrix[yStart][xStart].tile;
           // this.board.matrix[yStart][xStart][].pop(this.board.matrix[yStart][xStart]);
