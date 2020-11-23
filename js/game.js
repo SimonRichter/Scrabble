@@ -69,7 +69,11 @@ export default class Game {
 
     let passa = document.createElement("button");
     passa.setAttribute("class", "btn skip");
+<<<<<<< Updated upstream
     passa.setAttribute("id", "skipButton");
+=======
+    spela.setAttribute("id", "skipButton");
+>>>>>>> Stashed changes
     passa.textContent = "Passa";
     menu.appendChild(passa);
 
@@ -112,6 +116,7 @@ export default class Game {
       //skip++ ** counter will go here as well
     });
 
+<<<<<<< Updated upstream
     $("#skipButton").click(function () {
 
 
@@ -122,6 +127,17 @@ export default class Game {
       that.renderStand();
 
     });
+=======
+    /* $("#skipButton").click(function () {
+ 
+       that.players[that.playerTurn].skipCounter++;
+ 
+       that.playerTurn++;
+       that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+       that.renderStand();
+ 
+     });*/
+>>>>>>> Stashed changes
   }
 
   addDragEvents() {
