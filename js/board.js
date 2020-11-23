@@ -1,3 +1,4 @@
+import SAOLchecker from "./SAOLchecker.js";
 export default class Board {
   constructor() {
     // When the game starts, first round is true. When checkMiddleSquare() is called, it changes to false.
@@ -123,6 +124,8 @@ export default class Board {
         )
         .join("")
     );
+
+    if (this.putTilesThisRound.length) console.log('true or false? ', this.checkIfWord());
   }
 
   checkXYAxis() {
@@ -308,4 +311,24 @@ export default class Board {
       return true;
     }
   }
+
+  async checkIfWord() {
+    /*  for (let i = 0; i < this.putTilesThisRound.length; i++) {
+  
+      }*/
+    let newTiles = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1);
+    //console.log(newTiles); 
+    let word = '';
+    for (let i = 0; i < newTiles.length; i++) {
+      word += newTiles[i].char;
+    }
+    console.log('word: ', word)
+    let b = await SAOLchecker.scrabbleOk(word);
+    console.log('b: ', b);
+    return b;
+
+  }
+
+
+
 }
