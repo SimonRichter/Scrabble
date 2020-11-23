@@ -93,9 +93,7 @@ export default class Game {
     let that = this;
     $("#submitButton").click(function () {
 
-      console.log('that.board.checkIfWord() ', that.board.checkIfWord());
-      let checkIfWord = that.board.checkIfWord();
-      if (checkIfWord) {
+      if (that.board.falseCounter === 0) {
         //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
         // point 6 and 7 from Trello)
         for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
@@ -230,8 +228,11 @@ export default class Game {
           this.players[this.playerTurn].tiles.push(
             this.board.matrix[yStart][xStart].tile
           );
-          this.board.putTilesThisRound.pop(
+          let indexOf = this.board.putTilesThisRound.indexOf(
             this.board.matrix[yStart][xStart].tile
+          );
+          this.board.putTilesThisRound.splice(
+            indexOf, 1
           );
           delete this.board.matrix[yStart][xStart].tile;
         } else {
