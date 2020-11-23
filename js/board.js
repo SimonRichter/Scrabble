@@ -12,7 +12,7 @@ export default class Board {
     // on the board it has been placed, for example with the
     // field boardIndex in the tile object
     this.putTilesThisRound = [];
-    this.falseCounter = 0;
+    this.falseCounter = 1;
 
     this.specialSquares = {
       // Triple Word pts
@@ -125,6 +125,10 @@ export default class Board {
         )
         .join("")
     );
+    this.falseCounter = 1;
+    if (this.putTilesThisRound.length)
+      // console.log('true or false? ',this.checkIfWord());
+      this.checkIfWord();
     // this.nextToPutTilesHM();  Un-comment to test optional function
   }
 
@@ -337,7 +341,6 @@ export default class Board {
   // Function that checks if a word exist or not
   // changes falseCounter to 1 if a word doesn't exist (needed for spela-button)
   async checkIfWord(...a) {
-    this.falseCounter = 0;
 
     let tilesInOrder = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1);
     let words = []; // For the future
