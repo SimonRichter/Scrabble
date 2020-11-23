@@ -9,6 +9,7 @@ export default class Game {
     this.board = new Board();
     this.board.createBoard();
     this.playerTurn = 0;
+    this.skipCounter = 0;
 
     await this.tilesFromFile();
     // create players
@@ -63,6 +64,7 @@ export default class Game {
 
     let passa = document.createElement("button");
     passa.setAttribute("class", "btn skip");
+    passa.setAttribute("id", "skipButton");
     passa.textContent = "Passa";
     menu.appendChild(passa);
 
@@ -109,6 +111,28 @@ export default class Game {
       that.board.render();
       console.log("putTiles", that.board.putTiles);
     });
+
+    $("#skipButton").click(function () {
+
+
+      that.players[that.playerTurn].skipCounter++;
+
+      that.playerTurn++;
+      that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+      that.renderStand();
+    });
+
+    /* $("#skipButton").click(function () {
+  
+      that.players[that.playerTurn].skipCounter++;
+  
+      that.playerTurn++;
+      that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+      that.renderStand();
+  
+    });*/
+
+
   }
 
   addDragEvents() {

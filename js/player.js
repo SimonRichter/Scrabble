@@ -4,6 +4,7 @@ export default class Player {
     this.name = name;
     this.score = 0;
     this.tiles = [...this.game.getTiles(), " "];
+
   }
 
   render() {
