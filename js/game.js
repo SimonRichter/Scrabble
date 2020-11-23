@@ -115,7 +115,11 @@ export default class Game {
         console.log("putTiles", that.board.putTiles);
       }
 
-
+      that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+      that.renderStand();
+      console.log("How long is the bag lol:", that.bag.tiles.length);
+      that.board.render();
+      console.log("putTiles", that.board.putTiles);
     });
 
 
