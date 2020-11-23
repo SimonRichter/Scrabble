@@ -127,10 +127,22 @@ export default class Game {
 
     $("#skipButton").click(function () {
 
+
+
+      if (that.players[that.playerTurn].skipCounter >= 3) {
+
+        $('.game-over').fadeIn(1500);
+
+      }
+
       //accesses the player in players array by the playerTurn number and adds to that players skipCounter.
       that.players[that.playerTurn].skipCounter++;
+
+
+
       that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
       that.renderStand();
+
 
 
 
