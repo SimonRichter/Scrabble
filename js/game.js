@@ -11,6 +11,7 @@ export default class Game {
     this.playerTurn = 0;
     this.skipCounter = 0;
 
+
     await this.tilesFromFile();
     // create players
     this.players = [new Player(this, "Player 1"), new Player(this, "Player 2")];
@@ -113,28 +114,37 @@ export default class Game {
         that.board.render();
         console.log("putTiles", that.board.putTiles);
       }
+
+      that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+      that.renderStand();
+      console.log("How long is the bag lol:", that.bag.tiles.length);
+      that.board.render();
+      console.log("putTiles", that.board.putTiles);
     });
 
 
     $("#skipButton").click(function () {
 
 
+
+      if (that.players[that.playerTurn].skipCounter >= 3) {
+
+        $('.game-over').fadeIn(1500);
+
+      }
+
+      //accesses the player in players array by the playerTurn number and adds to that players skipCounter.
       that.players[that.playerTurn].skipCounter++;
 
-      that.playerTurn++;
+
+
       that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
       that.renderStand();
+
+
+
+
     });
-
-    /* $("#skipButton").click(function () {
-  
-      that.players[that.playerTurn].skipCounter++;
-  
-      that.playerTurn++;
-      that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
-      that.renderStand();
-  
-    });*/
 
 
   }
