@@ -91,19 +91,25 @@ export default class Game {
     await SAOLchecker.scrabbleOk(wordToCheck); // if will Be true or false after checking the dictionary
   }
 
-  addClickEvents() {
+  async addClickEvents() {
     let that = this;
     $("#submitButton").click(function () {
       //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
       // point 6 and 7 from Trello)
-      for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
-        that.players[that.playerTurn].tiles.push(that.bag.tiles.pop());
+      console.log('that.board.checkIfWord() ', that.board.checkIfWord());
+      let checkIfWord = that.board.checkIfWord();
+      if (checkIfWord) {
+
+        for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
+          that.players[that.playerTurn].tiles.push(that.bag.tiles.pop());
+        }
+        while (that.board.putTilesThisRound.length) {
+          that.board.putTiles.push(that.board.putTilesThisRound.pop());
+        }
+        that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+        that.renderStand();
       }
-      while (that.board.putTilesThisRound.length) {
-        that.board.putTiles.push(that.board.putTilesThisRound.pop());
-      }
-      that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
-      that.renderStand();
+
 
       //skip++ ** counter will go here as well
     });
@@ -159,6 +165,7 @@ export default class Game {
           this.playerTurn
         ].tiles.splice(tileIndex, 1)[0];
         this.board.matrix[y][x].tile.hasBeenPlaced = true;
+        this.board.matrix[y][x].tile.boardIndex = this.board.matrix[y][x].index;
         this.board.putTilesThisRound.push(this.board.matrix[y][x].tile);
         this.board.render();
         this.renderStand();
@@ -212,6 +219,7 @@ export default class Game {
 
           // put the tile on the board and re-render
           this.board.matrix[y][x].tile = this.board.matrix[yStart][xStart].tile;
+          this.board.matrix[y][x].tile.boardIndex = this.board.matrix[y][x].index;
           delete this.board.matrix[yStart][xStart].tile;
           console.log(this.board.matrix[yStart][xStart]);
           // this.board.matrix[yStart][xStart][].pop(this.board.matrix[yStart][xStart]);
