@@ -59,7 +59,8 @@ body {
   clear: both;
 }
 
-.stand .tile {
+.stand .tile,
+.board .tile {
   cursor: pointer;
 }
 

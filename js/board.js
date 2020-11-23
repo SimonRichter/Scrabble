@@ -2,7 +2,7 @@ import SAOLchecker from "./SAOLchecker.js";
 
 export default class Board {
   constructor() {
-    // When the game starts, first round is true. When checkMiddleSquare() is called, it changes to false.
+    // When the game starts, first round is true. When checkMiddleSquare() is called, it changes to false. 
     // (May have to be moved to game?)
     this.firstRound = true;
     // All the tiles that have been put on the board are in this array
@@ -115,7 +115,7 @@ export default class Board {
         <div class="${x.specialS ? x.specialS : ""}" data-index='${x.index
             }' id='cell${x.index}'>
           ${x.tile
-              ? `<div class="tile${x.tile.hasBeenPlaced ? "" : " tilePlacedThisRound"
+              ? `<div class="tile${x.tile.hasBeenPlaced ? " tilePlacedThisRound" : ""
               }" data-index='${x.index}'>${x.tile.char} <span>${x.tile.points || ""
               }</span></div>`
               : `${x.specialS ? x.specialS : ""}`
@@ -263,56 +263,54 @@ export default class Board {
     for (let newTile of this.putTilesThisRound) {
       for (let oldTile of this.putTiles) {
         // If the newly placed tile is in the square under or above the old tile, function returns true
-        if (
-          oldTile.boardIndex === newTile.boardIndex - 15 ||
-          oldTile.boardIndex === newTile.boardIndex + 15
-        ) {
+        if (oldTile.boardIndex === newTile.boardIndex - 15 || oldTile.boardIndex === newTile.boardIndex + 15) {
           return true;
         }
         // If the newly placed tile is in the square to the left or right of the old tile, function returns true
-        else if (
-          oldTile.boardIndex === newTile.boardIndex + 1 ||
-          oldTile.boardIndex === newTile.boardIndex - 1
-        ) {
+        else if (oldTile.boardIndex === newTile.boardIndex + 1 || oldTile.boardIndex === newTile.boardIndex - 1) {
           return true;
-        } else {
+        }
+        else {
           // If it's the last tile of the putTilesThisRoundArray (not 100% sure if pop works here)
           if (newTile === this.putTilesThisRound.pop()) {
-            alert(
-              "You need to connect your tiles with another already placed tile on the board."
-            );
+            alert("You need to connect your tiles with another already placed tile on the board.")
             return false;
-          } else {
+          }
+          else {
             continue;
           }
+
         }
       }
     }
+
   }
 
   checkMiddleSquare() {
     // If the first round is being played
     if (this.firstRound) {
-      let temp = 0;
       for (let tile of this.putTilesThisRound) {
         // If one of the newly placed tiles is on the middle square, function returns true
         if (tile.boardIndex === 112) {
           this.firstRound = false;
           return true;
-        } else {
+        }
+        else {
           // Checks if the loop is on the last tile in the putTilesThisRound array
-          if (temp === this.putTilesThisRound.length - 1) {
-            alert(
-              "You must place one of your tiles in the middle of the board."
-            );
+          if (tile === this.putTilesThisRound.pop()) {
+            alert("You must place one of your tiles in the middle of the board.")
             return false;
           }
+          else { continue; }
         }
-        temp++;
+
+
       }
-    } else {
+    }
+    else {
       return true;
     }
+
   }
 
   async checkIfWord() {
