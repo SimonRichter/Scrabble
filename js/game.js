@@ -89,17 +89,17 @@ export default class Game {
   }
 
   renderTilesLeft() {
-    let tileStats = this.bag.tiles.length;
+    $(".tilesLeft").remove();
     //create a div 
     let div = document.createElement("div");
     div.className = "tilesLeft";
     document.body.appendChild(div);
     let t = document.getElementsByClassName("tilesLeft")[0];
-    //create <p> element
-    let para = document.createElement("p");
-    let node = document.createTextNode("Brickor kvar: " + tileStats);
-    para.appendChild(node);
-    t.appendChild(para);
+    //create <p> element and append to div
+    let p = document.createElement("p");
+    let text = document.createTextNode("Brickor kvar: " + this.bag.tiles.length);
+    p.appendChild(text);
+    t.appendChild(p);
   }
 
   // Funtion for SAOL
@@ -136,6 +136,7 @@ export default class Game {
         // We then re-render the stand and board
         that.board.render();
         that.renderStand();
+        that.renderTilesLeft();
       }
     });
 
@@ -148,6 +149,7 @@ export default class Game {
 
       that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
       that.renderStand();
+      that.renderTilesLeft();
     });
   }
 
