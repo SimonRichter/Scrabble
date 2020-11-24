@@ -94,15 +94,15 @@ export default class Game {
   addClickEvents() {
     let that = this;
     $("#submitButton").click(function () {
+      if (that.board.putTilesThisRound.length === 0) {
+        return;
+      }
       if (that.board.falseCounter === 0) {
         that.skipCounter = 0; //Skip RESETS when a correct word is written.
 
-        //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
-        // point 6 and 7 from Trello)
-
-        // Fill the player stand with tiles again after they submit a correct word
+        // Fill the player's stand with tiles again after they submit a correct word
         for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
-          that.players[that.playerTurn].tiles.push(that.bag.tiles.pop());
+          that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
         }
         // This while loop assigns a boardIndex to the placed tile objects
         // in the board matrix and makes sure that the tiles can't be moved
@@ -127,7 +127,7 @@ export default class Game {
       that.skipCounter++; //Global skipCounter +1  when clicked. (4 consecutive times to 'Game Over')
 
       if (that.skipCounter > 5) {
-        $(".game-over").fadeIn(1500);
+        that.renderGameOver();
       }
 
       that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
@@ -187,7 +187,7 @@ export default class Game {
         // put the tile in the board matrix and re-render the board and stand
         this.board.matrix[y][x].tile = this.players[
           this.playerTurn
-        ].tiles.splice(tileIndex, 1)[0];
+        ].stand.splice(tileIndex, 1)[0];
         this.board.matrix[y][x].tile.boardIndex = squareIndex;
         this.board.putTilesThisRound.push(this.board.matrix[y][x].tile);
         this.board.render();
@@ -241,7 +241,7 @@ export default class Game {
         if ($(".stand").hasClass("hover")) {
           // Put back the tile
           this.board.matrix[yStart][xStart].tile.hasBeenPlaced = false;
-          this.players[this.playerTurn].tiles.push(
+          this.players[this.playerTurn].stand.push(
             this.board.matrix[yStart][xStart].tile
           );
           let indexOf = this.board.putTilesThisRound.indexOf(

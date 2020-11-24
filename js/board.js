@@ -1,5 +1,6 @@
 import SAOLchecker from "./SAOLchecker.js";
 export default class Board {
+
   constructor() {
     // When the game starts, first round is true. When checkMiddleSquare() is called, it changes to false.
     // (May have to be moved to game?)
@@ -12,82 +13,27 @@ export default class Board {
     // on the board it has been placed, for example with the
     // field boardIndex in the tile object
     this.putTilesThisRound = [];
-    this.falseCounter = 1;
-
+    this.falseCounter = 0;
     this.specialSquares = {
       // Triple Word pts
-      0: "TW",
-      7: "TW",
-      14: "TW",
-      105: "TW",
-      119: "TW",
-      210: "TW",
-      217: "TW",
-      224: "TW",
+      0: "TW", 7: "TW", 14: "TW", 105: "TW", 119: "TW", 210: "TW", 217: "TW", 224: "TW",
 
       // Triple letter pts
-      20: "TL",
-      24: "TL",
-      76: "TL",
-      80: "TL",
-      84: "TL",
-      88: "TL",
-      136: "TL",
-      140: "TL",
-      144: "TL",
-      148: "TL",
-      200: "TL",
-      204: "TL",
-
+      20: "TL", 24: "TL", 76: "TL", 80: "TL", 84: "TL", 88: "TL", 136: "TL", 140: "TL", 144: "TL", 148: "TL", 200: "TL", 204: "TL",
+      
       //Double Word pts
-      16: "DW",
-      32: "DW",
-      48: "DW",
-      64: "DW",
-      64: "DW",
-      196: "DW",
-      182: "DW",
-      168: "DW",
-      154: "DW",
-      28: "DW",
-      42: "DW",
-      56: "DW",
-      70: "DW",
-      160: "DW",
-      176: "DW",
-      192: "DW",
-      208: "DW",
+      16: "DW", 32: "DW", 48: "DW", 64: "DW", 64: "DW", 196: "DW", 182: "DW", 168: "DW", 154: "DW", 28: "DW", 42: "DW", 56: "DW",
+      70: "DW", 160: "DW", 176: "DW", 192: "DW", 208: "DW",
 
       //Double letter pts
-      3: "DL",
-      36: "DL",
-      45: "DL",
-      52: "DL",
-      92: "DL",
-      96: "DL",
-      108: "DL",
-      11: "DL",
-      38: "DL",
-      59: "DL",
-      98: "DL",
-      102: "DL",
-      122: "DL",
-      126: "DL",
-      128: "DL",
-      165: "DL",
-      172: "DL",
-      179: "DL",
-      186: "DL",
-      188: "DL",
-      213: "DL",
-      221: "DL",
-      116: "DL",
-      132: "DL",
-
+      3: "DL", 36: "DL", 45: "DL", 52: "DL", 92: "DL", 96: "DL", 108: "DL", 11: "DL", 38: "DL", 59: "DL", 98: "DL", 102: "DL", 122: "DL",
+      126: "DL", 128: "DL", 165: "DL", 172: "DL", 179: "DL", 186: "DL", 188: "DL", 213: "DL", 221: "DL", 116: "DL", 132: "DL",
+      
       // Middle of the board
       112: "CS",
     };
   }
+
   createBoard() {
     this.matrix = [...new Array(15)].map((x) =>
       [...new Array(15)].map((x) => ({}))
@@ -145,21 +91,7 @@ export default class Board {
   checkXYAxis() {
     // The indexes for the squares at the first row
     let firstIndexInRow = [
-      0,
-      15,
-      30,
-      45,
-      60,
-      75,
-      90,
-      105,
-      120,
-      135,
-      150,
-      165,
-      180,
-      195,
-      210,
+      0, 15,30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210,
     ];
     // First we hopefully sort the this.putTilesThisRound array so that the tile with
     // the lowest index number on the board is first and the tile
@@ -272,7 +204,6 @@ export default class Board {
     }
   }
 
-
   nextToPutTilesHM() {
     if (!this.putTiles.length) {
       console.log("Nothing to check");
@@ -301,7 +232,6 @@ export default class Board {
     }
     return false;
   }
-
 
   checkMiddleSquare() {
     // If the first round is being played
