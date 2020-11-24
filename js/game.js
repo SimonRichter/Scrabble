@@ -18,6 +18,7 @@ export default class Game {
     this.board.render();
     this.renderMenu();
     this.renderStand();
+    this.renderTilesLeft();
     // add click event listener.
     // Since the menu isn't re-rendered we only need to add the click event listener once.
     this.addClickEvents();
@@ -84,6 +85,20 @@ export default class Game {
     $players.append(this.players[this.playerTurn].render());
     // Add drag events
     this.addDragEvents();
+  }
+
+  renderTilesLeft() {
+    let tileStats = this.bag.tiles.length;
+    //create a div 
+    let div = document.createElement("div");
+    div.className = "tilesLeft";
+    document.body.appendChild(div);
+    let t = document.getElementsByClassName("tilesLeft")[0];
+    //create <p> element
+    let para = document.createElement("p");
+    let node = document.createTextNode("Brickor kvar: " + tileStats);
+    para.appendChild(node);
+    t.appendChild(para);
   }
 
   // Funtion for SAOL
