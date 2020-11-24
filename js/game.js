@@ -94,6 +94,9 @@ export default class Game {
   addClickEvents() {
     let that = this;
     $("#submitButton").click(function () {
+      that.board.falseCounter = 1;
+      if (that.board.putTilesThisRound.length)
+        that.board.checkIfWord();
       if (that.board.falseCounter === 0) {
         that.skipCounter = 0; //Skip RESETS when a correct word is written.
 
