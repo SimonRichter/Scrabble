@@ -120,21 +120,20 @@ export default class Board {
           // add special characters to squares that should have special characters
           // add index and an id to each square div
           (x) => `
-        <div class="${x.specialS ? x.specialS : ""}" data-index='${
-            x.index
-          }' id='cell${x.index}'>
+        <div class="${x.specialS ? x.specialS : ""}" data-index='${x.index
+            }' id='cell${x.index}'>
           ${
             // Then add the tiles that have been placed
             x.tile
               ? `<div class="tile${
-                  // remove the tilePlacedThisRound class from tiles placed in previous round
-                  x.tile.hasBeenPlaced ? "" : " tilePlacedThisRound"
-                }" data-index='${x.index}'>${x.tile.char} <span>${
-                  // Add index, letter and points to the tile div
-                  x.tile.points || ""
-                }</span></div>`
+              // remove the tilePlacedThisRound class from tiles placed in previous round
+              x.tile.hasBeenPlaced ? "" : " tilePlacedThisRound"
+              }" data-index='${x.index}'>${x.tile.char} <span>${
+              // Add index, letter and points to the tile div
+              x.tile.points || ""
+              }</span></div>`
               : `${x.specialS ? x.specialS : ""}`
-          }
+            }
         </div>
       `
         )
@@ -174,7 +173,7 @@ export default class Board {
     if (this.putTilesThisRound.length === 2) {
       if (
         this.putTilesThisRound[0].boardIndex ===
-          this.putTilesThisRound[1].boardIndex - 15 ||
+        this.putTilesThisRound[1].boardIndex - 15 ||
         (this.putTilesThisRound[0].boardIndex ===
           this.putTilesThisRound[1].boardIndex - 1 &&
           !firstIndexInRow.includes(this.putTilesThisRound[1].boardIndex))
@@ -228,7 +227,7 @@ export default class Board {
     // First we check if the second letter is to the right of the first one
     else if (
       this.putTilesThisRound[0].boardIndex ===
-        this.putTilesThisRound[1].boardIndex - 1 &&
+      this.putTilesThisRound[1].boardIndex - 1 &&
       // we make sure that the placed word is not placed on multiple rows
       !firstIndexInRow.includes(this.putTilesThisRound[1].boardIndex)
     ) {
@@ -237,7 +236,7 @@ export default class Board {
         if (i < this.putTilesThisRound.length - 2) {
           if (
             this.putTilesThisRound[i].boardIndex ===
-              this.putTilesThisRound[i + 1].boardIndex - 1 &&
+            this.putTilesThisRound[i + 1].boardIndex - 1 &&
             // we make sure that the placed word is not placed on multiple rows
             !firstIndexInRow.includes(this.putTilesThisRound[i + 1].boardIndex)
           ) {
@@ -253,7 +252,7 @@ export default class Board {
         } else {
           if (
             this.putTilesThisRound[i].boardIndex ===
-              this.putTilesThisRound[i + 1].boardIndex - 1 &&
+            this.putTilesThisRound[i + 1].boardIndex - 1 &&
             !firstIndexInRow.includes(this.putTilesThisRound[i + 1].boardIndex)
           ) {
             return true;
@@ -273,7 +272,7 @@ export default class Board {
     }
   }
 
-  // Optional function to nextToPutTiles()... To be discussed...
+
   nextToPutTilesHM() {
     if (!this.putTiles.length) {
       console.log("Nothing to check");
@@ -303,37 +302,6 @@ export default class Board {
     return false;
   }
 
-  nextToPutTiles() {
-    // Compares all the newly placed tiles to the old (already placed) tiles
-    for (let newTile of this.putTilesThisRound) {
-      for (let oldTile of this.putTiles) {
-        // If the newly placed tile is in the square under or above the old tile, function returns true
-        if (
-          oldTile.boardIndex === newTile.boardIndex - 15 ||
-          oldTile.boardIndex === newTile.boardIndex + 15
-        ) {
-          return true;
-        }
-        // If the newly placed tile is in the square to the left or right of the old tile, function returns true
-        else if (
-          oldTile.boardIndex === newTile.boardIndex + 1 ||
-          oldTile.boardIndex === newTile.boardIndex - 1
-        ) {
-          return true;
-        } else {
-          // If it's the last tile of the putTilesThisRoundArray (not 100% sure if pop works here)
-          if (newTile === this.putTilesThisRound.pop()) {
-            alert(
-              "You need to connect your tiles with another already placed tile on the board."
-            );
-            return false;
-          } else {
-            continue;
-          }
-        }
-      }
-    }
-  }
 
   checkMiddleSquare() {
     // If the first round is being played
