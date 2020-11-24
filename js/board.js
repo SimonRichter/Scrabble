@@ -232,12 +232,8 @@ export default class Board {
     }
     return false;
   }
+  
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 9d9ce28b2c1013bc649fd78baf5e13ede2353310
   checkMiddleSquare() {
     // If the first round is being played
     if (this.firstRound) {
