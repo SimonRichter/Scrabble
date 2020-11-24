@@ -137,10 +137,7 @@ export default class Board {
         // make sure it will be added as one string and not as individual strings
         .join("")
     );
-    this.falseCounter = 1;
-    if (this.putTilesThisRound.length)
-      // console.log('true or false? ',this.checkIfWord());
-      this.checkIfWord();
+
     //this.nextToPutTilesHM();  //Un-comment to test optional function
   }
 
@@ -305,6 +302,7 @@ export default class Board {
   }
 
 
+
   checkMiddleSquare() {
     // If the first round is being played
     if (this.firstRound) {
@@ -328,6 +326,33 @@ export default class Board {
     } else {
       return true;
     }
+  }
+
+  findWordsAcrossYaxis() {
+    let s = "";
+    let string = [];
+    let strings = [];
+    for (let tile of this.putTilesThisRound) {
+
+    }
+
+    return strings;
+
+
+
+  }
+
+  findWordsAcrossXaxis() {
+    let s = "";
+    let string = [];
+    let strings = [];
+
+    for (let tile of this.putTilesThisRound) {
+
+    }
+    return strings;
+
+
   }
 
   // Function that checks if a word exist or not
