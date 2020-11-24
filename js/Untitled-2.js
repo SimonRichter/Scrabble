@@ -86,17 +86,28 @@ export default class Game {
     this.addDragEvents();
   }
 
-  // Funtion for SAOL
-  async checkWordSaol(wordToCheck) {
-    await SAOLchecker.scrabbleOk(wordToCheck); // if will Be true or false after checking the dictionary
-  }
-
-  addClickEvents() {
+  async addClickEvents() {
     let that = this;
     $("#submitButton").click(function () {
       that.board.falseCounter = 1;
-      if (that.board.putTilesThisRound.length)
-        that.board.checkIfWord();
+      if (that.board.putTilesThisRound.length) {
+        that.board.findWordsAcrossXaxis()
+        console.log('xString: ', that.board.xStrings);
+        that.board.checkIfWord(that.board.xStrings);
+        setTimeout(function () {
+          if (!that.board.falseCounter) {
+            console.log('1. falseCounter ', that.board.falseCounter);
+            that.board.findWordsAcrossYaxis()
+            that.board.checkIfWord(that.board.yStrings);
+            console.log('2. falseCounter ', that.board.falseCounter);
+          }
+        }, 3000);
+
+
+        console.log('0. falseCounter ', that.board.falseCounter);
+
+      }
+
       if (that.board.falseCounter === 0) {
         that.skipCounter = 0; //Skip RESETS when a correct word is written. 
 

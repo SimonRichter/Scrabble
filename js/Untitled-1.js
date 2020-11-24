@@ -13,6 +13,8 @@ export default class Board {
     // field boardIndex in the tile object
     this.putTilesThisRound = [];
     this.falseCounter = 1;
+    this.xStrings = [];
+    this.yStrings = [];
 
     this.specialSquares = {
       // Triple Word pts
@@ -332,10 +334,10 @@ export default class Board {
     }
   }
 
-  findWordsAcrossXaxis() {
+  async findWordsAcrossXaxis() {
     let s = "";
     let string = [];
-    let strings = [];
+    this.xStrings = [];
     for (let t of this.putTilesThisRound) {
       let yIndex = Math.floor(t.boardIndex / 15);
       let xIndex = t.boardIndex % 15;
@@ -354,22 +356,17 @@ export default class Board {
         s += letter.char;
       }
 
-      strings.push(s);
+      this.xStrings.push(s);
       s = '';
       string = [];
     }
-    console.log(strings);
-    return strings;
+    console.log(this.xStrings);
   }
 
-  whateverTestYouWannaPut() {
-    this.checkIfWord(this.findWordsAcrossXaxis());
-  }
-
-  findWordsAcrossYaxis() {
+  async findWordsAcrossYaxis() {
     let s = "";
     let string = [];
-    let strings = [];
+    this.yStrings = [];
     for (let t of this.putTilesThisRound) {
       let yIndex = Math.floor(t.boardIndex / 15);
       let xIndex = t.boardIndex % 15;
@@ -387,37 +384,49 @@ export default class Board {
       for (let letter of string) {
         s += letter.char;
       }
-      strings.push(s);
+      this.yStrings.push(s);
       s = '';
       string = [];
     }
-    console.log(strings);
-    return strings;
+    console.log(this.yStrings);
   }
 
   // Function that checks if a word exist or not
   // changes falseCounter to 1 if a word doesn't exist (needed for spela-button)
-  async checkIfWord(a) {
-    let tilesInOrder = this.putTilesThisRound.sort((a, b) =>
-      a.boardIndex > b.boardIndex ? 1 : -1
-    );
-    let words = []; // For the future
-
-    let word = "";
-    for (let i = 0; i < tilesInOrder.length; i++) {
-      word += tilesInOrder[i].char;
-    }
-    console.log("word: ", word);
-    if (!a.length) {
-      a[0] = word;
-    }
-    for (let i of a) {
-      word = i;
-      this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 1;
-      if (this.falseCounter === 1) {
-        break;
+  async checkIfWord(xStrings, yStrings) {
+    /* let tilesInOrder = this.putTilesThisRound.sort((a, b) =>
+       a.boardIndex > b.boardIndex ? 1 : -1
+     );
+     let words = []; // For the future
+ 
+     let word = "";
+     for (let i = 0; i < tilesInOrder.length; i++) {
+       word += tilesInOrder[i].char;
+     }
+     console.log("word: ", word);
+     if (!a.length) {
+       a[0] = word;
+     } */
+    if (this.xStrings.length) {
+      for (let word of xStrings) {
+        this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 2;
+        console.log("falseCounter ", this.falseCounter);
+        if (this.falseCounter > 1) {
+          return;
+        }
       }
     }
-    console.log("falseCounter ", this.falseCounter);
+
+    if (this.yStrings.length) {
+      for (let word of yStrings) {
+        this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 2;
+
+        if (this.falseCounter > 1) {
+          return;
+        }
+      }
+    }
+
   }
 }
+
