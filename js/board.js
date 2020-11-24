@@ -112,14 +112,18 @@ export default class Board {
         .flat()
         .map(
           (x) => `
-        <div class="${x.specialS ? x.specialS : ""}" data-index='${x.index
-            }' id='cell${x.index}'>
-          ${x.tile
-              ? `<div class="tile${x.tile.hasBeenPlaced ? "" : " tilePlacedThisRound"
-              }" data-index='${x.index}'>${x.tile.char} <span>${x.tile.points || ""
-              }</span></div>`
+        <div class="${x.specialS ? x.specialS : ""}" data-index='${
+            x.index
+          }' id='cell${x.index}'>
+          ${
+            x.tile
+              ? `<div class="tile${
+                  x.tile.hasBeenPlaced ? "" : " tilePlacedThisRound"
+                }" data-index='${x.index}'>${x.tile.char} <span>${
+                  x.tile.points || ""
+                }</span></div>`
               : `${x.specialS ? x.specialS : ""}`
-            }
+          }
         </div>
       `
         )
@@ -162,7 +166,7 @@ export default class Board {
     if (this.putTilesThisRound.length === 2) {
       if (
         this.putTilesThisRound[0].boardIndex ===
-        this.putTilesThisRound[1].boardIndex - 15 ||
+          this.putTilesThisRound[1].boardIndex - 15 ||
         (this.putTilesThisRound[0].boardIndex ===
           this.putTilesThisRound[1].boardIndex - 1 &&
           !firstIndexInRow.includes(this.putTilesThisRound[1].boardIndex))
@@ -216,7 +220,7 @@ export default class Board {
     // First we check if the second letter is to the right of the first one
     else if (
       this.putTilesThisRound[0].boardIndex ===
-      this.putTilesThisRound[1].boardIndex - 1 &&
+        this.putTilesThisRound[1].boardIndex - 1 &&
       !firstIndexInRow.includes(this.putTilesThisRound[1].boardIndex)
     ) {
       for (let i = 0; i < this.putTilesThisRound.length - 1; i++) {
@@ -224,7 +228,7 @@ export default class Board {
         if (i < this.putTilesThisRound.length - 2) {
           if (
             this.putTilesThisRound[i].boardIndex ===
-            this.putTilesThisRound[i + 1].boardIndex - 1 &&
+              this.putTilesThisRound[i + 1].boardIndex - 1 &&
             !firstIndexInRow.includes(this.putTilesThisRound[i + 1].boardIndex)
           ) {
             // It's a match so we move on to the next letter
@@ -239,7 +243,7 @@ export default class Board {
         } else {
           if (
             this.putTilesThisRound[i].boardIndex ===
-            this.putTilesThisRound[i + 1].boardIndex - 1 &&
+              this.putTilesThisRound[i + 1].boardIndex - 1 &&
             !firstIndexInRow.includes(this.putTilesThisRound[i + 1].boardIndex)
           ) {
             return true;
@@ -261,24 +265,32 @@ export default class Board {
 
   // Optional function to nextToPutTiles()... To be discussed...
   nextToPutTilesHM() {
-    if (!this.putTiles.length) { console.log('Nothing to check'); return; }
+    if (!this.putTiles.length) {
+      console.log("Nothing to check");
+      return true;
+    }
     for (let newTile of this.putTilesThisRound) {
       for (let oldTile of this.putTiles) {
-
         let newX = Math.floor(newTile.boardIndex / 15);
         let newY = newTile.boardIndex % 15;
         let oldX = Math.floor(oldTile.boardIndex / 15);
         let oldY = oldTile.boardIndex % 15;
 
-        console.log('x and y:s', newX, newY, oldX, oldY);
+        console.log("x and y:s", newX, newY, oldX, oldY);
 
-        if (Math.abs(oldX - newX) === 1 && oldY === newY) { console.log('Same axis Y, touching Y'); return true; }
-        if (Math.abs(oldY - newY) === 1 && oldX === newX) { console.log('Same axis X, touching X'); return true; }
-        else { console.log('Not touching tiles placed in other rounds'); }
-
+        if (Math.abs(oldX - newX) === 1 && oldY === newY) {
+          console.log("Same axis Y, touching Y");
+          return true;
+        }
+        if (Math.abs(oldY - newY) === 1 && oldX === newX) {
+          console.log("Same axis X, touching X");
+          return true;
+        } else {
+          console.log("Not touching tiles placed in other rounds");
+        }
       }
     }
-
+    return false;
   }
 
   nextToPutTiles() {
@@ -341,21 +353,26 @@ export default class Board {
   // Function that checks if a word exist or not
   // changes falseCounter to 1 if a word doesn't exist (needed for spela-button)
   async checkIfWord(...a) {
-
-    let tilesInOrder = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1);
+    let tilesInOrder = this.putTilesThisRound.sort((a, b) =>
+      a.boardIndex > b.boardIndex ? 1 : -1
+    );
     let words = []; // For the future
 
-    let word = '';
+    let word = "";
     for (let i = 0; i < tilesInOrder.length; i++) {
       word += tilesInOrder[i].char;
     }
-    console.log('word: ', word)
-    if (!a.length) { a[0] = word; }
+    console.log("word: ", word);
+    if (!a.length) {
+      a[0] = word;
+    }
     for (let i of a) {
       word = i;
-      this.falseCounter = await SAOLchecker.scrabbleOk(word) ? 0 : 1;
-      if (this.falseCounter === 1) { break; }
+      this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 1;
+      if (this.falseCounter === 1) {
+        break;
+      }
     }
-    console.log('falseCounter ', this.falseCounter);
+    console.log("falseCounter ", this.falseCounter);
   }
 }
