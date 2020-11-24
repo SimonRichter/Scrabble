@@ -51,26 +51,26 @@ export default class Game {
   }
 
   renderMenu() {
-    //create menu div
+    // Create menu div
     let div = document.createElement("div");
     div.className = "menu";
     document.body.appendChild(div);
 
-    //create buttons and append to menu div
+    // Create buttons and append to menu div
     let menu = document.getElementsByClassName("menu")[0];
-    //spela button
+    // Spela button
     let spela = document.createElement("button");
     spela.setAttribute("class", "btn skip");
     spela.setAttribute("id", "submitButton");
     spela.textContent = "Spela";
     menu.appendChild(spela);
-    //passa button
+    // Passa button
     let passa = document.createElement("button");
     passa.setAttribute("class", "btn skip");
     passa.setAttribute("id", "skipButton");
     passa.textContent = "Passa";
     menu.appendChild(passa);
-    //byt button
+    // Byt button
     let byt = document.createElement("button");
     byt.setAttribute("class", "btn skip");
     byt.textContent = "Byt";
@@ -89,13 +89,14 @@ export default class Game {
   }
 
   renderTilesLeft() {
+    // Remove old div
     $(".tilesLeft").remove();
-    //create a div 
+    // Create a new div 
     let div = document.createElement("div");
     div.className = "tilesLeft";
     document.body.appendChild(div);
     let t = document.getElementsByClassName("tilesLeft")[0];
-    //create <p> element and append to div
+    // Create <p> element and append to div
     let p = document.createElement("p");
     let text = document.createTextNode("Brickor kvar: " + this.bag.tiles.length);
     p.appendChild(text);
