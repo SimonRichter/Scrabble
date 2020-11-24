@@ -259,4 +259,12 @@ export default class Game {
         this.renderStand();
       });
   }
+
+  renderGameOver() {
+    // Creates the Game Over div that covers whole page
+    let $gameover = $('<div class="game-over"/>').appendTo("body");
+    // Creates the smaller box with Game Over! text
+    $gameover.append(`<div>Game Over!</div>`);
+    $('.game-over').fadeIn(1300);
+  }
 }
