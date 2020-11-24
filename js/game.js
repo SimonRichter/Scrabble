@@ -16,8 +16,8 @@ export default class Game {
     // create players
     this.players = [new Player(this, "Player 1"), new Player(this, "Player 2")];
     // render the menu + board + players
-    this.renderMenu();
     this.board.render();
+    this.renderMenu();
     this.renderStand();
     this.addClickEvents();
   }
@@ -54,21 +54,21 @@ export default class Game {
     div.className = "menu";
     document.body.appendChild(div);
 
-    //create buttons
+    //create buttons and append to menu div
     let menu = document.getElementsByClassName("menu")[0];
-
+    //spela button
     let spela = document.createElement("button");
     spela.setAttribute("class", "btn skip");
     spela.setAttribute("id", "submitButton");
     spela.textContent = "Spela";
     menu.appendChild(spela);
-
+    //passa button
     let passa = document.createElement("button");
     passa.setAttribute("class", "btn skip");
     passa.setAttribute("id", "skipButton");
     passa.textContent = "Passa";
     menu.appendChild(passa);
-
+    //byt button
     let byt = document.createElement("button");
     byt.setAttribute("class", "btn skip");
     byt.textContent = "Byt";
