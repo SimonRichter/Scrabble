@@ -79,6 +79,14 @@ body {
   top: 95.2vh;
   left: 41vh;
 }
+.pname {
+  position: absolute;
+  font-size: 2.2vh;
+  font-weight: bold;
+  left: -37vh;
+  top: 1.3vh;
+  margin-bottom: 0px;
+}
 
 /* ----------------- TILES ---------------- */
 .tile {
@@ -123,9 +131,7 @@ body {
   margin-top: -4vh !important;
 }
 
-.pname {
-  margin-bottom: 20px;
-}
+
 /* ----------------- MENU/BUTTONS/TEXT ---------------- */
 .menu {
   position: absolute;
@@ -134,10 +140,10 @@ body {
   text-align: left;
   background-color: rgb(94, 34, 34);
   border: none;
-  padding: 1.5vh;
-  padding-top: 2vh;
+  padding: 2.4vh 0vh 0vh 14vh;
+  /* padding-top: 2vh; */
   width: 94vh;
-  height: 8vh;
+  height: 7.5vh;
   border-radius: 5px;
 }
 
