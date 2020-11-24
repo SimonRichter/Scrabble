@@ -94,7 +94,7 @@ export default class Game {
   addClickEvents() {
     let that = this;
     $("#submitButton").click(function () {
-      if (that.board.putTilesThisRound.length === 0) {
+      if (!that.board.putTilesThisRound.length) {
         return;
       }
       if (that.board.falseCounter === 0) {

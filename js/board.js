@@ -233,6 +233,11 @@ export default class Board {
     return false;
   }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 9d9ce28b2c1013bc649fd78baf5e13ede2353310
   checkMiddleSquare() {
     // If the first round is being played
     if (this.firstRound) {
@@ -256,6 +261,33 @@ export default class Board {
     } else {
       return true;
     }
+  }
+
+  findWordsAcrossYaxis() {
+    let s = "";
+    let string = [];
+    let strings = [];
+    for (let tile of this.putTilesThisRound) {
+
+    }
+
+    return strings;
+
+
+
+  }
+
+  findWordsAcrossXaxis() {
+    let s = "";
+    let string = [];
+    let strings = [];
+
+    for (let tile of this.putTilesThisRound) {
+
+    }
+    return strings;
+
+
   }
 
   // Function that checks if a word exist or not
