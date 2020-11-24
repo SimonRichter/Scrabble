@@ -133,7 +133,7 @@ export default class Board {
     if (this.putTilesThisRound.length)
       // console.log('true or false? ',this.checkIfWord());
       this.checkIfWord();
-    // this.nextToPutTilesHM();  Un-comment to test optional function
+    //this.nextToPutTilesHM();  //Un-comment to test optional function
   }
 
   checkXYAxis() {

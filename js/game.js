@@ -126,7 +126,7 @@ export default class Game {
 
       that.skipCounter++;   //Global skipCounter +1  when clicked. (4 consecutive times to 'Game Over')
 
-      if (that.skipCounter > 3) {
+      if (that.skipCounter > 5) {
 
         $('.game-over').fadeIn(1500);
 
