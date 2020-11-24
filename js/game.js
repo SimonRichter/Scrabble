@@ -11,7 +11,6 @@ export default class Game {
     this.playerTurn = 0;
     this.skipCounter = 0;
 
-
     await this.tilesFromFile();
     // create players
     this.players = [new Player(this, "Player 1"), new Player(this, "Player 2")];
@@ -19,6 +18,8 @@ export default class Game {
     this.renderMenu();
     this.board.render();
     this.renderStand();
+    // add click event listener.
+    // Since the menu isn't re-rendered we only need to add the click event listener once.
     this.addClickEvents();
   }
 
@@ -31,20 +32,19 @@ export default class Game {
       .split("\n")
       .forEach((x) => {
         // For each line split content by ' '
-        // x[0] = char, x[1] = points, x[2] = occurences
         x = x.split(" ");
         x[0] = x[0] === "_" ? " " : x[0];
-        // add tiles to this.tiles
+        // add tiles to this.bag.tiles
         while (x[2]--) {
           this.bag.tiles.push(new Tile(x[0], +x[1]));
         }
       });
-    // Shuffle in random order
+    // Shuffle the tiles in random order
     this.bag.tiles.sort(() => Math.random() - 0.5);
   }
 
   getTiles(howMany = 7) {
-    // Return a number of tiles (and remove from this.tiles)
+    // Return a number of tiles (and remove from this.bag.tiles)
     return this.bag.tiles.splice(0, howMany);
   }
 
@@ -76,12 +76,13 @@ export default class Game {
   }
 
   renderStand() {
-    // Create the players divs
+    // Create the players div
     $(".players").remove();
     let $players = $('<div class="players"/>').appendTo("body");
 
     // Render the players
     $players.append(this.players[this.playerTurn].render());
+    // Add drag events
     this.addDragEvents();
   }
 
@@ -93,56 +94,50 @@ export default class Game {
   addClickEvents() {
     let that = this;
     $("#submitButton").click(function () {
-
       if (that.board.falseCounter === 0) {
-        that.skipCounter = 0;  //Skip RESETS when a correct word is written.
+        that.skipCounter = 0; //Skip RESETS when a correct word is written.
 
         //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
         // point 6 and 7 from Trello)
+
+        // Fill the player stand with tiles again after they submit a correct word
         for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
           that.players[that.playerTurn].tiles.push(that.bag.tiles.pop());
         }
+        // This while loop assigns a boardIndex to the placed tile objects
+        // in the board matrix and makes sure that the tiles can't be moved
+        // in the next round
         while (that.board.putTilesThisRound.length) {
           let squareIndex = that.board.putTilesThisRound[0].boardIndex;
-          console.log("squareIndex", squareIndex);
           let y = Math.floor(squareIndex / 15);
           let x = squareIndex % 15;
           that.board.matrix[y][x].tile.hasBeenPlaced = true;
+          // We also push the tiles from putTilesThisRound to putTiles
           that.board.putTiles.push(that.board.putTilesThisRound.shift());
         }
+        // We change the player turn to the next player
         that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+        // We then re-render the stand and board
         that.renderStand();
-        console.log("How long is the bag lol:", that.bag.tiles.length);
         that.board.render();
-        console.log("putTiles", that.board.putTiles);
       }
-
-
     });
 
-
     $("#skipButton").click(function () {
-
-
-      that.skipCounter++;   //Global skipCounter +1  when clicked. (4 consecutive times to 'Game Over')
+      that.skipCounter++; //Global skipCounter +1  when clicked. (4 consecutive times to 'Game Over')
 
       if (that.skipCounter > 5) {
-
-        $('.game-over').fadeIn(1500);
-
+        $(".game-over").fadeIn(1500);
       }
-
 
       that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
       that.renderStand();
-
-
     });
-
-
   }
 
   addDragEvents() {
+    // This function adds some opacity to the tiles in the stand
+    // When hovering over them.
     $(".stand .tile").hover(
       function () {
         $(this).css("opacity", "0.9");
@@ -160,16 +155,18 @@ export default class Game {
         me.addClass("hover");
       }
     });
+    // Remove the hover class on mouseleave
     $(".board > div").mouseleave((e) =>
       $(e.currentTarget).removeClass("hover")
     );
 
-    // Drag-events: We only check if a tile is in place on dragEnd
+    // When moving tiles from the stand, run this code:
     $(".stand .tile")
       .not(".none")
       .draggabilly()
       .on("dragEnd", (e) => {
-        // get the dropZone square - if none render and return
+        // get the dropZone square -
+        // if none re-render the stand to put back the dragged tile and return
         let $dropZone = $(".hover");
         if (!$dropZone.length) {
           this.renderStand();
@@ -187,46 +184,62 @@ export default class Game {
         let $tile = $(e.currentTarget);
         let tileIndex = $(".stand > div").index($tile);
 
-        // put the tile on the board and re-render
+        // put the tile in the board matrix and re-render the board and stand
         this.board.matrix[y][x].tile = this.players[
           this.playerTurn
         ].tiles.splice(tileIndex, 1)[0];
-        console.log("what is this??", squareIndex);
-
         this.board.matrix[y][x].tile.boardIndex = squareIndex;
         this.board.putTilesThisRound.push(this.board.matrix[y][x].tile);
         this.board.render();
         this.renderStand();
       });
 
+    // These variables are declared here so that they can be used
+    // both in the following dragStart and dragEnd
     let yStart = 0;
     let xStart = 0;
 
+    // When moving tiles from the board, run this code:
     $(".tilePlacedThisRound")
       .draggabilly()
       .on("dragStart", (e) => {
+        // $tile is declared as the tile we are dragging from the board
         let $tile = $(e.currentTarget);
+
+        // we declare tileIndex as the index on the board of the tile being draggec
         let tileIndex = $(".board > div").index($tile.parent());
+
+        // For some reason the is-dragging class is not added to the tile being dragged
+        // Therefore we add the class "dragging" which does the same thing as is-dragging
         $tile.addClass("dragging");
-        // convert to y and x coords in this.board
+
+        // we save the y and x coordinates of the tile being dragged
+        // which will be used in dragEnd later
         yStart = Math.floor(tileIndex / 15);
         xStart = tileIndex % 15;
+
+        // We add some opacity on the tiles in the stand as we are hovering over them
         $(".stand").mouseenter((e) => {
           $(e.currentTarget).addClass("hover");
         });
+        // Remove hover class on mouseleave
         $(".stand").mouseleave((e) => $(e.currentTarget).removeClass("hover"));
       })
+
       .on("dragEnd", (e) => {
-        // get the dropZone square - if none render and return
+        // declare $dropZone to be the square on the DOM board that
+        // the mouse is hovering over -
+        // if there is no dropZone square (= tile dragged outside the board and stand) re-render and return
         let $dropZone = $(".hover");
         if (!$dropZone.length) {
           this.board.render();
           this.renderStand();
-          this.addDragEvents();
           return;
         }
 
+        // Check if we are dragging the tile above the stand
         if ($(".stand").hasClass("hover")) {
+          // Put back the tile
           this.board.matrix[yStart][xStart].tile.hasBeenPlaced = false;
           this.players[this.playerTurn].tiles.push(
             this.board.matrix[yStart][xStart].tile
@@ -234,25 +247,28 @@ export default class Game {
           let indexOf = this.board.putTilesThisRound.indexOf(
             this.board.matrix[yStart][xStart].tile
           );
-          this.board.putTilesThisRound.splice(
-            indexOf, 1
-          );
+          // Remove the tile from putTilesThisRound and the board matrix
+          this.board.putTilesThisRound.splice(indexOf, 1);
           delete this.board.matrix[yStart][xStart].tile;
+
+          // inside this else we have code that runs if the tile is dragged
+          // from one place on the board to another place on the board
         } else {
           // the index of the square we are hovering over
           let squareIndex = $(".board > div").index($dropZone);
 
-          // convert to y and x coords in this.board
+          // convert to y and x coordinates
           let y = Math.floor(squareIndex / 15);
           let x = squareIndex % 15;
 
-          // put the tile on the board and re-render
+          // put the tile on the new location in the board matrix
           this.board.matrix[y][x].tile = this.board.matrix[yStart][xStart].tile;
-
+          // Assign the new boardIndex to the tile
           this.board.matrix[y][x].tile.boardIndex = squareIndex;
+          // delete the moved tile from the old location
           delete this.board.matrix[yStart][xStart].tile;
-          // this.board.matrix[yStart][xStart][].pop(this.board.matrix[yStart][xStart]);
         }
+        // Remove dragging and hover class and re-render board and stand
         let $tile = $(e.currentTarget);
         $tile.removeClass("dragging").removeClass("hover");
         this.board.render();

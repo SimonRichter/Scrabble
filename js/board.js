@@ -105,21 +105,29 @@ export default class Board {
   }
 
   render() {
+    // Remove the old board div and its children
     $(".board").remove();
+    // Append new board div
     $("body").append('<div class="board"/>');
+    // Fill the new board div with square children, some with tiles some not
     $(".board").html(
       this.matrix
         .flat()
         .map(
+          // add special characters to squares that should have special characters
+          // add index and an id to each square div
           (x) => `
         <div class="${x.specialS ? x.specialS : ""}" data-index='${
             x.index
           }' id='cell${x.index}'>
           ${
+            // Then add the tiles that have been placed
             x.tile
               ? `<div class="tile${
+                  // remove the tilePlacedThisRound class from tiles placed in previous round
                   x.tile.hasBeenPlaced ? "" : " tilePlacedThisRound"
                 }" data-index='${x.index}'>${x.tile.char} <span>${
+                  // Add index, letter and points to the tile div
                   x.tile.points || ""
                 }</span></div>`
               : `${x.specialS ? x.specialS : ""}`
@@ -127,6 +135,7 @@ export default class Board {
         </div>
       `
         )
+        // make sure it will be added as one string and not as individual strings
         .join("")
     );
     this.falseCounter = 1;
@@ -137,6 +146,7 @@ export default class Board {
   }
 
   checkXYAxis() {
+    // The indexes for the squares at the first row
     let firstIndexInRow = [
       0,
       15,
@@ -221,6 +231,7 @@ export default class Board {
     else if (
       this.putTilesThisRound[0].boardIndex ===
         this.putTilesThisRound[1].boardIndex - 1 &&
+      // we make sure that the placed word is not placed on multiple rows
       !firstIndexInRow.includes(this.putTilesThisRound[1].boardIndex)
     ) {
       for (let i = 0; i < this.putTilesThisRound.length - 1; i++) {
@@ -229,6 +240,7 @@ export default class Board {
           if (
             this.putTilesThisRound[i].boardIndex ===
               this.putTilesThisRound[i + 1].boardIndex - 1 &&
+            // we make sure that the placed word is not placed on multiple rows
             !firstIndexInRow.includes(this.putTilesThisRound[i + 1].boardIndex)
           ) {
             // It's a match so we move on to the next letter
