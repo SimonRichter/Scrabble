@@ -9,7 +9,7 @@ export default class Game {
     this.board = new Board();
     this.board.createBoard();
     this.playerTurn = 0;
-    this.skipCounterChanged = 0;
+    this.skipCounter = 0;
 
     await this.tilesFromFile();
     // create players
