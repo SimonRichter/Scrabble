@@ -25,8 +25,10 @@ body {
 
 .board > div {
   border: 1px solid #000000;
-  width: 6.2vh;
-  height: 6.2vh;
+  /* width: 6.2vh;
+  height: 6.2vh; */
+  width: 6vh;
+  height: 6vh;
   float: left;
   text-align: center;
   font-weight: bold;
@@ -44,7 +46,8 @@ body {
 
 .board .tile {
   position: absolute;
-  margin: 1px;
+  /* margin: 2px; */
+  margin: 0.2vmin;
 }
 
 .board > div.hover {
@@ -57,7 +60,8 @@ body {
   background-color: rgb(127, 46, 46);
   border-radius: 3px;
   padding: 0.5vh;
-  width: 53vh;
+  /* width: 52vh; */
+  width: 49.5vh;
 }
 
 .stand::after {
@@ -76,14 +80,18 @@ body {
 
 .players {
   position: absolute; 
-  top: 95.2vh;
-  left: 41vh;
+  /* top: 95.2vh;
+  left: 42vh; */
+  top: 92vh;
+  left: 41.5vh;
 }
 .pname {
   position: absolute;
   font-size: 2.2vh;
   font-weight: bold;
-  left: -37vh;
+  /*  left: -37vh;
+  top: 1.3vh; */
+  left: -9vh;
   top: 1.3vh;
   margin-bottom: 0px;
 }
@@ -93,13 +101,16 @@ body {
   z-index: 1;
   position: relative;
   text-align: center;
-  width: 5.6vh;
-  height: 5.6vh;
+  /* width: 5.6vh;
+  height: 5.6vh; */
+  width: 5.4vh;
+  height: 5.4vh;
   float: left;
   background-color: #fff;
   border: 1px solid #000;
   border-radius: 3px;
-  margin: 0 2px;
+  /* margin: 0 1px; */
+  margin: 0 1px;
   font-size: 3.5vh;
 }
 
@@ -135,14 +146,15 @@ body {
 /* ----------------- MENU/BUTTONS/TEXT ---------------- */
 .menu {
   position: absolute;
-  top: 94.6vh;
-  left: 1vh;
+  /* top: 91.5vh; */
+  top: 91.5vh;
+  left: 0.8vh;
   text-align: left;
   background-color: rgb(94, 34, 34);
   border: none;
-  padding: 1.6vh 0vh 0vh 11vh;
+  padding: 1.6vh 0vh 0vh 1vh;
   /* padding-top: 2vh; */
-  width: 94vh;
+  width: 91vh;
   height: 7.5vh;
   border-radius: 5px;
 }
@@ -151,7 +163,7 @@ body {
   width: 9vh; 
   border: inset;
   background-color: rgb(143, 50, 50);
-  border-color: rgb(247, 163, 163);
+  border-color: rgb(143, 129, 129);
   border-width: 2px;
   margin-right: 0.5vh;
   padding: 0.66vh 1vh;
