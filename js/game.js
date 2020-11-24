@@ -22,6 +22,7 @@ export default class Game {
     // add click event listener.
     // Since the menu isn't re-rendered we only need to add the click event listener once.
     this.addClickEvents();
+    this.renderScoreBoard();
   }
 
   async tilesFromFile() {
@@ -297,5 +298,20 @@ export default class Game {
     // Creates the smaller box with Game Over! text
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
+  }
+
+  renderScoreBoard() {
+    // Removes any old scoreboard existing
+    $(".scoreboard").remove();
+    // Creates a new Score Board div
+    let $scoreboard = $('<div class="scoreboard"><h2>Scoreboard</h2></div>').appendTo("body");
+
+    for (let player of this.players) {
+      $scoreboard.append(`<div> 
+      <h3>${player.name}</h3>
+      <p>${player.score}</p>
+      </div>`)
+    }
+
   }
 }
