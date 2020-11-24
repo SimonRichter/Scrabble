@@ -24,6 +24,7 @@ export default class Board {
       210: "TW",
       217: "TW",
       224: "TW",
+
       // Triple letter pts
       20: "TL",
       24: "TL",
@@ -37,6 +38,7 @@ export default class Board {
       148: "TL",
       200: "TL",
       204: "TL",
+
       //Double Word pts
       16: "DW",
       32: "DW",
@@ -82,7 +84,8 @@ export default class Board {
       116: "DL",
       132: "DL",
 
-      112: "CS", // Middle of the board
+      // Middle of the board
+      112: "CS",
     };
   }
   createBoard() {
@@ -138,11 +141,6 @@ export default class Board {
         // make sure it will be added as one string and not as individual strings
         .join("")
     );
-    this.falseCounter = 1;
-    if (this.putTilesThisRound.length)
-      // console.log('true or false? ',this.checkIfWord());
-      this.checkIfWord();
-    //this.nextToPutTilesHM();  //Un-comment to test optional function
   }
 
   checkXYAxis() {

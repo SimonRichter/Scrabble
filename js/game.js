@@ -118,8 +118,8 @@ export default class Game {
         // We change the player turn to the next player
         that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
         // We then re-render the stand and board
-        that.renderStand();
         that.board.render();
+        that.renderStand();
       }
     });
 
@@ -281,6 +281,6 @@ export default class Game {
     let $gameover = $('<div class="game-over"/>').appendTo("body");
     // Creates the smaller box with Game Over! text
     $gameover.append(`<div>Game Over!</div>`);
-    $('.game-over').fadeIn(1300);
+    $(".game-over").fadeIn(1300);
   }
 }
