@@ -21,6 +21,8 @@ body {
   border-radius: 5px;
   display: inline-block;
   background-color: rgb(176, 194, 218);
+  background: rgb(217,233,238);
+  background: radial-gradient(circle, rgba(217,233,238,1) 0%, rgba(137,159,166,1) 100%);   
 }
 
 .board > div {
@@ -107,7 +109,7 @@ body {
   height: 5.4vh;
   float: left;
   background-color: #fff;
-  border: 1px solid #000;
+  border: 0px solid #000;
   border-radius: 3px;
   /* margin: 0 1px; */
   margin: 0 1px;
