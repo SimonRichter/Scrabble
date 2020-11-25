@@ -20,7 +20,7 @@ export default class Board {
 
       // Triple letter pts
       20: "TL", 24: "TL", 76: "TL", 80: "TL", 84: "TL", 88: "TL", 136: "TL", 140: "TL", 144: "TL", 148: "TL", 200: "TL", 204: "TL",
-      
+
       //Double Word pts
       16: "DW", 32: "DW", 48: "DW", 64: "DW", 64: "DW", 196: "DW", 182: "DW", 168: "DW", 154: "DW", 28: "DW", 42: "DW", 56: "DW",
       70: "DW", 160: "DW", 176: "DW", 192: "DW", 208: "DW",
@@ -28,7 +28,7 @@ export default class Board {
       //Double letter pts
       3: "DL", 36: "DL", 45: "DL", 52: "DL", 92: "DL", 96: "DL", 108: "DL", 11: "DL", 38: "DL", 59: "DL", 98: "DL", 102: "DL", 122: "DL",
       126: "DL", 128: "DL", 165: "DL", 172: "DL", 179: "DL", 186: "DL", 188: "DL", 213: "DL", 221: "DL", 116: "DL", 132: "DL",
-      
+
       // Middle of the board
       112: "CS",
     };
@@ -91,7 +91,7 @@ export default class Board {
   checkXYAxis() {
     // The indexes for the squares at the first row
     let firstIndexInRow = [
-      0, 15,30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210,
+      0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210,
     ];
     // First we hopefully sort the this.putTilesThisRound array so that the tile with
     // the lowest index number on the board is first and the tile
@@ -232,7 +232,7 @@ export default class Board {
     }
     return false;
   }
-  
+
 
   checkMiddleSquare() {
     // If the first round is being played
@@ -259,56 +259,142 @@ export default class Board {
     }
   }
 
+  /*
+  This method will check all potential words(strings) across the X axis 
+      W      W      W
+     [O] [R][O] [R][W][][][]  <---- X AXIS
+      R      R      O
+      D      D      R
+      ??     ??     D ??
+  and return an array of strings ("potencial words")
+  */
+
+  findWordsAcrossXaxis() {
+    let s = "";    // this will form a a string(potential word).
+    let string = []; //this array will contain the tiles found on the board.
+    let strings = []; // array with all the potential words.
+    for (let t of this.putTilesThisRound) {  //for all tiles put on this round.
+      let yIndex = Math.floor(t.boardIndex / 15);  //obtain (x,y) coordinates
+      let xIndex = t.boardIndex % 15;
+      try {
+        while (this.matrix[yIndex][xIndex].tile) {    // while the tile object exist on the board
+          string.push(this.matrix[yIndex][xIndex].tile); //put it in the array of tiles.
+          yIndex++;                                     // we move 1 sqaure and check again (while loop)
+        }
+
+      } catch (error) {    // we were at the edge of the board, catch the error and
+        yIndex--;           // back one square.
+
+      }
+      yIndex = Math.floor(t.boardIndex / 15) - 1;
+      try {
+        while (this.matrix[yIndex][xIndex].tile) {        // we do the same as the other 
+          string.push(this.matrix[yIndex][xIndex].tile);   // while-loop but now on the other
+          yIndex--;                                     // direction.
+        }
+
+      } catch (error) {        // catch edge of the board error
+        yIndex++;
+      }
+
+      string.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1);  //we sort the tiles by index so we can read (left to right // top to bottom)
+      for (let letter of string) {  //for each letter inside the tile
+        s += letter.char;  // we add that tile to or "potential word" variable.
+      }
+      strings.push(s);  // pushed the potencial word to the Array which will be  returned
+      s = '';    // empty the potencial word so we can use it again in the next loop.
+      string = []; // empty the array of tiles  we can use it again in the next loop.
+    }
+    console.log(strings);  //  test 
+    return strings;
+  }
+
+
+  /*
+  
+  This method will check all potential words(strings) across the X axis
+    W O [R]R D ??
+        [A]
+    W O [R]R D  ??
+        [A]
+       W[O]R D  ??
+        [A]
+        []
+        []
+        Y 
+        |
+        |
+        AXIS
+  
+  and return an array of strings ("potencial words")
+  
+   THE SAME AS LAST METHOD ******   findWordsAcrossXaxis()  *******
+  
+  */
+
   findWordsAcrossYaxis() {
     let s = "";
     let string = [];
     let strings = [];
-    for (let tile of this.putTilesThisRound) {
+    for (let t of this.putTilesThisRound) {
+      let yIndex = Math.floor(t.boardIndex / 15);
+      let xIndex = t.boardIndex % 15;
+      console.log(yIndex);
+      console.log(xIndex);
 
-    }
+      try {
+        while (this.matrix[yIndex][xIndex].tile) {
+          string.push(this.matrix[yIndex][xIndex].tile);
+          xIndex++;
+        }
 
-    return strings;
+      } catch (error) {
+        xIndex--;
 
-
-
-  }
-
-  findWordsAcrossXaxis() {
-    let s = "";
-    let string = [];
-    let strings = [];
-
-    for (let tile of this.putTilesThisRound) {
-
-    }
-    return strings;
-
-
-  }
-
-  // Function that checks if a word exist or not
-  // changes falseCounter to 1 if a word doesn't exist (needed for spela-button)
-  async checkIfWord(...a) {
-    let tilesInOrder = this.putTilesThisRound.sort((a, b) =>
-      a.boardIndex > b.boardIndex ? 1 : -1
-    );
-    let words = []; // For the future
-
-    let word = "";
-    for (let i = 0; i < tilesInOrder.length; i++) {
-      word += tilesInOrder[i].char;
-    }
-    console.log("word: ", word);
-    if (!a.length) {
-      a[0] = word;
-    }
-    for (let i of a) {
-      word = i;
-      this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 1;
-      if (this.falseCounter === 1) {
-        break;
       }
+      xIndex = (t.boardIndex % 15) - 1;
+      console.log(xIndex)
+      try {
+        while (this.matrix[yIndex][xIndex].tile) {
+          string.push(this.matrix[yIndex][xIndex].tile);
+          xIndex--;
+        }
+
+      } catch (error) {
+        xIndex++;
+
+      }
+      string.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1);
+      for (let letter of string) {
+        s += letter.char;
+      }
+
+      strings.push(s);
+      s = '';
+      string = [];
     }
-    console.log("falseCounter ", this.falseCounter);
+    console.log(strings);
+    return strings;
+  }
+
+
+
+
+  // array of potencial words from methods  findWordsAcrossYaxis() and
+  // findWordsAcrossXaxis() 
+
+  async checkIfWord(array) {
+
+    let word = ""; // we will put each potencial word of the array here.
+    for (let ord of array) {
+      if (ord.length > 1) {  // words consisted of 1 letter are not considered
+        word = ord;
+        this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 1;  // checks the dictionary
+        if (this.falseCounter === 1) {
+          break;
+        }
+      }
+
+    }
   }
 }
