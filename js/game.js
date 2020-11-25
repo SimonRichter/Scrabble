@@ -161,25 +161,7 @@ export default class Game {
       }
     });
 
-
-
     $("#skipButton").click(function () {
-
-      if (that.board.putTilesThisRound.length) {
-
-        for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
-
-          let squareIndex = that.board.putTilesThisRound[i].boardIndex;
-          let y = Math.floor(squareIndex / 15);
-          let x = squareIndex % 15;
-          delete that.board.matrix[y][x].tile;
-          that.players[that.playerTurn].stand.push(that.board.putTilesThisRound[i]);
-
-          that.board.putTilesThisRound.splice(i, 1);
-
-        }
-      }
-
       that.skipCounter++; //Global skipCounter +1  when clicked. (4 consecutive times to 'Game Over')
 
       if (that.skipCounter > 5) {
@@ -187,13 +169,10 @@ export default class Game {
       }
 
       that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
-
-      that.board.render();
       that.renderStand();
-
+      that.renderTilesLeft();
     });
   }
-
 
   addDragEvents() {
     // This function adds some opacity to the tiles in the stand
