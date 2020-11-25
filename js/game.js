@@ -55,6 +55,8 @@ export default class Game {
     let div = document.createElement("div");
     div.className = "menu";
     document.body.appendChild(div);
+    //document.getElementsByClassName("board").appendChild(div);
+
 
     // Create buttons and append to menu div
     let menu = document.getElementsByClassName("menu")[0];
