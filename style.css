@@ -57,7 +57,7 @@ body {
 
 /* ----------------- STAND ---------------- */
 .stand {
-  background-color: rgb(127, 46, 46);
+  background-color: rgb(54, 8, 8);
   border-radius: 3px;
   padding: 0.5vh;
   /* width: 52vh; */
@@ -82,7 +82,7 @@ body {
   position: absolute; 
   /* top: 95.2vh;
   left: 42vh; */
-  top: 92vh;
+  top: 92.4vh;
   left: 41.5vh;
 }
 .pname {
@@ -147,24 +147,29 @@ body {
 .menu {
   position: absolute;
   /* top: 91.5vh; */
-  top: 91.5vh;
+  top: 91.8vh;
   left: 0.8vh;
   text-align: left;
-  background-color: rgb(94, 34, 34);
+  background-color: rgb(90, 40, 40);
+  background: rgb(59,19,14);
+  background: linear-gradient(180deg, rgba(59,19,14,1) 0%, rgba(125,30,30,1) 50%, rgba(50,9,9,1) 100%);  
   border: none;
-  padding: 1.6vh 0vh 0vh 1vh;
+  padding: 1.6vmin 0vh 0vh 1.5vmin;
   /* padding-top: 2vh; */
   width: 91vh;
   height: 7.5vh;
-  border-radius: 5px;
+  border-radius: 0.5vmin;
 }
 
 .btn {
   width: 9vh; 
-  border: inset;
+  background: rgb(75,24,17);
+  background: linear-gradient(180deg, rgba(75,24,17,1) 0%, rgba(186,63,26,1) 0%, rgba(173,0,0,1) 100%);         
   background-color: rgb(143, 50, 50);
-  border-color: rgb(143, 129, 129);
-  border-width: 2px;
+  border-color: rgb(48, 40, 40);
+  border: groove;
+  border-width: 0.2vmin;
+  border-radius: 1.0vmin;
   margin-right: 0.5vh;
   padding: 0.66vh 1vh;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -172,19 +177,19 @@ body {
   font-weight: 600;
   line-height: 2.5vh;
   text-align: center;
+  text-shadow: 2px 2px 8px #800000;
   cursor: pointer;
   display: inline-block;
 }
 
 .skip {
   color: #d3cfcf;
-
-  border-radius: 5px;
+  /* border-radius: 5px; */
 }
 
 .skip:hover {
-  background: #a74c4c;
-  color: rgb(94, 9, 9);
+  /* background: #a74c4c; */
+  color: rgba(0, 0, 0, 0.445);
 }
 
 .tilesLeft {
