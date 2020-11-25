@@ -88,120 +88,35 @@ export default class Board {
     );
   }
 
-  checkXYAxis() {
-    // The indexes for the squares at the first row
-    let firstIndexInRow = [
-      0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210,
-    ];
-    // First we hopefully sort the this.putTilesThisRound array so that the tile with
-    // the lowest index number on the board is first and the tile
-    // with the highest index number on the board is last
-    // This is to make sure the function is "reading" the word
-    // correctly no matter what order the player puts down the tiles
-    this.putTilesThisRound.sort((a, b) =>
-      a.boardIndex > b.boardIndex ? 1 : -1
-    );
-    // Case if the word is two letters long:
-    if (this.putTilesThisRound.length === 2) {
-      if (
-        this.putTilesThisRound[0].boardIndex ===
-        this.putTilesThisRound[1].boardIndex - 15 ||
-        (this.putTilesThisRound[0].boardIndex ===
-          this.putTilesThisRound[1].boardIndex - 1 &&
-          !firstIndexInRow.includes(this.putTilesThisRound[1].boardIndex))
-      ) {
-        return true;
-      } else {
-        alert(
-          "You did not put down your tiles next to eachother. Please try again."
-        );
-        return false;
+  checkXYAxisHM() {
+    if (this.putTiles.length) { // Only do the function if there are tiles on the board
+      let message = "You did not put down your tiles next to eachother."; // Alert message
+      let tilesInOrder = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1); // Sort this.putTilesThisRound
+      let startIndex = tilesInOrder[0].boardIndex; // Index of the tile with the lowest index
+      let endIndex = tilesInOrder[tilesInOrder.length - 1].boardIndex; // Index of the tile with the highest index
+
+      // Converting indexes to x and y-indexes
+      let yStartIndex = Math.floor(startIndex / 15);
+      let xStartIndex = startIndex % 15;
+      let yEndIndex = Math.floor(endIndex / 15);
+      let xEndIndex = endIndex % 15;
+
+      if (xStartIndex !== xEndIndex) { // If tiles are in the same row
+        // Check if there are any gaps between the first and last tile
+        // if so return false + message
+        while (xStartIndex <= xEndIndex) {
+          if (!this.matrix[yStartIndex][xStartIndex].tile) { alert(message); return false; }
+          xStartIndex++;
+        }
       }
-    }
-    // Case if the word is vertically placed on the board
-    // First we check if the second letter is below the first one
-    else if (
-      this.putTilesThisRound[0].boardIndex ===
-      this.putTilesThisRound[1].boardIndex - 15
-    ) {
-      for (let i = 0; i < this.putTilesThisRound.length - 1; i++) {
-        // We use the code in the next if statement until we reach the last letter
-        if (i < this.putTilesThisRound.length - 2) {
-          if (
-            this.putTilesThisRound[i].boardIndex ===
-            this.putTilesThisRound[i + 1].boardIndex - 15
-          ) {
-            // It's a match so we move on to the next letter
-            continue;
-          } else {
-            alert(
-              "You did not put down your tiles next to eachother. Please try again."
-            );
-            return false;
-          }
-          // When we have reached the last letter we do one final check
-        } else {
-          if (
-            this.putTilesThisRound[i].boardIndex ===
-            this.putTilesThisRound[i + 1].boardIndex - 15
-          ) {
-            return true;
-          } else {
-            alert(
-              "You did not put down your tiles next to eachother. Please try again."
-            );
-            return false;
-          }
+      if (yStartIndex !== yEndIndex) { // Same as before but in columns
+        while (xStartIndex <= xEndIndex) {
+          if (!this.matrix[yStartIndex][xStartIndex].tile) { alert(message); return false; }
+          yStartIndex++;
         }
       }
     }
-    // Case if the word is horizontally placed on the board
-    // First we check if the second letter is to the right of the first one
-    else if (
-      this.putTilesThisRound[0].boardIndex ===
-      this.putTilesThisRound[1].boardIndex - 1 &&
-      // we make sure that the placed word is not placed on multiple rows
-      !firstIndexInRow.includes(this.putTilesThisRound[1].boardIndex)
-    ) {
-      for (let i = 0; i < this.putTilesThisRound.length - 1; i++) {
-        // We use the code in the next if statement until we reach the last letter
-        if (i < this.putTilesThisRound.length - 2) {
-          if (
-            this.putTilesThisRound[i].boardIndex ===
-            this.putTilesThisRound[i + 1].boardIndex - 1 &&
-            // we make sure that the placed word is not placed on multiple rows
-            !firstIndexInRow.includes(this.putTilesThisRound[i + 1].boardIndex)
-          ) {
-            // It's a match so we move on to the next letter
-            continue;
-          } else {
-            alert(
-              "You did not put down your tiles next to eachother. Please try again."
-            );
-            return false;
-          }
-          // When we have reached the last letter we do one final check
-        } else {
-          if (
-            this.putTilesThisRound[i].boardIndex ===
-            this.putTilesThisRound[i + 1].boardIndex - 1 &&
-            !firstIndexInRow.includes(this.putTilesThisRound[i + 1].boardIndex)
-          ) {
-            return true;
-          } else {
-            alert(
-              "You did not put down your tiles next to eachother. Please try again."
-            );
-            return false;
-          }
-        }
-      }
-    } else {
-      alert(
-        "You did not put down your tiles next to eachother. Please try again."
-      );
-      return false;
-    }
+    return true;
   }
 
   nextToPutTilesHM() {
