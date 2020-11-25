@@ -110,7 +110,7 @@ export default class Board {
         }
       }
       if (yStartIndex !== yEndIndex) { // Same as before but in columns
-        while (xStartIndex <= xEndIndex) {
+        while (yStartIndex <= yEndIndex) {
           if (!this.matrix[yStartIndex][xStartIndex].tile) { alert(message); return false; }
           yStartIndex++;
         }
