@@ -13,7 +13,7 @@ export default class Game {
 
     await this.tilesFromFile();
     // create players
-    this.players = [new Player(this, "Player 1"), new Player(this, "Player 2")];
+    this.players = [new Player(this, "Spelare 1"), new Player(this, "Spelare 2")];
     // render the menu + board + players
     this.board.render();
     this.renderMenu();
@@ -22,7 +22,7 @@ export default class Game {
     // add click event listener.
     // Since the menu isn't re-rendered we only need to add the click event listener once.
     this.addClickEvents();
-    this.renderScoreBoard();
+    //this.renderScoreBoard();
   }
 
   async tilesFromFile() {
@@ -70,11 +70,13 @@ export default class Game {
     passa.setAttribute("id", "skipButton");
     passa.textContent = "Passa";
     menu.appendChild(passa);
-    // Byt button
+    /*
+    // Byt button 
     let byt = document.createElement("button");
     byt.setAttribute("class", "btn skip");
     byt.textContent = "Byt";
     menu.appendChild(byt);
+    */
   }
 
   renderStand() {
