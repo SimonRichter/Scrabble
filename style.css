@@ -90,11 +90,10 @@ body {
 .pname {
   position: absolute;
   font-size: 2.2vh;
-  font-weight: bold;
   color: white;
   /*  left: -37vh;
   top: 1.3vh; */
-  left: -9vh;
+  left: -13vh;
   top: 1.3vh;
   margin-bottom: 0px;
 }
@@ -150,7 +149,7 @@ body {
 .menu {
   position: absolute;
   /* top: 91.5vh; */
-  top: 92h;
+  top: 92vh;
   left: 1.5vh;
   text-align: left;
   background-color: rgb(90, 40, 40);
