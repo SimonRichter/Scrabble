@@ -111,33 +111,49 @@ export default class Game {
   addClickEvents() {
     let that = this;
     $("#submitButton").click(function () {
-      if (!that.board.putTilesThisRound.length) {
-        return;
-      }
-      if (that.board.falseCounter === 0) {
-        that.skipCounter = 0; //Skip RESETS when a correct word is written.
+      that.board.falseCounter = 1;    // falseCounter resets to 1 (false) at the begging of the round
 
-        // Fill the player's stand with tiles again after they submit a correct word
-        for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
-          that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
-        }
-        // This while loop assigns a boardIndex to the placed tile objects
-        // in the board matrix and makes sure that the tiles can't be moved
-        // in the next round
-        while (that.board.putTilesThisRound.length) {
-          let squareIndex = that.board.putTilesThisRound[0].boardIndex;
-          let y = Math.floor(squareIndex / 15);
-          let x = squareIndex % 15;
-          that.board.matrix[y][x].tile.hasBeenPlaced = true;
-          // We also push the tiles from putTilesThisRound to putTiles
-          that.board.putTiles.push(that.board.putTilesThisRound.shift());
-        }
-        // We change the player turn to the next player
-        that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
-        // We then re-render the stand and board
-        that.board.render();
-        that.renderStand();
-        that.renderTilesLeft();
+      if (that.board.putTilesThisRound.length) {
+        let check1 = that.board.findWordsAcrossXaxis();
+        that.board.checkIfWord(check1).then(x => {     //it will wait for Promised to be fullfilled before running the next code
+
+          if (that.board.putTilesThisRound.length) {
+            let check2 = that.board.findWordsAcrossYaxis();
+            that.board.checkIfWord(check2).then(x => {   //(round 2)it will wait for Promised to be fullfilled before running the next code.
+              if (that.board.falseCounter === 0) {
+                that.skipCounter = 0; //Skip RESETS when a correct word is written. 
+
+                //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
+                // point 6 and 7 from Trello)
+
+                // Fill the player stand with tiles again after they submit a correct word
+                for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
+                  that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
+                }
+                // This while loop assigns a boardIndex to the placed tile objects
+                // in the board matrix and makes sure that the tiles can't be moved
+                // in the next round
+                while (that.board.putTilesThisRound.length) {
+                  let squareIndex = that.board.putTilesThisRound[0].boardIndex;
+                  let y = Math.floor(squareIndex / 15);
+                  let x = squareIndex % 15;
+                  that.board.matrix[y][x].tile.hasBeenPlaced = true;
+                  // We also push the tiles from putTilesThisRound to putTiles
+                  that.board.putTiles.push(that.board.putTilesThisRound.shift());
+                }
+                // We change the player turn to the next player
+                that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+                // We then re-render the stand and board
+                that.board.render();
+                that.renderStand();
+                that.renderTilesLeft();
+
+              }
+
+            });
+
+          }
+        });
       }
     });
 
