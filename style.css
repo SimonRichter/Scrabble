@@ -19,6 +19,7 @@ body {
 .board {
   border: 5px solid #000000;
   border-radius: 5px;
+  margin-top: -7px;
   display: inline-block;
   background-color: rgb(176, 194, 218);
   background: rgb(217,233,238);
@@ -206,6 +207,10 @@ body {
   border: none;
   padding: 0vh 1vh 0vh 1vh;
   border-radius: 5px;
+}
+
+.tilesLeft > p {
+  font-size: 20px;
 }
 
 .game-over{
