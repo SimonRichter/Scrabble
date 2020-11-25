@@ -230,6 +230,7 @@ export default class Board {
         }
       }
     }
+    alert("Not touching tiles placed in other rounds");
     return false;
   }
 
@@ -391,6 +392,7 @@ export default class Board {
         word = ord;
         this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 1;  // checks the dictionary
         if (this.falseCounter === 1) {
+          alert("'" + word.toUpperCase() + "' is not a correct word from the swedish dictionary!");
           break;
         }
       }
