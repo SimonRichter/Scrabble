@@ -121,7 +121,6 @@ export default class Board {
 
   nextToPutTilesHM() {
     if (!this.putTiles.length) {
-      console.log("Nothing to check");
       return true;
     }
     for (let newTile of this.putTilesThisRound) {
@@ -131,17 +130,17 @@ export default class Board {
         let oldX = Math.floor(oldTile.boardIndex / 15);
         let oldY = oldTile.boardIndex % 15;
 
-        console.log("x and y:s", newX, newY, oldX, oldY);
+        // console.log("x and y:s", newX, newY, oldX, oldY); //test
 
         if (Math.abs(oldX - newX) === 1 && oldY === newY) {
-          console.log("Same axis Y, touching Y");
+          //console.log("Same axis Y, touching Y"); //test
           return true;
         }
         if (Math.abs(oldY - newY) === 1 && oldX === newX) {
-          console.log("Same axis X, touching X");
+          //console.log("Same axis X, touching X"); //test
           return true;
         } else {
-          console.log("Not touching tiles placed in other rounds");
+
         }
       }
     }
@@ -221,7 +220,7 @@ export default class Board {
       s = '';    // empty the potencial word so we can use it again in the next loop.
       string = []; // empty the array of tiles  we can use it again in the next loop.
     }
-    console.log(strings);  //  test 
+    //console.log(strings);  //  test 
     return strings;
   }
 
@@ -247,7 +246,6 @@ export default class Board {
    THE SAME AS LAST METHOD ******   findWordsAcrossXaxis()  *******
   
   */
-
   findWordsAcrossYaxis() {
     let s = "";
     let string = [];
@@ -255,8 +253,6 @@ export default class Board {
     for (let t of this.putTilesThisRound) {
       let yIndex = Math.floor(t.boardIndex / 15);
       let xIndex = t.boardIndex % 15;
-      console.log(yIndex);
-      console.log(xIndex);
 
       try {
         while (this.matrix[yIndex][xIndex].tile) {
@@ -269,7 +265,6 @@ export default class Board {
 
       }
       xIndex = (t.boardIndex % 15) - 1;
-      console.log(xIndex)
       try {
         while (this.matrix[yIndex][xIndex].tile) {
           string.push(this.matrix[yIndex][xIndex].tile);
@@ -289,7 +284,7 @@ export default class Board {
       s = '';
       string = [];
     }
-    console.log(strings);
+    //console.log(strings); //test
     return strings;
   }
 
