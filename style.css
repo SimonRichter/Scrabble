@@ -21,6 +21,8 @@ body {
   border-radius: 5px;
   display: inline-block;
   background-color: rgb(176, 194, 218);
+  background: rgb(217,233,238);
+  background: radial-gradient(circle, rgba(217,233,238,1) 0%, rgba(137,159,166,1) 100%);   
 }
 
 .board > div {
@@ -89,6 +91,7 @@ body {
   position: absolute;
   font-size: 2.2vh;
   font-weight: bold;
+  color: white;
   /*  left: -37vh;
   top: 1.3vh; */
   left: -9vh;
@@ -107,7 +110,7 @@ body {
   height: 5.4vh;
   float: left;
   background-color: #fff;
-  border: 1px solid #000;
+  border: 0px solid #000;
   border-radius: 3px;
   /* margin: 0 1px; */
   margin: 0 1px;
@@ -147,8 +150,8 @@ body {
 .menu {
   position: absolute;
   /* top: 91.5vh; */
-  top: 91.8vh;
-  left: 0.8vh;
+  top: 92h;
+  left: 1.5vh;
   text-align: left;
   background-color: rgb(90, 40, 40);
   background: rgb(59,19,14);
