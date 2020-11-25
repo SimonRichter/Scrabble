@@ -82,7 +82,7 @@ body {
   position: absolute; 
   /* top: 95.2vh;
   left: 42vh; */
-  top: 92.4vh;
+  top: 92.5vh;
   left: 41.5vh;
 }
 .pname {
@@ -147,8 +147,8 @@ body {
 .menu {
   position: absolute;
   /* top: 91.5vh; */
-  top: 91.8vh;
-  left: 0.8vh;
+  top: 92vh;
+  left: 1vh;
   text-align: left;
   background-color: rgb(90, 40, 40);
   background: rgb(59,19,14);
