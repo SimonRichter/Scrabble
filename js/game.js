@@ -127,9 +127,6 @@ export default class Game {
               if (that.board.falseCounter === 0 && that.board.checkMiddleSquare() && that.board.checkXYAxisHM() && that.board.nextToPutTilesHM()) {
                 that.skipCounter = 0; //Skip RESETS when a correct word is written. 
 
-                //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
-                // point 6 and 7 from Trello)
-
                 // Fill the player stand with tiles again after they submit a correct word
                 for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
                   that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
