@@ -120,7 +120,7 @@ export default class Game {
           if (that.board.putTilesThisRound.length) {
             let check2 = that.board.findWordsAcrossYaxis();
             that.board.checkIfWord(check2).then(x => {   //(round 2)it will wait for Promised to be fullfilled before running the next code.
-              if (that.board.falseCounter === 0) {
+              if (that.board.falseCounter === 0 && that.board.checkMiddleSquare() && that.board.checkXYAxis() && that.board.nextToPutTilesHM()) {
                 that.skipCounter = 0; //Skip RESETS when a correct word is written. 
 
                 //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
