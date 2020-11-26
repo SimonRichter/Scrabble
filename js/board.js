@@ -90,7 +90,7 @@ export default class Board {
 
   checkXYAxisHM() {
     if (this.putTilesThisRound.length) { // Only do the function if there are tiles on the board
-      let message = "You did not put down your tiles next to eachother."; // Alert message
+      let message = "Your tiles must touch each other."; // Alert message
       let tilesInOrder = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1); // Sort this.putTilesThisRound
       let startIndex = tilesInOrder[0].boardIndex; // Index of the tile with the lowest index
       let endIndex = tilesInOrder[tilesInOrder.length - 1].boardIndex; // Index of the tile with the highest index
@@ -144,7 +144,7 @@ export default class Board {
         }
       }
     }
-    alert("Not touching tiles placed in other rounds");
+    alert("Tiles must touch tiles placed in previous rounds");
     return false;
   }
 
@@ -227,7 +227,7 @@ export default class Board {
 
   /*
   
-  This method will check all potential words(strings) across the X axis
+  This method will check all potential words(strings) across the Y axis
     W O [R]R D ??
         [A]
     W O [R]R D  ??
@@ -302,7 +302,7 @@ export default class Board {
         word = ord;
         this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 1;  // checks the dictionary
         if (this.falseCounter === 1) {
-          alert("'" + word.toUpperCase() + "' is not a correct word from the swedish dictionary!");
+          alert("'" + word.toUpperCase() + "' is NOT a correct word from the Swedish dictionary!");
           break;
         }
       }
