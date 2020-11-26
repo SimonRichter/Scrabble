@@ -1,5 +1,6 @@
 import SAOLchecker from "./SAOLchecker.js";
 export default class Board {
+
   constructor() {
     // When the game starts, first round is true. When checkMiddleSquare() is called, it changes to false.
     // (May have to be moved to game?)
@@ -12,82 +13,27 @@ export default class Board {
     // on the board it has been placed, for example with the
     // field boardIndex in the tile object
     this.putTilesThisRound = [];
-    this.falseCounter = 1;
-
+    this.falseCounter = 0;
     this.specialSquares = {
       // Triple Word pts
-      0: "TW",
-      7: "TW",
-      14: "TW",
-      105: "TW",
-      119: "TW",
-      210: "TW",
-      217: "TW",
-      224: "TW",
+      0: "TW", 7: "TW", 14: "TW", 105: "TW", 119: "TW", 210: "TW", 217: "TW", 224: "TW",
 
       // Triple letter pts
-      20: "TL",
-      24: "TL",
-      76: "TL",
-      80: "TL",
-      84: "TL",
-      88: "TL",
-      136: "TL",
-      140: "TL",
-      144: "TL",
-      148: "TL",
-      200: "TL",
-      204: "TL",
+      20: "TL", 24: "TL", 76: "TL", 80: "TL", 84: "TL", 88: "TL", 136: "TL", 140: "TL", 144: "TL", 148: "TL", 200: "TL", 204: "TL",
 
       //Double Word pts
-      16: "DW",
-      32: "DW",
-      48: "DW",
-      64: "DW",
-      64: "DW",
-      196: "DW",
-      182: "DW",
-      168: "DW",
-      154: "DW",
-      28: "DW",
-      42: "DW",
-      56: "DW",
-      70: "DW",
-      160: "DW",
-      176: "DW",
-      192: "DW",
-      208: "DW",
+      16: "DW", 32: "DW", 48: "DW", 64: "DW", 64: "DW", 196: "DW", 182: "DW", 168: "DW", 154: "DW", 28: "DW", 42: "DW", 56: "DW",
+      70: "DW", 160: "DW", 176: "DW", 192: "DW", 208: "DW",
 
       //Double letter pts
-      3: "DL",
-      36: "DL",
-      45: "DL",
-      52: "DL",
-      92: "DL",
-      96: "DL",
-      108: "DL",
-      11: "DL",
-      38: "DL",
-      59: "DL",
-      98: "DL",
-      102: "DL",
-      122: "DL",
-      126: "DL",
-      128: "DL",
-      165: "DL",
-      172: "DL",
-      179: "DL",
-      186: "DL",
-      188: "DL",
-      213: "DL",
-      221: "DL",
-      116: "DL",
-      132: "DL",
+      3: "DL", 36: "DL", 45: "DL", 52: "DL", 92: "DL", 96: "DL", 108: "DL", 11: "DL", 38: "DL", 59: "DL", 98: "DL", 102: "DL", 122: "DL",
+      126: "DL", 128: "DL", 165: "DL", 172: "DL", 179: "DL", 186: "DL", 188: "DL", 213: "DL", 221: "DL", 116: "DL", 132: "DL",
 
       // Middle of the board
       112: "CS",
     };
   }
+
   createBoard() {
     this.matrix = [...new Array(15)].map((x) =>
       [...new Array(15)].map((x) => ({}))
@@ -140,145 +86,41 @@ export default class Board {
         // make sure it will be added as one string and not as individual strings
         .join("")
     );
-    //this.findWordsAcrossXaxis();
-    //this.findWordsAcrossYaxis();
-
   }
 
-  checkXYAxis() {
-    // The indexes for the squares at the first row
-    let firstIndexInRow = [
-      0,
-      15,
-      30,
-      45,
-      60,
-      75,
-      90,
-      105,
-      120,
-      135,
-      150,
-      165,
-      180,
-      195,
-      210,
-    ];
-    // First we hopefully sort the this.putTilesThisRound array so that the tile with
-    // the lowest index number on the board is first and the tile
-    // with the highest index number on the board is last
-    // This is to make sure the function is "reading" the word
-    // correctly no matter what order the player puts down the tiles
-    this.putTilesThisRound.sort((a, b) =>
-      a.boardIndex > b.boardIndex ? 1 : -1
-    );
-    // Case if the word is two letters long:
-    if (this.putTilesThisRound.length === 2) {
-      if (
-        this.putTilesThisRound[0].boardIndex ===
-        this.putTilesThisRound[1].boardIndex - 15 ||
-        (this.putTilesThisRound[0].boardIndex ===
-          this.putTilesThisRound[1].boardIndex - 1 &&
-          !firstIndexInRow.includes(this.putTilesThisRound[1].boardIndex))
-      ) {
-        return true;
-      } else {
-        alert(
-          "You did not put down your tiles next to eachother. Please try again."
-        );
-        return false;
+  checkXYAxisHM() {
+    if (this.putTilesThisRound.length) { // Only do the function if there are tiles on the board
+      let message = "Your tiles must touch each other."; // Alert message
+      let tilesInOrder = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1); // Sort this.putTilesThisRound
+      let startIndex = tilesInOrder[0].boardIndex; // Index of the tile with the lowest index
+      let endIndex = tilesInOrder[tilesInOrder.length - 1].boardIndex; // Index of the tile with the highest index
+
+      // Converting indexes to x and y-indexes
+      let yStartIndex = Math.floor(startIndex / 15);
+      let xStartIndex = startIndex % 15;
+      let yEndIndex = Math.floor(endIndex / 15);
+      let xEndIndex = endIndex % 15;
+
+      if (xStartIndex !== xEndIndex) { // If tiles are in the same row
+        // Check if there are any gaps between the first and last tile
+        // if so return false + message
+        while (xStartIndex <= xEndIndex) {
+          if (!this.matrix[yStartIndex][xStartIndex].tile) { alert(message); return false; }
+          xStartIndex++;
+        }
       }
-    }
-    // Case if the word is vertically placed on the board
-    // First we check if the second letter is below the first one
-    else if (
-      this.putTilesThisRound[0].boardIndex ===
-      this.putTilesThisRound[1].boardIndex - 15
-    ) {
-      for (let i = 0; i < this.putTilesThisRound.length - 1; i++) {
-        // We use the code in the next if statement until we reach the last letter
-        if (i < this.putTilesThisRound.length - 2) {
-          if (
-            this.putTilesThisRound[i].boardIndex ===
-            this.putTilesThisRound[i + 1].boardIndex - 15
-          ) {
-            // It's a match so we move on to the next letter
-            continue;
-          } else {
-            alert(
-              "You did not put down your tiles next to eachother. Please try again."
-            );
-            return false;
-          }
-          // When we have reached the last letter we do one final check
-        } else {
-          if (
-            this.putTilesThisRound[i].boardIndex ===
-            this.putTilesThisRound[i + 1].boardIndex - 15
-          ) {
-            return true;
-          } else {
-            alert(
-              "You did not put down your tiles next to eachother. Please try again."
-            );
-            return false;
-          }
+      if (yStartIndex !== yEndIndex) { // Same as before but in columns
+        while (yStartIndex <= yEndIndex) {
+          if (!this.matrix[yStartIndex][xStartIndex].tile) { alert(message); return false; }
+          yStartIndex++;
         }
       }
     }
-    // Case if the word is horizontally placed on the board
-    // First we check if the second letter is to the right of the first one
-    else if (
-      this.putTilesThisRound[0].boardIndex ===
-      this.putTilesThisRound[1].boardIndex - 1 &&
-      // we make sure that the placed word is not placed on multiple rows
-      !firstIndexInRow.includes(this.putTilesThisRound[1].boardIndex)
-    ) {
-      for (let i = 0; i < this.putTilesThisRound.length - 1; i++) {
-        // We use the code in the next if statement until we reach the last letter
-        if (i < this.putTilesThisRound.length - 2) {
-          if (
-            this.putTilesThisRound[i].boardIndex ===
-            this.putTilesThisRound[i + 1].boardIndex - 1 &&
-            // we make sure that the placed word is not placed on multiple rows
-            !firstIndexInRow.includes(this.putTilesThisRound[i + 1].boardIndex)
-          ) {
-            // It's a match so we move on to the next letter
-            continue;
-          } else {
-            alert(
-              "You did not put down your tiles next to eachother. Please try again."
-            );
-            return false;
-          }
-          // When we have reached the last letter we do one final check
-        } else {
-          if (
-            this.putTilesThisRound[i].boardIndex ===
-            this.putTilesThisRound[i + 1].boardIndex - 1 &&
-            !firstIndexInRow.includes(this.putTilesThisRound[i + 1].boardIndex)
-          ) {
-            return true;
-          } else {
-            alert(
-              "You did not put down your tiles next to eachother. Please try again."
-            );
-            return false;
-          }
-        }
-      }
-    } else {
-      alert(
-        "You did not put down your tiles next to eachother. Please try again."
-      );
-      return false;
-    }
+    return true;
   }
-
 
   nextToPutTilesHM() {
     if (!this.putTiles.length) {
-      console.log("Nothing to check");
       return true;
     }
     for (let newTile of this.putTilesThisRound) {
@@ -288,23 +130,23 @@ export default class Board {
         let oldX = Math.floor(oldTile.boardIndex / 15);
         let oldY = oldTile.boardIndex % 15;
 
-        console.log("x and y:s", newX, newY, oldX, oldY);
+        // console.log("x and y:s", newX, newY, oldX, oldY); //test
 
         if (Math.abs(oldX - newX) === 1 && oldY === newY) {
-          console.log("Same axis Y, touching Y");
+          //console.log("Same axis Y, touching Y"); //test
           return true;
         }
         if (Math.abs(oldY - newY) === 1 && oldX === newX) {
-          console.log("Same axis X, touching X");
+          //console.log("Same axis X, touching X"); //test
           return true;
         } else {
-          console.log("Not touching tiles placed in other rounds");
+
         }
       }
     }
+    alert("Tiles must touch tiles placed in previous rounds");
     return false;
   }
-
 
 
   checkMiddleSquare() {
@@ -332,40 +174,78 @@ export default class Board {
     }
   }
 
+  /*
+  This method will check all potential words(strings) across the X axis 
+      W      W      W
+     [O] [R][O] [R][W][][][]  <---- X AXIS
+      R      R      O
+      D      D      R
+      ??     ??     D ??
+  and return an array of strings ("potencial words")
+  */
+
   findWordsAcrossXaxis() {
-    let s = "";
-    let string = [];
-    let strings = [];
-    for (let t of this.putTilesThisRound) {
-      let yIndex = Math.floor(t.boardIndex / 15);
+    let s = "";    // this will form a a string(potential word).
+    let string = []; //this array will contain the tiles found on the board.
+    let strings = []; // array with all the potential words.
+    for (let t of this.putTilesThisRound) {  //for all tiles put on this round.
+      let yIndex = Math.floor(t.boardIndex / 15);  //obtain (x,y) coordinates
       let xIndex = t.boardIndex % 15;
+      try {
+        while (this.matrix[yIndex][xIndex].tile) {    // while the tile object exist on the board
+          string.push(this.matrix[yIndex][xIndex].tile); //put it in the array of tiles.
+          yIndex++;                                     // we move 1 sqaure and check again (while loop)
+        }
 
-      while (this.matrix[yIndex][xIndex].tile) {
-        string.push(this.matrix[yIndex][xIndex].tile);
-        xIndex++;
+      } catch (error) {    // we were at the edge of the board, catch the error and
+        yIndex--;           // back one square.
+
       }
-      xIndex = (t.boardIndex % 15) - 1;
-      while (this.matrix[yIndex][xIndex].tile) {
-        string.push(this.matrix[yIndex][xIndex].tile);
-        xIndex--;
-      }
-      string.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1);
-      for (let letter of string) {
-        s += letter.char;
+      yIndex = Math.floor(t.boardIndex / 15) - 1;
+      try {
+        while (this.matrix[yIndex][xIndex].tile) {        // we do the same as the other 
+          string.push(this.matrix[yIndex][xIndex].tile);   // while-loop but now on the other
+          yIndex--;                                     // direction.
+        }
+
+      } catch (error) {        // catch edge of the board error
+        yIndex++;
       }
 
-      strings.push(s);
-      s = '';
-      string = [];
+      string.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1);  //we sort the tiles by index so we can read (left to right // top to bottom)
+      for (let letter of string) {  //for each letter inside the tile
+        s += letter.char;  // we add that tile to or "potential word" variable.
+      }
+      strings.push(s);  // pushed the potencial word to the Array which will be  returned
+      s = '';    // empty the potencial word so we can use it again in the next loop.
+      string = []; // empty the array of tiles  we can use it again in the next loop.
     }
-    console.log(strings);
+    //console.log(strings);  //  test 
     return strings;
   }
 
-  whateverTestYouWannaPut() {
-    this.checkIfWord(this.findWordsAcrossXaxis());
-  }
 
+  /*
+  
+  This method will check all potential words(strings) across the Y axis
+    W O [R]R D ??
+        [A]
+    W O [R]R D  ??
+        [A]
+       W[O]R D  ??
+        [A]
+        []
+        []
+        Y 
+        |
+        |
+        AXIS
+  
+  and return an array of strings ("potencial words")
+  
+   THE SAME AS LAST METHOD ******   findWordsAcrossXaxis()  *******
+  
+  */
   findWordsAcrossYaxis() {
     let s = "";
     let string = [];
@@ -374,50 +254,59 @@ export default class Board {
       let yIndex = Math.floor(t.boardIndex / 15);
       let xIndex = t.boardIndex % 15;
 
-      while (this.matrix[yIndex][xIndex].tile) {
-        string.push(this.matrix[yIndex][xIndex].tile);
-        yIndex++;
+      try {
+        while (this.matrix[yIndex][xIndex].tile) {
+          string.push(this.matrix[yIndex][xIndex].tile);
+          xIndex++;
+        }
+
+      } catch (error) {
+        xIndex--;
+
       }
-      yIndex = Math.floor(t.boardIndex / 15) - 1;
-      while (this.matrix[yIndex][xIndex].tile) {
-        string.push(this.matrix[yIndex][xIndex].tile);
-        yIndex--;
+      xIndex = (t.boardIndex % 15) - 1;
+      try {
+        while (this.matrix[yIndex][xIndex].tile) {
+          string.push(this.matrix[yIndex][xIndex].tile);
+          xIndex--;
+        }
+
+      } catch (error) {
+        xIndex++;
+
       }
       string.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1);
       for (let letter of string) {
         s += letter.char;
       }
+
       strings.push(s);
       s = '';
       string = [];
     }
-    console.log(strings);
+    //console.log(strings); //test
     return strings;
   }
 
-  // Function that checks if a word exist or not
-  // changes falseCounter to 1 if a word doesn't exist (needed for spela-button)
-  async checkIfWord(a) {
-    let tilesInOrder = this.putTilesThisRound.sort((a, b) =>
-      a.boardIndex > b.boardIndex ? 1 : -1
-    );
-    let words = []; // For the future
 
-    let word = "";
-    for (let i = 0; i < tilesInOrder.length; i++) {
-      word += tilesInOrder[i].char;
-    }
-    console.log("word: ", word);
-    if (!a.length) {
-      a[0] = word;
-    }
-    for (let i of a) {
-      word = i;
-      this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 1;
-      if (this.falseCounter === 1) {
-        break;
+
+
+  // array of potencial words from methods  findWordsAcrossYaxis() and
+  // findWordsAcrossXaxis() 
+
+  async checkIfWord(array) {
+
+    let word = ""; // we will put each potencial word of the array here.
+    for (let ord of array) {
+      if (ord.length > 1) {  // words consisted of 1 letter are not considered
+        word = ord;
+        this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 1;  // checks the dictionary
+        if (this.falseCounter === 1) {
+          alert("'" + word.toUpperCase() + "' is NOT a correct word from the Swedish dictionary!");
+          break;
+        }
       }
+
     }
-    console.log("falseCounter ", this.falseCounter);
   }
 }

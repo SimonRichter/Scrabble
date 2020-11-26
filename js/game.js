@@ -13,14 +13,16 @@ export default class Game {
 
     await this.tilesFromFile();
     // create players
-    this.players = [new Player(this, "Player 1"), new Player(this, "Player 2")];
+    this.players = [new Player(this, "Spelare 1"), new Player(this, "Spelare 2")];
     // render the menu + board + players
     this.board.render();
     this.renderMenu();
     this.renderStand();
+    this.renderTilesLeft();
     // add click event listener.
     // Since the menu isn't re-rendered we only need to add the click event listener once.
     this.addClickEvents();
+    //this.renderScoreBoard();
   }
 
   async tilesFromFile() {
@@ -49,30 +51,34 @@ export default class Game {
   }
 
   renderMenu() {
-    //create menu div
+    // Create menu div
     let div = document.createElement("div");
     div.className = "menu";
     document.body.appendChild(div);
+    //document.getElementsByClassName("board").appendChild(div);
 
-    //create buttons and append to menu div
+
+    // Create buttons and append to menu div
     let menu = document.getElementsByClassName("menu")[0];
-    //spela button
+    // Spela button
     let spela = document.createElement("button");
     spela.setAttribute("class", "btn skip");
     spela.setAttribute("id", "submitButton");
     spela.textContent = "Spela";
     menu.appendChild(spela);
-    //passa button
+    // Passa button
     let passa = document.createElement("button");
     passa.setAttribute("class", "btn skip");
     passa.setAttribute("id", "skipButton");
     passa.textContent = "Passa";
     menu.appendChild(passa);
-    //byt button
+    /*
+    // Byt button 
     let byt = document.createElement("button");
     byt.setAttribute("class", "btn skip");
     byt.textContent = "Byt";
     menu.appendChild(byt);
+    */
   }
 
   renderStand() {
@@ -86,6 +92,21 @@ export default class Game {
     this.addDragEvents();
   }
 
+  renderTilesLeft() {
+    // Remove old div
+    $(".tilesLeft").remove();
+    // Create a new div 
+    let div = document.createElement("div");
+    div.className = "tilesLeft";
+    document.body.appendChild(div);
+    let t = document.getElementsByClassName("tilesLeft")[0];
+    // Create <p> element and append to div
+    let p = document.createElement("p");
+    let text = document.createTextNode("Brickor kvar: " + this.bag.tiles.length);
+    p.appendChild(text);
+    t.appendChild(p);
+  }
+
   // Funtion for SAOL
   async checkWordSaol(wordToCheck) {
     await SAOLchecker.scrabbleOk(wordToCheck); // if will Be true or false after checking the dictionary
@@ -94,47 +115,80 @@ export default class Game {
   addClickEvents() {
     let that = this;
     $("#submitButton").click(function () {
-      that.board.falseCounter = 1;
-      if (that.board.putTilesThisRound.length)
-        that.board.checkIfWord();
-      if (that.board.falseCounter === 0) {
-        that.skipCounter = 0; //Skip RESETS when a correct word is written. 
+      that.board.falseCounter = 1;    // falseCounter resets to 1 (false) at the begging of the round
 
-        //if(checkWordSaol() &&  ********* conditions if word true and other condtions will be here
-        // point 6 and 7 from Trello)
+      if (that.board.putTilesThisRound.length) { //if there are tiles on the board
 
-        // Fill the player stand with tiles again after they submit a correct word
-        for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
-          that.players[that.playerTurn].tiles.push(that.bag.tiles.pop());
-        }
-        // This while loop assigns a boardIndex to the placed tile objects
-        // in the board matrix and makes sure that the tiles can't be moved
-        // in the next round
-        while (that.board.putTilesThisRound.length) {
-          let squareIndex = that.board.putTilesThisRound[0].boardIndex;
-          let y = Math.floor(squareIndex / 15);
-          let x = squareIndex % 15;
-          that.board.matrix[y][x].tile.hasBeenPlaced = true;
-          // We also push the tiles from putTilesThisRound to putTiles
-          that.board.putTiles.push(that.board.putTilesThisRound.shift());
-        }
-        // We change the player turn to the next player
-        that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
-        // We then re-render the stand and board
-        that.board.render();
-        that.renderStand();
+        //we put both arrays together into one variable
+        let allWords = that.board.findWordsAcrossXaxis().concat(that.board.findWordsAcrossYaxis());
+
+        that.board.checkIfWord(allWords).then(x => {     //it will wait for Promised to be fullfilled before running the next code.
+
+          //check  all functions must be True to to be able to go next player after pressing "spela"
+          if (that.board.checkMiddleSquare() && that.board.checkXYAxisHM() && that.board.nextToPutTilesHM() && that.board.falseCounter === 0) {
+            that.skipCounter = 0; //Skip RESETS when a correct word is written. 
+
+            // Fill the player stand with tiles again after they submit a correct word
+            for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
+              that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
+            }
+            // This while loop assigns a boardIndex to the placed tile objects
+            // in the board matrix and makes sure that the tiles can't be moved
+            // in the next round
+            while (that.board.putTilesThisRound.length) {
+              let squareIndex = that.board.putTilesThisRound[0].boardIndex;
+              let y = Math.floor(squareIndex / 15);
+              let x = squareIndex % 15;
+              that.board.matrix[y][x].tile.hasBeenPlaced = true;
+              // We also push the tiles from putTilesThisRound to putTiles
+              that.board.putTiles.push(that.board.putTilesThisRound.shift());
+            }
+            // We change the player turn to the next player
+            that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+            // We then re-render the stand and board
+            that.board.render();
+            that.renderStand();
+            that.renderTilesLeft();
+            if (that.bag.tiles.length === 0 && !that.players[0].stand.length &&
+              !that.players[1].stand.length && !that.players[2].stand.length && !that.players[3].stand.length) {
+              that.renderGameOver();
+            }
+          }
+        });
       }
+      else
+        alert("No tiles played. Click on  'Passa' if you give up this round."); // if player clicks on "spela" without placeing tiles
+
     });
 
     $("#skipButton").click(function () {
+      if (that.board.putTilesThisRound.length) {
+
+        for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
+
+          let squareIndex = that.board.putTilesThisRound[i].boardIndex;
+          let y = Math.floor(squareIndex / 15);
+          let x = squareIndex % 15;
+          delete that.board.matrix[y][x].tile;
+          that.players[that.playerTurn].stand.push(that.board.putTilesThisRound[i]);
+
+          that.board.putTilesThisRound.splice(i, 1);
+
+        }
+      }
+
       that.skipCounter++; //Global skipCounter +1  when clicked. (4 consecutive times to 'Game Over')
 
-      if (that.skipCounter > 5) {
-        $(".game-over").fadeIn(1500);
+      if (that.skipCounter > 3 || (that.bag.tiles.length === 0 && !that.players[0].stand.length &&
+        !that.players[1].stand.length && !that.players[2].stand.length && !that.players[3].stand.length)) {
+        that.renderGameOver();
       }
 
       that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+
+      that.board.render();
       that.renderStand();
+      that.renderTilesLeft();
     });
   }
 
@@ -190,7 +244,7 @@ export default class Game {
         // put the tile in the board matrix and re-render the board and stand
         this.board.matrix[y][x].tile = this.players[
           this.playerTurn
-        ].tiles.splice(tileIndex, 1)[0];
+        ].stand.splice(tileIndex, 1)[0];
         this.board.matrix[y][x].tile.boardIndex = squareIndex;
         this.board.putTilesThisRound.push(this.board.matrix[y][x].tile);
         this.board.render();
@@ -244,7 +298,7 @@ export default class Game {
         if ($(".stand").hasClass("hover")) {
           // Put back the tile
           this.board.matrix[yStart][xStart].tile.hasBeenPlaced = false;
-          this.players[this.playerTurn].tiles.push(
+          this.players[this.playerTurn].stand.push(
             this.board.matrix[yStart][xStart].tile
           );
           let indexOf = this.board.putTilesThisRound.indexOf(
@@ -285,5 +339,20 @@ export default class Game {
     // Creates the smaller box with Game Over! text
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
+  }
+
+  renderScoreBoard() {
+    // Removes any old scoreboard existing
+    $(".scoreboard").remove();
+    // Creates a new Score Board div
+    let $scoreboard = $('<div class="scoreboard"><h2>Scoreboard</h2></div>').appendTo("body");
+
+    for (let player of this.players) {
+      $scoreboard.append(`<div> 
+      <h3>${player.name}</h3>
+      <p>${player.score}</p>
+      </div>`)
+    }
+
   }
 }

@@ -3,12 +3,12 @@ export default class Player {
     this.game = game;
     this.name = name;
     this.score = 0;
-    this.tiles = [...this.game.getTiles(), " "];
+    this.stand = [...this.game.getTiles(), " "];
   }
 
   render() {
     return `<div class="stand">
-      ${this.tiles
+      ${this.stand
         .map(
           (x, i) => `<div 
           class="tile ${x.char ? "" : "none"}"
