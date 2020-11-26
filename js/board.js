@@ -89,7 +89,7 @@ export default class Board {
   }
 
   checkXYAxisHM() {
-    if (this.putTiles.length) { // Only do the function if there are tiles on the board
+    if (this.putTilesThisRound.length) { // Only do the function if there are tiles on the board
       let message = "You did not put down your tiles next to eachother."; // Alert message
       let tilesInOrder = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1); // Sort this.putTilesThisRound
       let startIndex = tilesInOrder[0].boardIndex; // Index of the tile with the lowest index
