@@ -125,7 +125,7 @@ export default class Game {
         that.board.checkIfWord(allWords).then(x => {     //it will wait for Promised to be fullfilled before running the next code.
 
           //check  all functions must be True to to be able to go next player after pressing "spela"
-          if (that.board.falseCounter === 0 && that.board.checkMiddleSquare() && that.board.checkXYAxisHM() && that.board.nextToPutTilesHM()) {
+          if (that.board.checkMiddleSquare() && that.board.checkXYAxisHM() && that.board.nextToPutTilesHM() && that.board.falseCounter === 0) {
             that.skipCounter = 0; //Skip RESETS when a correct word is written. 
 
             // Fill the player stand with tiles again after they submit a correct word
