@@ -149,7 +149,10 @@ export default class Game {
             that.board.render();
             that.renderStand();
             that.renderTilesLeft();
-
+            if (that.bag.tiles.length === 0 && !that.players[0].stand.length &&
+            !that.players[1].stand.length && !that.players[2].stand.length && !that.players[3].stand.length) {
+            that.renderGameOver();
+      }
           }
         });
       }
@@ -176,7 +179,8 @@ export default class Game {
 
       that.skipCounter++; //Global skipCounter +1  when clicked. (4 consecutive times to 'Game Over')
 
-      if (that.skipCounter > 5) {
+      if (that.skipCounter > 3 || (that.bag.tiles.length === 0 && !that.players[0].stand.length &&
+        !that.players[1].stand.length && !that.players[2].stand.length && !that.players[3].stand.length)) {
         that.renderGameOver();
       }
 
