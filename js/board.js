@@ -86,6 +86,8 @@ export default class Board {
         // make sure it will be added as one string and not as individual strings
         .join("")
     );
+    this.countPointsYAxis();
+    this.countPointsXAxis();
   }
 
   checkXYAxisHM() {
@@ -322,22 +324,161 @@ export default class Board {
     }
   }
 
-
-  /*
-    countPoints() {
+  countPointsYAxis() {
+    if (this.putTilesThisRound.length) {
       let points = 0;
-      if (this.putTilesThisRound) {
-        for (let tile of this.putTilesThisRound) {
-          points += tile.points;
-          console.log(tile.specialS);
-          if (this.nextToPutTilesHM) {
-  
+      let pointAdder = 0;
+      let wordMultiplyer = 1;
+      let somethingCounter = 0;
+
+      for (let t of this.putTilesThisRound) {
+        //let t = this.putTilesThisRound[0];
+        let yIndex = Math.floor(t.boardIndex / 15);
+        let xIndex = t.boardIndex % 15;
+        //debugger;
+        if (somethingCounter < 2 && (this.matrix[yIndex + 1][xIndex].tile || this.matrix[yIndex - 1][xIndex].tile)) {
+
+          try {
+
+            while (this.matrix[yIndex][xIndex].tile) {
+              somethingCounter += this.matrix[yIndex][xIndex].tile.hasBeenPlaced ? 0 : 1;
+
+              pointAdder += this.matrix[yIndex][xIndex].tile.points;
+              if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
+                switch (this.matrix[yIndex][xIndex].specialS) {
+                  case 'TW': wordMultiplyer *= 3; break;
+                  case 'DW': wordMultiplyer *= 2; break;
+                  case 'CS': wordMultiplyer *= 2; break;
+                  case 'DL': pointAdder *= 2; break;
+                  case 'TL': pointAdder *= 3; break;
+
+                }
+              }
+              points += pointAdder;
+              pointAdder = 0;
+
+
+              yIndex++;
+            }
+          }
+
+          catch (error) {
+            yIndex--;
+
+          }
+          yIndex = Math.floor(t.boardIndex / 15) - 1;
+          try {
+
+            while (this.matrix[yIndex][xIndex].tile) {
+              somethingCounter += this.matrix[yIndex][xIndex].tile.hasBeenPlaced ? 0 : 1;
+              pointAdder += this.matrix[yIndex][xIndex].tile.points;
+              if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
+                switch (this.matrix[yIndex][xIndex].specialS) {
+                  case 'TW': wordMultiplyer *= 3; break;
+                  case 'DW': wordMultiplyer *= 2; break;
+                  case 'CS': wordMultiplyer *= 2; break;
+                  case 'DL': pointAdder *= 2; break;
+                  case 'TL': pointAdder *= 3; break;
+
+                }
+              }
+              points += pointAdder;
+              pointAdder = 0;
+
+
+              yIndex--;
+            }
+
+            points *= wordMultiplyer;
+            wordMultiplyer = 1;
+
+
+          } catch (error) {
+            yIndex++;
+
           }
         }
-        console.log("Current points this player this round: ", points);
-  
-  
       }
-  
-    }*/
+      console.log('Ypoints: ', points);
+      return points;
+    }
+  }
+
+  countPointsXAxis() {
+    if (this.putTilesThisRound.length) {
+      let points = 0;
+      let pointAdder = 0;
+      let wordMultiplyer = 1;
+      let somethingCounter = 0;
+
+      for (let t of this.putTilesThisRound) {
+        //let t = this.putTilesThisRound[0];
+        let yIndex = Math.floor(t.boardIndex / 15);
+        let xIndex = t.boardIndex % 15;
+        //debugger;
+        if (somethingCounter < 2 && (this.matrix[yIndex][xIndex + 1].tile || this.matrix[yIndex][xIndex - 1].tile)) {
+          try {
+
+            while (this.matrix[yIndex][xIndex].tile) {
+              somethingCounter += this.matrix[yIndex][xIndex].tile.hasBeenPlaced ? 0 : 1;
+              pointAdder += this.matrix[yIndex][xIndex].tile.points;
+              if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
+                switch (this.matrix[yIndex][xIndex].specialS) {
+                  case 'TW': wordMultiplyer *= 3; break;
+                  case 'DW': wordMultiplyer *= 2; break;
+                  case 'CS': wordMultiplyer *= 2; break;
+                  case 'DL': pointAdder *= 2; break;
+                  case 'TL': pointAdder *= 3; break;
+
+                }
+              }
+              points += pointAdder;
+              pointAdder = 0;
+
+
+              xIndex++;
+            }
+          }
+
+          catch (error) {
+            xIndex--;
+
+          }
+          xIndex = (t.boardIndex % 15) - 1;
+          try {
+
+            while (this.matrix[yIndex][xIndex].tile) {
+              somethingCounter += this.matrix[yIndex][xIndex].tile.hasBeenPlaced ? 0 : 1;
+              pointAdder += this.matrix[yIndex][xIndex].tile.points;
+              if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
+                switch (this.matrix[yIndex][xIndex].specialS) {
+                  case 'TW': wordMultiplyer *= 3; break;
+                  case 'DW': wordMultiplyer *= 2; break;
+                  case 'CS': wordMultiplyer *= 2; break;
+                  case 'DL': pointAdder *= 2; break;
+                  case 'TL': pointAdder *= 3; break;
+
+                }
+              }
+              points += pointAdder;
+              pointAdder = 0;
+
+
+              xIndex--;
+            }
+
+            points *= wordMultiplyer;
+            wordMultiplyer = 1;
+
+
+          } catch (error) {
+            xIndex++;
+
+          }
+        }
+      }
+      console.log('Xpoints: ', points);
+      return points;
+    }
+  }
 }
