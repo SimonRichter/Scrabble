@@ -150,9 +150,9 @@ export default class Game {
             that.renderStand();
             that.renderTilesLeft();
             if (that.bag.tiles.length === 0 && !that.players[0].stand.length &&
-            !that.players[1].stand.length && !that.players[2].stand.length && !that.players[3].stand.length) {
-            that.renderGameOver();
-      }
+              !that.players[1].stand.length && !that.players[2].stand.length && !that.players[3].stand.length) {
+              that.renderGameOver();
+            }
           }
         });
       }
