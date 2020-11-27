@@ -220,7 +220,13 @@ export default class Board {
       s = '';    // empty the potencial word so we can use it again in the next loop.
       string = []; // empty the array of tiles  we can use it again in the next loop.
     }
-    //console.log(strings);  //  test 
+    let uniqueStrings = [];
+    $.each(strings, (i, el) => {
+      if ($.inArray(el, uniqueStrings) === -1)
+        uniqueStrings.push(el);
+    });
+    console.log("strings:", strings);
+    console.log("unique Strings", uniqueStrings)  //  test 
     return strings;
   }
 
@@ -284,7 +290,13 @@ export default class Board {
       s = '';
       string = [];
     }
-    //console.log(strings); //test
+    let uniqueStrings = [];
+    $.each(strings, (i, el) => {
+      if ($.inArray(el, uniqueStrings) === -1)
+        uniqueStrings.push(el);
+    });
+    console.log("strings:", strings);
+    console.log("unique Strings", uniqueStrings)
     return strings;
   }
 
@@ -309,4 +321,23 @@ export default class Board {
 
     }
   }
+
+
+  /*
+    countPoints() {
+      let points = 0;
+      if (this.putTilesThisRound) {
+        for (let tile of this.putTilesThisRound) {
+          points += tile.points;
+          console.log(tile.specialS);
+          if (this.nextToPutTilesHM) {
+  
+          }
+        }
+        console.log("Current points this player this round: ", points);
+  
+  
+      }
+  
+    }*/
 }
