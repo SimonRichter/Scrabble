@@ -306,7 +306,7 @@ export default class Board {
 
 
   // array of potencial words from methods  findWordsAcrossYaxis() and
-  // findWordsAcrossXaxis() 
+  // findWordsAcrossXaxis()  will go here.
 
   async checkIfWord(array) {
 
@@ -324,161 +324,148 @@ export default class Board {
     }
   }
 
+  //Function to count points in the Y axis
+
   countPointsYAxis() {
-    if (this.putTilesThisRound.length) {
-      let points = 0;
-      let pointAdder = 0;
-      let wordMultiplyer = 1;
-      let somethingCounter = 0;
+    if (this.putTilesThisRound.length) {  // if there is a tile on the board.
+      let points = 0;                   //variable for points this round.
+      let letterPoints = 0;             // variable for the value of the tile
+      let wordMultiplyer = 1;       // Multiplier cannot be 0 
+      let checkUpDown = 0;          //  counter of tiles on same Y axis
 
-      for (let t of this.putTilesThisRound) {
-        //let t = this.putTilesThisRound[0];
-        let yIndex = Math.floor(t.boardIndex / 15);
+      for (let t of this.putTilesThisRound) {  // for tiles put on this round 
+        let yIndex = Math.floor(t.boardIndex / 15);  // change coordinates to (Y,X)
         let xIndex = t.boardIndex % 15;
-        //debugger;
-        if (somethingCounter < 2 && (this.matrix[yIndex + 1][xIndex].tile || this.matrix[yIndex - 1][xIndex].tile)) {
 
-          try {
+        try { //this try will catch the error of placing the first tile  on a corner
+          if (checkUpDown < 2 && (this.matrix[yIndex + 1][xIndex].tile || this.matrix[yIndex - 1][xIndex].tile)) {  // if there are tiles UP or DOWN
 
-            while (this.matrix[yIndex][xIndex].tile) {
-              somethingCounter += this.matrix[yIndex][xIndex].tile.hasBeenPlaced ? 0 : 1;
+            try {
+              while (this.matrix[yIndex][xIndex].tile) { //while theres is a tile on the board
+                checkUpDown += this.matrix[yIndex][xIndex].tile.hasBeenPlaced ? 0 : 1; // we count that tile as "checked" , we dont count it again
 
-              pointAdder += this.matrix[yIndex][xIndex].tile.points;
-              if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
-                switch (this.matrix[yIndex][xIndex].specialS) {
-                  case 'TW': wordMultiplyer *= 3; break;
-                  case 'DW': wordMultiplyer *= 2; break;
-                  case 'CS': wordMultiplyer *= 2; break;
-                  case 'DL': pointAdder *= 2; break;
-                  case 'TL': pointAdder *= 3; break;
+                letterPoints += this.matrix[yIndex][xIndex].tile.points; // assing value of the tile to variable
+                if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) { //if it is a special square and not placed before
 
+                  //mutiply by the value of special square. Letter are added now. Word multipler will be added later.
+                  switch (this.matrix[yIndex][xIndex].specialS) {
+                    case 'TW': wordMultiplyer *= 3; break;
+                    case 'DW': wordMultiplyer *= 2; break;
+                    case 'CS': wordMultiplyer *= 2; break;
+                    case 'DL': letterPoints *= 2; break;
+                    case 'TL': letterPoints *= 3; break;
+                  }
                 }
+                points += letterPoints; //add the letter points to "points"
+                letterPoints = 0; // we reset the variable for next loop - new tile will be assign
+                yIndex++;  // we move one square up and check again.
               }
-              points += pointAdder;
-              pointAdder = 0;
-
-
-              yIndex++;
             }
-          }
-
-          catch (error) {
-            yIndex--;
-
-          }
-          yIndex = Math.floor(t.boardIndex / 15) - 1;
-          try {
-
-            while (this.matrix[yIndex][xIndex].tile) {
-              somethingCounter += this.matrix[yIndex][xIndex].tile.hasBeenPlaced ? 0 : 1;
-              pointAdder += this.matrix[yIndex][xIndex].tile.points;
-              if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
-                switch (this.matrix[yIndex][xIndex].specialS) {
-                  case 'TW': wordMultiplyer *= 3; break;
-                  case 'DW': wordMultiplyer *= 2; break;
-                  case 'CS': wordMultiplyer *= 2; break;
-                  case 'DL': pointAdder *= 2; break;
-                  case 'TL': pointAdder *= 3; break;
-
-                }
-              }
-              points += pointAdder;
-              pointAdder = 0;
-
-
+            catch (error) {  //catching the error of counting points over the edge of the board
               yIndex--;
+
             }
+            // now teh same as before but we go down instead.
+            yIndex = Math.floor(t.boardIndex / 15) - 1;
+            try {
+              while (this.matrix[yIndex][xIndex].tile) {
+                checkUpDown += this.matrix[yIndex][xIndex].tile.hasBeenPlaced ? 0 : 1;
+                letterPoints += this.matrix[yIndex][xIndex].tile.points;
+                if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
+                  switch (this.matrix[yIndex][xIndex].specialS) {
+                    case 'TW': wordMultiplyer *= 3; break;
+                    case 'DW': wordMultiplyer *= 2; break;
+                    case 'CS': wordMultiplyer *= 2; break;
+                    case 'DL': letterPoints *= 2; break;
+                    case 'TL': letterPoints *= 3; break;
+                  }
+                }
+                points += letterPoints; // add the letter points 
+                letterPoints = 0;   // reset for next loop
+                yIndex--; // go down one square
+              }
+              points *= wordMultiplyer;  // NOW we mulply the word
+              wordMultiplyer = 1;  // we reset it to 1 again for next loop
+            } catch (error) {
+              yIndex++;
 
-            points *= wordMultiplyer;
-            wordMultiplyer = 1;
-
-
-          } catch (error) {
-            yIndex++;
-
+            }
           }
-        }
+
+        } catch (error) { }  // test
       }
       console.log('Ypoints: ', points);
-      return points;
+      return points;  // we returned the points counted on Y axis.
     }
   }
+
+  // same as before - countPointsYAxis() -  but now on X axis , mirrored function.
 
   countPointsXAxis() {
     if (this.putTilesThisRound.length) {
       let points = 0;
-      let pointAdder = 0;
+      let letterPoints = 0;
       let wordMultiplyer = 1;
-      let somethingCounter = 0;
+      let checkLeftRight = 0;
 
       for (let t of this.putTilesThisRound) {
-        //let t = this.putTilesThisRound[0];
         let yIndex = Math.floor(t.boardIndex / 15);
         let xIndex = t.boardIndex % 15;
-        //debugger;
-        if (somethingCounter < 2 && (this.matrix[yIndex][xIndex + 1].tile || this.matrix[yIndex][xIndex - 1].tile)) {
-          try {
-
-            while (this.matrix[yIndex][xIndex].tile) {
-              somethingCounter += this.matrix[yIndex][xIndex].tile.hasBeenPlaced ? 0 : 1;
-              pointAdder += this.matrix[yIndex][xIndex].tile.points;
-              if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
-                switch (this.matrix[yIndex][xIndex].specialS) {
-                  case 'TW': wordMultiplyer *= 3; break;
-                  case 'DW': wordMultiplyer *= 2; break;
-                  case 'CS': wordMultiplyer *= 2; break;
-                  case 'DL': pointAdder *= 2; break;
-                  case 'TL': pointAdder *= 3; break;
-
+        try {
+          if (checkLeftRight < 2 && (this.matrix[yIndex][xIndex + 1].tile || this.matrix[yIndex][xIndex - 1].tile)) {
+            try {
+              while (this.matrix[yIndex][xIndex].tile) {
+                checkLeftRight += this.matrix[yIndex][xIndex].tile.hasBeenPlaced ? 0 : 1;
+                letterPoints += this.matrix[yIndex][xIndex].tile.points;
+                if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
+                  switch (this.matrix[yIndex][xIndex].specialS) {
+                    case 'TW': wordMultiplyer *= 3; break;
+                    case 'DW': wordMultiplyer *= 2; break;
+                    case 'CS': wordMultiplyer *= 2; break;
+                    case 'DL': letterPoints *= 2; break;
+                    case 'TL': letterPoints *= 3; break;
+                  }
                 }
+                points += letterPoints;
+                letterPoints = 0;
+                xIndex++;
               }
-              points += pointAdder;
-              pointAdder = 0;
-
-
-              xIndex++;
             }
-          }
-
-          catch (error) {
-            xIndex--;
-
-          }
-          xIndex = (t.boardIndex % 15) - 1;
-          try {
-
-            while (this.matrix[yIndex][xIndex].tile) {
-              somethingCounter += this.matrix[yIndex][xIndex].tile.hasBeenPlaced ? 0 : 1;
-              pointAdder += this.matrix[yIndex][xIndex].tile.points;
-              if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
-                switch (this.matrix[yIndex][xIndex].specialS) {
-                  case 'TW': wordMultiplyer *= 3; break;
-                  case 'DW': wordMultiplyer *= 2; break;
-                  case 'CS': wordMultiplyer *= 2; break;
-                  case 'DL': pointAdder *= 2; break;
-                  case 'TL': pointAdder *= 3; break;
-
-                }
-              }
-              points += pointAdder;
-              pointAdder = 0;
-
-
+            catch (error) {
               xIndex--;
             }
+            xIndex = (t.boardIndex % 15) - 1;
+            try {
 
-            points *= wordMultiplyer;
-            wordMultiplyer = 1;
+              while (this.matrix[yIndex][xIndex].tile) {
+                checkLeftRight += this.matrix[yIndex][xIndex].tile.hasBeenPlaced ? 0 : 1;
+                letterPoints += this.matrix[yIndex][xIndex].tile.points;
+                if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
+                  switch (this.matrix[yIndex][xIndex].specialS) {
+                    case 'TW': wordMultiplyer *= 3; break;
+                    case 'DW': wordMultiplyer *= 2; break;
+                    case 'CS': wordMultiplyer *= 2; break;
+                    case 'DL': letterPoints *= 2; break;
+                    case 'TL': letterPoints *= 3; break;
+                  }
+                }
+                points += letterPoints;
+                letterPoints = 0;
+                xIndex--;
+              }
 
+              points *= wordMultiplyer;
+              wordMultiplyer = 1;
+            } catch (error) {
+              xIndex++;
 
-          } catch (error) {
-            xIndex++;
-
+            }
           }
         }
+        catch (error) { }
       }
       console.log('Xpoints: ', points);
-      return points;
+      return points;  // we return  the points counted on X axis
     }
   }
 }
