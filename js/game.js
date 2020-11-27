@@ -128,6 +128,10 @@ export default class Game {
           if (that.board.checkMiddleSquare() && that.board.checkXYAxisHM() && that.board.nextToPutTilesHM() && that.board.falseCounter === 0) {
             that.skipCounter = 0; //Skip RESETS when a correct word is written. 
 
+            // we add the points counted and add them to the Players Score.
+            that.players[that.playerTurn].score += that.board.countPointsXAxis() + that.board.countPointsYAxis();
+            console.log('SCORE ', that.players[that.playerTurn].name, '= ', that.players[that.playerTurn].score, " points"); //shows Score on console (for now)
+
             // Fill the player stand with tiles again after they submit a correct word
             for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
               that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
