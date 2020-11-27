@@ -220,8 +220,15 @@ export default class Board {
       s = '';    // empty the potencial word so we can use it again in the next loop.
       string = []; // empty the array of tiles  we can use it again in the next loop.
     }
-    //console.log(strings);  //  test 
-    return strings;
+    //now delete duplicated strings/words.
+    let uniqueStrings = []; // Empty array for Unique words.
+    $.each(strings, (i, el) => { //function for each element(potential word) of array strings.
+      if ($.inArray(el, uniqueStrings) === -1) // if the element is NOT in our new uniqueStrings Array
+        uniqueStrings.push(el); // push it haaaard.
+    });
+    console.log("strings across X:", strings); //test
+    console.log("unique Strings across X", uniqueStrings)  //  test 
+    return uniqueStrings; //we now return unique values /strings/potencial words
   }
 
 
@@ -244,6 +251,7 @@ export default class Board {
   and return an array of strings ("potencial words")
   
    THE SAME AS LAST METHOD ******   findWordsAcrossXaxis()  *******
+   But now for the Y axis.
   
   */
   findWordsAcrossYaxis() {
@@ -284,8 +292,14 @@ export default class Board {
       s = '';
       string = [];
     }
-    //console.log(strings); //test
-    return strings;
+    let uniqueStrings = [];
+    $.each(strings, (i, el) => {
+      if ($.inArray(el, uniqueStrings) === -1)
+        uniqueStrings.push(el);
+    });
+    console.log("strings across Y:", strings);//test
+    console.log("unique Strings across Y", uniqueStrings)  //test
+    return uniqueStrings;
   }
 
 
