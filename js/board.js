@@ -86,6 +86,8 @@ export default class Board {
         // make sure it will be added as one string and not as individual strings
         .join("")
     );
+    this.countPointsYAxis();
+    this.countPointsXAxis();
   }
 
   checkXYAxisHM() {
