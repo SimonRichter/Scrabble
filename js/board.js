@@ -86,10 +86,27 @@ export default class Board {
         // make sure it will be added as one string and not as individual strings
         .join("")
     );
-    this.countPointsYAxis();
-    this.countPointsXAxis();
+    this.countPointsYAxis(); // console points on Y for test 
+    this.countPointsXAxis(); //console points on x for test 
+    this.testPointInRealTime() // Div in DOM for test 
+
+
   }
 
+  //function for test of real time points in DOM
+  testPointInRealTime() {
+    let x = 0;
+    if (this.putTilesThisRound.length) {
+      let that = this;
+      x = that.countPointsXAxis() + that.countPointsYAxis();
+    }
+    $(".tpirt").remove();
+    let $tpirt = $('<div class="tpirt">Points in real time</div>').appendTo("body");
+    $tpirt.append(`<h3>+${x}</h3>`)
+  }
+
+
+  // This function checks if tiles of this round are touching each other
   checkXYAxisHM() {
     if (this.putTilesThisRound.length) { // Only do the function if there are tiles on the board
       let message = "Your tiles must touch each other."; // Alert message
@@ -121,6 +138,8 @@ export default class Board {
     return true;
   }
 
+
+  // this function is checks if tiles are touching tiles from previous rounds
   nextToPutTilesHM() {
     if (!this.putTiles.length) {
       return true;
