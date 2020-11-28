@@ -22,7 +22,8 @@ export default class Game {
     // add click event listener.
     // Since the menu isn't re-rendered we only need to add the click event listener once.
     this.addClickEvents();
-    //this.renderScoreBoard();
+    this.renderScoreBoard();
+
   }
 
   async tilesFromFile() {
@@ -147,6 +148,8 @@ export default class Game {
               // We also push the tiles from putTilesThisRound to putTiles
               that.board.putTiles.push(that.board.putTilesThisRound.shift());
             }
+            that.renderScoreBoard();
+
             // We change the player turn to the next player
             that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
             // We then re-render the stand and board
@@ -359,4 +362,6 @@ export default class Game {
     }
 
   }
+
+
 }
