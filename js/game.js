@@ -42,9 +42,17 @@ export default class Game {
           this.bag.tiles.push(new Tile(x[0], +x[1]));
         }
       });
-    // Shuffle the tiles in random order
-    this.bag.tiles.sort(() => Math.random() - 0.5);
+
+    // Better random/shuffle of the bag. 
+    let s, i; // s="storage" i="index"
+    for (let t = this.bag.tiles.length - 1; t > 0; t--) { //we start the shuffle from the last t(tile) position of the array and until 0. 
+      i = Math.floor(Math.random() * t); // i(index) will be a random bettwen (1) and (tiles-available).
+      s = this.bag.tiles[t]; // we put the current last tile position in a temporary storage.
+      this.bag.tiles[t] = this.bag.tiles[i]; // current  last tile postion will have the the random position from i(index)
+      this.bag.tiles[i] = s; //  now we take the tile from the temporary storage 's' and put it the random index.
+    }
   }
+
 
   getTiles(howMany = 7) {
     // Return a number of tiles (and remove from this.bag.tiles)
