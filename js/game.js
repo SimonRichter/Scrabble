@@ -88,6 +88,11 @@ export default class Game {
     byt.textContent = "Byt";
     menu.appendChild(byt);
     */
+    let mix = document.createElement("button");
+    mix.setAttribute("class", "btn skip");
+    mix.setAttribute("id", "shuffle");
+    mix.textContent = "Shuffle";
+    menu.appendChild(mix);
   }
 
   renderStand() {
@@ -205,6 +210,15 @@ export default class Game {
       that.renderStand();
       that.renderTilesLeft();
     });
+
+
+
+    // Button to shuffle the tiles in the rack. (test)
+    $("#shuffle").click(function () {
+      that.players[that.playerTurn].stand.sort(() => Math.random() - 0.5) // this random is ok for short arrays.
+      that.renderStand();
+    });
+
   }
 
   addDragEvents() {
