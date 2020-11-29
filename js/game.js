@@ -121,10 +121,6 @@ export default class Game {
     t.appendChild(p);
   }
 
-  // Funtion for SAOL
-  async checkWordSaol(wordToCheck) {
-    await SAOLchecker.scrabbleOk(wordToCheck); // if will Be true or false after checking the dictionary
-  }
 
   addClickEvents() {
     let that = this;

@@ -101,7 +101,7 @@ export default class Board {
       x = that.countPointsXAxis() + that.countPointsYAxis();
     }
     $(".tpirt").remove();
-    let $tpirt = $('<div class="tpirt">Points in real time</div>').appendTo("body");
+    let $tpirt = $('<div class="tpirt">Points this Round</div>').appendTo("body");
     $tpirt.append(`<h3>+${x}</h3>`)
   }
 
