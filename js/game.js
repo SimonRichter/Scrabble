@@ -7,6 +7,7 @@ import SAOLchecker from "./SAOLchecker.js";
 
 export default class Game {
   async start() {
+    this.network = new Network();
     this.board = new Board();
     this.board.createBoard();
     this.playerTurn = 0;
@@ -24,8 +25,8 @@ export default class Game {
     // Since the menu isn't re-rendered we only need to add the click event listener once.
     this.addClickEvents();
     this.renderScoreBoard();
-    this.network = new Network();
-    this.network.whatever();
+
+
 
 
   }
