@@ -6,10 +6,10 @@ import Network from "./Network.js";
 
 export default class Game {
   async start() {
-    this.network = new Network(this.board);
-
     this.board = new Board();
+    this.network = new Network(this.board);
     this.board.createBoard();
+
     this.playerTurn = 0;
     this.skipCounter = 0;
 
@@ -25,9 +25,6 @@ export default class Game {
     // Since the menu isn't re-rendered we only need to add the click event listener once.
     this.addClickEvents();
     this.renderScoreBoard();
-
-
-
 
   }
 
@@ -126,9 +123,11 @@ export default class Game {
     t.appendChild(p);
   }
 
-
   addClickEvents() {
+
     let that = this;
+    if (!that.board.putTilesThisRound.length)
+      $('#submitButton').prop('disabled', true);
     $("#submitButton").click(function () {
       that.board.falseCounter = 1;    // falseCounter resets to 1 (false) at the begging of the round
 
@@ -141,6 +140,7 @@ export default class Game {
 
           //check  all functions must be True to to be able to go next player after pressing "spela"
           if (that.board.checkMiddleSquare() && that.board.checkXYAxisHM() && that.board.nextToPutTilesHM() && that.board.falseCounter === 0) {
+            that.network.connectToStore();
             that.skipCounter = 0; //Skip RESETS when a correct word is written. 
 
             // we add the points counted and add them to the Players Score.
