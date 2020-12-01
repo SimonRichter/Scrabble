@@ -3,11 +3,11 @@ import Board from "./Board.js";
 import Tile from "./Tile.js";
 import Bag from "./Bag.js";
 import Network from "./Network.js";
-import SAOLchecker from "./SAOLchecker.js";
 
 export default class Game {
   async start() {
     this.network = new Network();
+
     this.board = new Board();
     this.board.createBoard();
     this.playerTurn = 0;

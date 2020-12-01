@@ -3,6 +3,7 @@ import Board from "./Board.js";
 
 export default class Network {
 
+
   constructor() {
     this.renderStart();
     this.addEventListeners();
@@ -16,15 +17,21 @@ export default class Network {
 
       <div class="start">
 
-        <button class="start-btn">give me the key</button>
+        <h1>Tic Tac Toe</h1>
 
-        <button class="connect-btn">enter key</button>
+        <input type="text" name="playerName" placeholder="Name" required>
+
+        <button class="start-btn">Start a new game</button>
+
+        <button class="connect-btn">Connect to a game</button>
 
       </div>
 
     `);
 
-  } render() {
+  }
+
+  render() {
 
     let s = this.store;
 
@@ -67,7 +74,6 @@ export default class Network {
       this.makeMove($('.board > div').index(e.currentTarget))
 
     );
-
 
     const getName = () => {
 
