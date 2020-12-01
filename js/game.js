@@ -6,7 +6,7 @@ import Network from "./Network.js";
 
 export default class Game {
   async start() {
-    this.network = new Network();
+    this.network = new Network(this.board);
 
     this.board = new Board();
     this.board.createBoard();

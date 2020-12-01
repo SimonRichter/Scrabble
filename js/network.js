@@ -4,10 +4,14 @@ import Board from "./Board.js";
 export default class Network {
 
 
-  constructor() {
+
+  constructor(board) {
     this.renderStart();
     this.addEventListeners();
+    this.board = board;
   }
+
+
 
 
 
