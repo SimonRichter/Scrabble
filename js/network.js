@@ -4,14 +4,16 @@ import Board from "./Board.js";
 export default class Network {
 
   constructor() {
-    this.idunno = this.board.putTiles;
-
-
-    this.renderStart();
-    this.addEventListeners();
-    this.board.render();
+    //this.renderStart();
+    //this.addEventListeners();
   }
 
+
+  async whatever() {
+    this.networkKey = await Store.createNetworkKey();
+    console.log(this.networkKey);
+    // this.connectToStore();
+  }
 
 
 

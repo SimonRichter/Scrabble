@@ -2,6 +2,7 @@ import Player from "./Player.js";
 import Board from "./Board.js";
 import Tile from "./Tile.js";
 import Bag from "./Bag.js";
+import Network from "./Network.js";
 import SAOLchecker from "./SAOLchecker.js";
 
 export default class Game {
@@ -23,6 +24,9 @@ export default class Game {
     // Since the menu isn't re-rendered we only need to add the click event listener once.
     this.addClickEvents();
     this.renderScoreBoard();
+    this.network = new Network();
+    this.network.whatever();
+
 
   }
 
