@@ -12,10 +12,19 @@ export default class Network {
   renderStart() {
 
     $('body').html(/*html*/`
+
+      <div class="start">
+
         <input type="text" name="playerName" placeholder="Name" required>
+
         <button class="start-btn">Start a new game</button>
+
         <button class="connect-btn">Connect to a game</button>
+
+      </div>
+
     `);
+
   }
 
   render() {
@@ -50,7 +59,7 @@ export default class Network {
     $('body').on('click', '.start-btn', async () => {
       if (!getName()) { return; }
       this.networkKey = await Store.createNetworkKey();
-      $('.start').append('<p>Give your friend this network key: ' + this.networkKey + '</p><p>When he/she has entered it the games starts!</p>');
+      $('.start').append('<span>network key: ' + this.networkKey + '</span>');
       $('.start-btn').prop('disabled', true);
       this.connectToStore();
     });

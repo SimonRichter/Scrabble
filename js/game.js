@@ -7,8 +7,8 @@ import Network from "./Network.js";
 export default class Game {
   async start() {
     this.board = new Board();
-    this.network = new Network(this.board);
     this.board.createBoard();
+    this.network = new Network(this.board);
 
     this.playerTurn = 0;
     this.skipCounter = 0;
@@ -126,8 +126,6 @@ export default class Game {
   addClickEvents() {
 
     let that = this;
-    if (!that.board.putTilesThisRound.length)
-      $('#submitButton').prop('disabled', true);
     $("#submitButton").click(function () {
       that.board.falseCounter = 1;    // falseCounter resets to 1 (false) at the begging of the round
 
