@@ -46,9 +46,9 @@ export default class Game {
     // Better random/shuffle of the bag. 
     let s, i; // s="storage" i="index"
     for (let t = this.bag.tiles.length - 1; t > 0; t--) { //we start the shuffle from the last t(tile) position of the array and until 0. 
-      i = Math.floor(Math.random() * t); // i(index) will be a random bettwen (1) and (tiles-available).
+      i = Math.floor(Math.random() * t); // i(index) will be a random between (1) and (tiles-available).
       s = this.bag.tiles[t]; // we put the current last tile position in a temporary storage.
-      this.bag.tiles[t] = this.bag.tiles[i]; // current  last tile postion will have the the random position from i(index)
+      this.bag.tiles[t] = this.bag.tiles[i]; // current last tile postion will have the random position from i(index)
       this.bag.tiles[i] = s; //  now we take the tile from the temporary storage 's' and put it the random index.
     }
   }
@@ -81,18 +81,21 @@ export default class Game {
     passa.setAttribute("id", "skipButton");
     passa.textContent = "Passa";
     menu.appendChild(passa);
-    /*
+    
     // Byt button 
     let byt = document.createElement("button");
     byt.setAttribute("class", "btn skip");
+    byt.setAttribute("id", "changeTilesButton")
     byt.textContent = "Byt";
     menu.appendChild(byt);
-    */
+    
+    /*
     let mix = document.createElement("button");
     mix.setAttribute("class", "btn skip");
     mix.setAttribute("id", "shuffle");
     mix.textContent = "Shuffle";
     menu.appendChild(mix);
+    */
   }
 
   renderStand() {
@@ -173,7 +176,7 @@ export default class Game {
         });
       }
       else
-        alert("No tiles played. Click on  'Passa' if you give up this round."); // if player clicks on "spela" without placeing tiles
+        alert("No tiles played. Click on 'Passa' if you give up this round."); // if player clicks on "spela" without placeing tiles
 
     });
 
@@ -195,8 +198,7 @@ export default class Game {
 
       that.skipCounter++; //Global skipCounter +1  when clicked. (4 consecutive times to 'Game Over')
 
-      if (that.skipCounter > 3 || (that.bag.tiles.length === 0 && !that.players[0].stand.length &&
-        !that.players[1].stand.length && !that.players[2].stand.length && !that.players[3].stand.length)) {
+      if (that.skipCounter > 3) {
         that.renderGameOver();
       }
 
@@ -215,6 +217,60 @@ export default class Game {
       that.renderStand();
     });
 
+
+    // Click event for toggling a border on tiles in the stand
+    $("body").on("click", ".stand .tile", (e) => {
+      let me = $(e.currentTarget);
+      me.toggleClass("redBorder");
+    });
+
+    // Click event for switching out tiles between the stand and the bag
+    $("body").on("click", "#changeTilesButton", function () {
+      if ($(".redBorder").length === 0) {
+        alert("Du måste välja brickor i din hållare genom att trycka på dem för att kunna byta ut dem.");
+        return;
+      }
+      // We make sure there are enough tiles in the bag to be switched out
+      if (that.bag.tiles.length >= $(".redBorder").length) {
+        // If tiles have been put on the board they go back to the players stand
+        if (that.board.putTilesThisRound.length) {
+          for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
+          let squareIndex = that.board.putTilesThisRound[i].boardIndex;
+          let y = Math.floor(squareIndex / 15);
+          let x = squareIndex % 15;
+          delete that.board.matrix[y][x].tile;
+          that.players[that.playerTurn].stand.push(that.board.putTilesThisRound[i]);
+          that.board.putTilesThisRound.splice(i, 1);
+          }
+          that.board.render()
+        }
+
+        for (let i = $(".redBorder").length - 1; i >= 0; i--){
+        // select the last tile of tiles with the class "redBorder" and save it
+        // in the tileIndex variable
+        let tileIndex = $(".stand > div").index($(".redBorder")[i]);
+        // Push back the tile to the bag
+        that.bag.tiles.push(that.players[that.playerTurn
+        ].stand.splice(tileIndex, 1)[0]);
+        
+        // Better random/shuffle of the bag. 
+        let s, j; // s="storage" j="index"
+        for (let t = that.bag.tiles.length - 1; t > 0; t--) { //we start the shuffle from the last t(tile) position of the array and until 0. 
+          j = Math.floor(Math.random() * t); // i(index) will be a random between (1) and (tiles-available).
+          s = that.bag.tiles[t]; // we put the current last tile position in a temporary storage.
+          that.bag.tiles[t] = that.bag.tiles[j]; // current last tile postion will have the random position from i(index)
+          that.bag.tiles[i] = s; //  now we take the tile from the temporary storage 's' and put it the random index.
+        }
+        that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
+        }
+      // We change the player turn to the next player
+      that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+      that.renderStand();
+        console.log(that.bag.tiles)
+      } else {
+        alert("Det finns inte tillräckligt med brickor i påsen för att kunna byta.")
+      }
+    });
   }
 
   addDragEvents() {
