@@ -267,6 +267,7 @@ body {
 /* ----------------- START PAGE ---------------- */
 
 .startpage h1 {
+  text-align: center;
   font-size: 15vh;
     color: rgb(255, 255, 255);
   -webkit-text-fill-color: rgba(255, 255, 255, 0.144); /* Will override color (regardless of order) */
