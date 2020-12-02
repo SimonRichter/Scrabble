@@ -14,6 +14,7 @@ export default class Board {
     // field boardIndex in the tile object
     this.putTilesThisRound = [];
     this.falseCounter = 0;
+    //this.wordsPlayed = []; // correct words played this game.
     this.specialSquares = {
       // Triple Word pts
       0: "TW", 7: "TW", 14: "TW", 105: "TW", 119: "TW", 210: "TW", 217: "TW", 224: "TW",
@@ -323,6 +324,20 @@ export default class Board {
     return uniqueStrings;
   }
 
+  // For later (maybe) list of uniue words played in the game
+  /*
+    uniqueWordsPlayed(wPlayed) {
+      let uniqueStrings = [];
+      $.each(wPlayed, (i, el) => {
+        if ($.inArray(el, uniqueStrings) === -1)
+          uniqueStrings.push(el);
+      });
+      console.log("words played:", wPlayed);//test
+      console.log("unique Words played", uniqueStrings)  //test
+      return uniqueStrings;
+  
+    }
+  */
 
 
 
@@ -340,6 +355,7 @@ export default class Board {
           alert("'" + word.toUpperCase() + "' is NOT a correct word from the Swedish dictionary!");
           break;
         }
+        //this.wordsPlayed.push(word); add another correct word to the list
       }
 
     }
