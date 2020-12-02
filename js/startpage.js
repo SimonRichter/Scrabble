@@ -11,7 +11,7 @@ export default class StartPage {
     <button class="joingame">GÅ MED I BEFINTLIGT SPEL</button>
     </header>`);
 
-    //$('body').css('background-color', 'blue !important');
+    $('body').css('background-color', '#0e2b3c');
 
 
   }

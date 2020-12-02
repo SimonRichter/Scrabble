@@ -266,6 +266,13 @@ body {
 
 /* ----------------- START PAGE ---------------- */
 
+.startpage h1 {
+  font-size: 15vh;
+    color: rgb(255, 255, 255);
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.144); /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 0.2px;
+  -webkit-text-stroke-color: rgb(255, 255, 255);
+}
 
 
 /* ----------------- ETC ---------------- */
