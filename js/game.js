@@ -9,6 +9,7 @@ export default class Game {
     this.board.createBoard();
     this.playerTurn = 0;
     this.skipCounter = 0;
+    
 
     await this.tilesFromFile();
     // create players
@@ -226,7 +227,7 @@ export default class Game {
     // Click event for switching out tiles between the stand and the bag
     $("body").on("click", "#changeTilesButton", function () {
       if ($(".redBorder").length === 0) {
-        alert("Du måste välja brickor i din hållare genom att trycka på dem för att kunna byta ut dem.");
+        alert("Du måste choosea brickor i din hållare genom att trycka på dem för att kunna byta ut dem.");
         return;
       }
       // We make sure there are enough tiles in the bag to be switched out
@@ -329,6 +330,25 @@ export default class Game {
         this.board.putTilesThisRound.push(this.board.matrix[y][x].tile);
         this.board.render();
         this.renderStand();
+        let that = this;
+        console.log("tile", this.board.matrix[y][x].tile);
+         if (this.board.matrix[y][x].tile.char === ' ') {
+            console.log("We found the tile!");
+            this.changeLetterOfEmptyTile();
+            $("body").on("click", "#chooseButton", function () {
+              let letterInBox = $(".letterBox input").val().toUpperCase();
+              let acceptedLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ';
+              if (letterInBox.length === 1 && acceptedLetters.includes(letterInBox)) {
+                console.log("It works!");
+                that.board.matrix[y][x].tile.char = letterInBox;
+                that.board.matrix[y][x].tile.points = 0;
+                $(".letterBox").remove();
+                that.board.render();
+                that.renderStand();
+      }
+    });
+        }
+        
       });
 
     // These variables are declared here so that they can be used
@@ -388,6 +408,9 @@ export default class Game {
           this.board.putTilesThisRound.splice(indexOf, 1);
           delete this.board.matrix[yStart][xStart].tile;
 
+          // Remove the letterbox div
+          $(".letterBox").remove();
+
           // inside this else we have code that runs if the tile is dragged
           // from one place on the board to another place on the board
         } else {
@@ -411,6 +434,27 @@ export default class Game {
         this.board.render();
         this.renderStand();
       });
+  }
+
+
+  changeLetterOfEmptyTile() {
+    let div = document.createElement("div");
+    div.className = "letterBox";
+    
+    let h4 = document.createElement("h4");
+    h4.textContent = "välj en bokstav";
+    div.appendChild(h4);
+
+    let input = document.createElement("input");
+    div.appendChild(input);
+
+    let choose = document.createElement("button");
+    choose.setAttribute("class", "btn skip");
+    choose.setAttribute("id", "chooseButton");
+    choose.textContent = "Okej";
+    div.appendChild(choose);
+
+    document.body.appendChild(div);
   }
 
   renderGameOver() {

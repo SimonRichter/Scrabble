@@ -305,3 +305,24 @@ body {
   border: 2px solid #ff0000;
   border-radius: 5px;
 }
+
+.letterBox {
+  width: 20vw;
+  height: 12vw;
+  text-align: center;
+  position: absolute;
+  border: 5px solid #000000;
+  border-radius: 5px;
+  top: 40%;
+  left: 40%;
+  background-color: rgb(255, 249, 238);
+  z-index: 5;
+}
+
+.letterBox h4 {
+  margin: 10px 0;
+}
+
+.letterBox input {
+  margin-bottom: 15px;
+}
