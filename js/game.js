@@ -233,7 +233,7 @@ export default class Game {
       // We make sure there are enough tiles in the bag to be switched out
       if (that.bag.tiles.length >= $(".redBorder").length) {
         // If tiles have been put on the board they go back to the players stand
-        if (that.board.putTilesThisRound.length) {
+        if (that.board.putTilesThisRound.length > 0) {
           for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
           let squareIndex = that.board.putTilesThisRound[i].boardIndex;
           let y = Math.floor(squareIndex / 15);
@@ -253,14 +253,7 @@ export default class Game {
         that.bag.tiles.push(that.players[that.playerTurn
         ].stand.splice(tileIndex, 1)[0]);
         
-        // Better random/shuffle of the bag. 
-        let s, j; // s="storage" j="index"
-        for (let t = that.bag.tiles.length - 1; t > 0; t--) { //we start the shuffle from the last t(tile) position of the array and until 0. 
-          j = Math.floor(Math.random() * t); // i(index) will be a random between (1) and (tiles-available).
-          s = that.bag.tiles[t]; // we put the current last tile position in a temporary storage.
-          that.bag.tiles[t] = that.bag.tiles[j]; // current last tile postion will have the random position from i(index)
-          that.bag.tiles[i] = s; //  now we take the tile from the temporary storage 's' and put it the random index.
-        }
+        that.bag.tiles.sort(() => Math.random() - 0.5);
         that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
         }
       // We change the player turn to the next player
