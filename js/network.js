@@ -10,18 +10,20 @@ export default class Network {
     this.renderStart();
   }
 
+
   renderStart() {
     $('body').html(/*html*/`
       <div class="start">
         <h1>Super amazing sCRAPble</h1>
         <input type="text" name="playerName" placeholder="Name" required>
-        <button class="start-btn">Start a new game</button>
-        <button class="connect-btn">Connect to a game</button>
+        <button class="start-btn">Get key</button>
+        <button class="connect-btn">Connect</button>
       </div>
     `);
   }
 
   addEventListeners() {
+
     $('body').off('click');
 
     $('body').on('click', '.board > div', e =>
@@ -29,7 +31,7 @@ export default class Network {
     );
 
     const getName = () => {
-      this.playerName = $('input[name="playerName"]').val();
+      this.player = new Player(this, $('input[name="playerName"]').val());
       return this.playerName;
     };
 
