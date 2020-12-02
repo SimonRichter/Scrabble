@@ -1,3 +1,4 @@
-import Game from './Game.js';
 
-new Game().start();
+import Network from './Network.js';
+
+new Network();
