@@ -23,7 +23,6 @@ export default class Game {
     // Since the menu isn't re-rendered we only need to add the click event listener once.
     this.addClickEvents();
     this.renderScoreBoard();
-
   }
 
   async tilesFromFile() {
@@ -137,7 +136,7 @@ export default class Game {
 
         that.board.checkIfWord(allWords).then(x => {     //it will wait for Promised to be fullfilled before running the next code.
 
-          //check  all functions must be True to to be able to go next player after pressing "spela"
+          //check  all functions must be True to be able to go next player after pressing "spela"
           if (that.board.checkMiddleSquare() && that.board.checkXYAxisHM() && that.board.nextToPutTilesHM() && that.board.falseCounter === 0) {
             that.skipCounter = 0; //Skip RESETS when a correct word is written. 
 
@@ -189,6 +188,7 @@ export default class Game {
           let y = Math.floor(squareIndex / 15);
           let x = squareIndex % 15;
           delete that.board.matrix[y][x].tile;
+          that.changeBackEmptyTile(that.board.putTilesThisRound[i]);
           that.players[that.playerTurn].stand.push(that.board.putTilesThisRound[i]);
 
           that.board.putTilesThisRound.splice(i, 1);
@@ -239,6 +239,7 @@ export default class Game {
             let y = Math.floor(squareIndex / 15);
             let x = squareIndex % 15;
             delete that.board.matrix[y][x].tile;
+            that.changeBackEmptyTile(that.board.matrix[yStart][xStart].tile);
             that.players[that.playerTurn].stand.push(that.board.putTilesThisRound[i]);
             that.board.putTilesThisRound.splice(i, 1);
           }
@@ -266,9 +267,32 @@ export default class Game {
         // We change the player turn to the next player
         that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
         that.renderStand();
-        console.log(that.bag.tiles)
       } else {
         alert("Det finns inte tillräckligt med brickor i påsen för att kunna byta.")
+      }
+    });
+  
+    $("body").on("click", ".board > div", (e) => {
+      if ($(".board > div > div > span").val() === '') {
+        let tileIndex = $(".board > div > div").attr('data-index');
+        // convert to y and x coordinates
+        let y = Math.floor(tileIndex / 15);
+        let x = tileIndex % 15;
+        that.changeLetterOfEmptyTile();
+        $("body").on("click", "#chooseButton", function () {
+          if ($(".letterBox input").val()){
+            let letterInBox = $(".letterBox input").val().toUpperCase();
+            let acceptedLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ';
+              if (letterInBox.length === 1 && acceptedLetters.includes(letterInBox)) {
+                that.board.matrix[y][x].tile.char = letterInBox;
+                $(".letterBox").remove();
+                that.board.render();
+                that.renderStand();
+                } else {
+                  $(".letterBox input").val('Välj endast en bokstav')
+                }
+      }
+    });
       }
     });
   }
@@ -331,20 +355,21 @@ export default class Game {
         this.board.render();
         this.renderStand();
         let that = this;
-        console.log("tile", this.board.matrix[y][x].tile);
          if (this.board.matrix[y][x].tile.char === ' ') {
-            console.log("We found the tile!");
             this.changeLetterOfEmptyTile();
-            $("body").on("click", "#chooseButton", function () {
+           $("body").on("click", "#chooseButton", function () {
+              if ($(".letterBox input").val()){
               let letterInBox = $(".letterBox input").val().toUpperCase();
               let acceptedLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ';
-              if (letterInBox.length === 1 && acceptedLetters.includes(letterInBox)) {
-                console.log("It works!");
-                that.board.matrix[y][x].tile.char = letterInBox;
-                that.board.matrix[y][x].tile.points = 0;
-                $(".letterBox").remove();
-                that.board.render();
-                that.renderStand();
+                if (letterInBox.length === 1 && acceptedLetters.includes(letterInBox)) {
+                  that.board.matrix[y][x].tile.char = letterInBox;
+                  that.board.matrix[y][x].tile.points = 0;
+                  $(".letterBox").remove();
+                  that.board.render();
+                  that.renderStand();
+                } else {
+                  $(".letterBox input").val('Välj endast en bokstav')
+                }
       }
     });
         }
@@ -398,6 +423,7 @@ export default class Game {
         if ($(".stand").hasClass("hover")) {
           // Put back the tile
           this.board.matrix[yStart][xStart].tile.hasBeenPlaced = false;
+          this.changeBackEmptyTile(this.board.matrix[yStart][xStart].tile);
           this.players[this.playerTurn].stand.push(
             this.board.matrix[yStart][xStart].tile
           );
@@ -436,6 +462,12 @@ export default class Game {
       });
   }
 
+  changeBackEmptyTile(tile) {
+    if (tile.points === 0) {
+      tile.char = ' ';
+      tile.points = '';
+    }
+  }
 
   changeLetterOfEmptyTile() {
     let div = document.createElement("div");
