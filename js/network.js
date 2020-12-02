@@ -31,7 +31,7 @@ export default class Network {
     );
 
     const getName = () => {
-      this.player = new Player(this, $('input[name="playerName"]').val());
+      this.player = $('input[name="playerName"]').val();
       return this.playerName;
     };
 

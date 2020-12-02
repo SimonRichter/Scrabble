@@ -5,6 +5,7 @@ import Bag from "./Bag.js";
 import Network from "./Network.js";
 
 export default class Game {
+
   async start() {
     this.board = new Board();
     this.board.createBoard();
