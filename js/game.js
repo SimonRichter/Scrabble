@@ -503,7 +503,7 @@ export default class Game {
     // Removes any old scoreboard existing
     $(".scoreboard").remove();
     // Creates a new Score Board div
-    let $scoreboard = $('<div class="scoreboard"><h2>Scoreboard</h2></div>').appendTo("body");
+    let $scoreboard = $('<div class="scoreboard"><h2>Poäng</h2></div>').appendTo("body");
 
     for (let player of this.players) {
       $scoreboard.append(`<div> 
