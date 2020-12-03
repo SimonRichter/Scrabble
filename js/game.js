@@ -529,7 +529,6 @@ export default class Game {
   }
   renderMessage(m, w) {
     //Remove any old message
-    clearTimeout();
     $("div").remove(".message");
     // Create a div to contain message
     let $msg = $('<div class="message"/>').appendTo("body");
@@ -541,6 +540,7 @@ export default class Game {
     if (m === 4) { $msg.append(`<div>Första rundan måste en bricka spelas i mittenrutan</div>`); }
     if (m === 5) { $msg.append(`<div>` + w + ` är inte ett giltigt ord</div>`); }
     if (m === 6) { $msg.append(`<div>Brickor måste hänga samman med tidigare lagda brickor</div>`); }
+    if (m === 7) { $msg.append(`<div>Brickorna du lägger måste hänga ihop</div>`); }
     $(".message").fadeIn(0);
 
 
