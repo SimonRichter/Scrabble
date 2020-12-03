@@ -277,13 +277,14 @@ export default class Game {
         alert("Det finns inte tillräckligt med brickor i påsen för att kunna byta.")
       }
     });
-
-    $("body").on("click", ".board > div", (e) => {
-      if ($(".board > div > div > span").val() === '') {
-        let tileIndex = $(".board > div > div").attr('data-index');
-        // convert to y and x coordinates
-        let y = Math.floor(tileIndex / 15);
-        let x = tileIndex % 15;
+  
+    $("body").on("click", ".board > div > div", (e) => {
+      let $me = $(e.currentTarget);
+      let tileIndex = $me.attr('data-index');
+      // convert to y and x coordinates
+      let y = Math.floor(tileIndex / 15);
+      let x = tileIndex % 15;
+      if (that.board.matrix[y][x].tile.points === 0) {
         that.changeLetterOfEmptyTile();
         $("body").on("click", "#chooseButton", function () {
           if ($(".letterBox input").val()) {
@@ -511,7 +512,7 @@ export default class Game {
     // Removes any old scoreboard existing
     $(".scoreboard").remove();
     // Creates a new Score Board div
-    let $scoreboard = $('<div class="scoreboard"><h2>Scoreboard</h2></div>').appendTo("body");
+    let $scoreboard = $('<div class="scoreboard"><h2>Poäng</h2></div>').appendTo("body");
 
     for (let player of this.players) {
       $scoreboard.append(`<div> 
