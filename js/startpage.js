@@ -11,12 +11,14 @@ export default class StartPage {
     <button class="joingame">GÅ MED I BEFINTLIGT SPEL</button>
     </header>`);
 
-    $('body').css('background-color', '#0e2b3c');
-    $('body').css('background-image', 'url(gridvector.svg)');
-    $('body').css('background-repeat', 'no-repeat');
-    $('body').css('background-position', '50% 50%'); // how to include space..
-    $('body').css('background-attachment', 'fixed');
-    $('body').css('background-size', '60%');
+    $('body').css({
+      'background-color': '#0e2b3c',
+      'background-image': 'url(gridvector.svg)',
+      'background-repeat': 'no-repeat',
+      'background-position': '45%',
+      'background-attachment': 'fixed',
+      'background-size': 'auto'
+    });
 
 
   }
