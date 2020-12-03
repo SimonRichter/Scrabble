@@ -152,7 +152,9 @@ export default class Game {
 
             // Fill the player stand with tiles again after they submit a correct word
             for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
+              if (that.bag.tiles.length > 0) {
               that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
+              }
             }
             // This while loop assigns a boardIndex to the placed tile objects
             // in the board matrix and makes sure that the tiles can't be moved
