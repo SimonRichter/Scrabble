@@ -31,14 +31,14 @@ export default class Network {
     );
 
     const getName = () => {
-      this.player = $('input[name="playerName"]').val();
+      this.playerName = $('input[name="playerName"]').val();
       return this.playerName;
     };
 
     $('body').on('click', '.start-btn', async () => {
       if (!getName()) { return; }
       this.networkKey = await Store.createNetworkKey();
-      $('.start').append('<p>Give your friend this network key: ' + this.networkKey + '</p><p>When he/she has entered it the games starts!</p>');
+      $('.start').append('<p>get key: ' + this.networkKey + '</p>');
       $('.start-btn').prop('disabled', true);
       this.connectToStore();
     });
@@ -49,6 +49,11 @@ export default class Network {
       this.connectToStore();
     });
 
+  }
+
+  listenForNetworkChanges() {
+    // this method is called each time someone else
+    // changes this.store
   }
 
   async connectToStore() {

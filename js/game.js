@@ -16,7 +16,12 @@ export default class Game {
 
     await this.tilesFromFile();
     // create players
-    this.players = [new Player(this, "Spelare 1"), new Player(this, "Spelare 2")];
+    this.players = [];
+    for (player of this.network.store.playerNames) {
+      console.log(player)
+      this.players.push(new Player(this, player));
+
+    }
     // render the menu + board + players
     this.board.render();
     this.renderMenu();
