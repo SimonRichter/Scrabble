@@ -369,7 +369,7 @@ export default class Game {
         let that = this;
         if (this.board.matrix[y][x].tile.char === ' ') {
           this.changeLetterOfEmptyTile();
-          $("body").on("click", "#chooseButton", function () {
+          $("#chooseButton").click(function () {
             if ($(".letterBox input").val()) {
               let letterInBox = $(".letterBox input").val().toUpperCase();
               let acceptedLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ';
