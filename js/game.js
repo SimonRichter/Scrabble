@@ -152,7 +152,9 @@ export default class Game {
 
             // Fill the player stand with tiles again after they submit a correct word
             for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
-              that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
+              if (that.bag.tiles.length > 0) {
+                that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
+              }
             }
             // This while loop assigns a boardIndex to the placed tile objects
             // in the board matrix and makes sure that the tiles can't be moved
@@ -287,7 +289,7 @@ export default class Game {
       // convert to y and x coordinates
       let y = Math.floor(tileIndex / 15);
       let x = tileIndex % 15;
-      if (that.board.matrix[y][x].tile.points === 0) {
+      if (that.board.matrix[y][x].tile.points === 0 && !that.board.matrix[y][x].tile.hasBeenPlaced) {
         that.changeLetterOfEmptyTile();
         $("body").on("click", "#chooseButton", function () {
           if ($(".letterBox input").val()) {
