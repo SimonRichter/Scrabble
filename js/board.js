@@ -110,7 +110,7 @@ export default class Board {
 
   // This function checks if tiles of this round are touching each other
   checkXYAxisHM() {
-    let message = "Your tiles must touch each other."; // Alert message
+    //let message = "Your tiles must touch each other."; // Alert message
 
     if (this.putTilesThisRound.length > 1) { // Only do the function if there are tiles on the board
       let pttrl = this.putTilesThisRound;
@@ -132,7 +132,9 @@ export default class Board {
         }
       }
       if (errorCounter === 2) {
-        alert(message); return false;
+        //alert(message);
+        new Game().renderMessage(7);
+        return false;
       }
       let tilesInOrder = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1); // Sort this.putTilesThisRound
       let startIndex = tilesInOrder[0].boardIndex; // Index of the tile with the lowest index
@@ -148,13 +150,13 @@ export default class Board {
         // Check if there are any gaps between the first and last tile
         // if so return false + message
         while (xStartIndex <= xEndIndex) {
-          if (!this.matrix[yStartIndex][xStartIndex].tile) { alert(message); return false; }
+          if (!this.matrix[yStartIndex][xStartIndex].tile) { new Game().renderMessage(7);/* alert(message) ;*/ return false; }
           xStartIndex++;
         }
       }
       if (yStartIndex !== yEndIndex) { // Same as before but in columns
         while (yStartIndex <= yEndIndex) {
-          if (!this.matrix[yStartIndex][xStartIndex].tile) { alert(message); return false; }
+          if (!this.matrix[yStartIndex][xStartIndex].tile) { new Game().renderMessage(7);/* alert(message);*/ return false; }
           yStartIndex++;
         }
       }
