@@ -9,7 +9,7 @@ export default class Game {
     this.board.createBoard();
     this.playerTurn = 0;
     this.skipCounter = 0;
-    
+
 
     await this.tilesFromFile();
     // create players
@@ -138,6 +138,7 @@ export default class Game {
 
           //check  all functions must be True to be able to go next player after pressing "spela"
           if (that.board.checkMiddleSquare() && that.board.checkXYAxisHM() && that.board.nextToPutTilesHM() && that.board.falseCounter === 0) {
+            //that.board.uniqueWordsPlayed(that.board.wordsPlayed); // Updates the list of unique words played in the game.
             that.skipCounter = 0; //Skip RESETS when a correct word is written. 
 
             // we add the points counted and add them to the Players Score.
@@ -246,23 +247,23 @@ export default class Game {
           that.board.render()
         }
 
-        for (let i = $(".redBorder").length - 1; i >= 0; i--){
-        // select the last tile of tiles with the class "redBorder" and save it
-        // in the tileIndex variable
-        let tileIndex = $(".stand > div").index($(".redBorder")[i]);
-        // Push back the tile to the bag
-        that.bag.tiles.push(that.players[that.playerTurn
-        ].stand.splice(tileIndex, 1)[0]);
-        
-        // Better random/shuffle of the bag. 
-        let s, j; // s="storage" i="index"
-        for (let t = that.bag.tiles.length - 1; t > 0; t--) { //we start the shuffle from the last t(tile) position of the array and until 0. 
-          j = Math.floor(Math.random() * t); // i(index) will be a random between (1) and (tiles-available).
-          s = that.bag.tiles[t]; // we put the current last tile position in a temporary storage.
-          that.bag.tiles[t] = that.bag.tiles[j]; // current last tile postion will have the random position from i(index)
-          that.bag.tiles[j] = s; //  now we take the tile from the temporary storage 's' and put it the random index.
-    }
-        that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
+        for (let i = $(".redBorder").length - 1; i >= 0; i--) {
+          // select the last tile of tiles with the class "redBorder" and save it
+          // in the tileIndex variable
+          let tileIndex = $(".stand > div").index($(".redBorder")[i]);
+          // Push back the tile to the bag
+          that.bag.tiles.push(that.players[that.playerTurn
+          ].stand.splice(tileIndex, 1)[0]);
+
+          // Better random/shuffle of the bag. 
+          let s, j; // s="storage" i="index"
+          for (let t = that.bag.tiles.length - 1; t > 0; t--) { //we start the shuffle from the last t(tile) position of the array and until 0. 
+            j = Math.floor(Math.random() * t); // i(index) will be a random between (1) and (tiles-available).
+            s = that.bag.tiles[t]; // we put the current last tile position in a temporary storage.
+            that.bag.tiles[t] = that.bag.tiles[j]; // current last tile postion will have the random position from i(index)
+            that.bag.tiles[j] = s; //  now we take the tile from the temporary storage 's' and put it the random index.
+          }
+          that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
         }
         // We change the player turn to the next player
         that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
@@ -281,19 +282,19 @@ export default class Game {
       if (that.board.matrix[y][x].tile.points === 0) {
         that.changeLetterOfEmptyTile();
         $("body").on("click", "#chooseButton", function () {
-          if ($(".letterBox input").val()){
+          if ($(".letterBox input").val()) {
             let letterInBox = $(".letterBox input").val().toUpperCase();
             let acceptedLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ';
-              if (letterInBox.length === 1 && acceptedLetters.includes(letterInBox)) {
-                that.board.matrix[y][x].tile.char = letterInBox;
-                $(".letterBox").remove();
-                that.board.render();
-                that.renderStand();
-                } else {
-                  $(".letterBox input").val('Välj endast en bokstav')
-                }
-      }
-    });
+            if (letterInBox.length === 1 && acceptedLetters.includes(letterInBox)) {
+              that.board.matrix[y][x].tile.char = letterInBox;
+              $(".letterBox").remove();
+              that.board.render();
+              that.renderStand();
+            } else {
+              $(".letterBox input").val('Välj endast en bokstav')
+            }
+          }
+        });
       }
     });
   }
@@ -356,25 +357,25 @@ export default class Game {
         this.board.render();
         this.renderStand();
         let that = this;
-         if (this.board.matrix[y][x].tile.char === ' ') {
-            this.changeLetterOfEmptyTile();
-           $("body").on("click", "#chooseButton", function () {
-              if ($(".letterBox input").val()){
+        if (this.board.matrix[y][x].tile.char === ' ') {
+          this.changeLetterOfEmptyTile();
+          $("body").on("click", "#chooseButton", function () {
+            if ($(".letterBox input").val()) {
               let letterInBox = $(".letterBox input").val().toUpperCase();
               let acceptedLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ';
-                if (letterInBox.length === 1 && acceptedLetters.includes(letterInBox)) {
-                  that.board.matrix[y][x].tile.char = letterInBox;
-                  that.board.matrix[y][x].tile.points = 0;
-                  $(".letterBox").remove();
-                  that.board.render();
-                  that.renderStand();
-                } else {
-                  $(".letterBox input").val('Välj endast en bokstav')
-                }
-      }
-    });
+              if (letterInBox.length === 1 && acceptedLetters.includes(letterInBox)) {
+                that.board.matrix[y][x].tile.char = letterInBox;
+                that.board.matrix[y][x].tile.points = 0;
+                $(".letterBox").remove();
+                that.board.render();
+                that.renderStand();
+              } else {
+                $(".letterBox input").val('Välj endast en bokstav')
+              }
+            }
+          });
         }
-        
+
       });
 
     // These variables are declared here so that they can be used
@@ -473,7 +474,7 @@ export default class Game {
   changeLetterOfEmptyTile() {
     let div = document.createElement("div");
     div.className = "letterBox";
-    
+
     let h4 = document.createElement("h4");
     h4.textContent = "välj en bokstav";
     div.appendChild(h4);
