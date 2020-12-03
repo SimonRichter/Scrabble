@@ -6,20 +6,20 @@ export default class StartPage {
 
   render() {
     $('body').append(`<header class="startpage">
-    <h1>SCRABBLE</h1>
+    <div class="btn-container">
     <button class="newgame">NYTT SPEL</button>
     <button class="joingame">GÅ MED I BEFINTLIGT SPEL</button>
+    </div>
     </header>`);
 
     $('body').css({
       'background-color': '#0e2b3c',
-      'background-image': 'url(gridvector.svg)',
+      'background-image': 'url(scrabble_startpage.png)',
       'background-repeat': 'no-repeat',
-      'background-position': '45%',
-      'background-attachment': 'fixed',
-      'background-size': 'auto'
+      'background-position': 'center',
+      'background-size': '80%',
+      'background-attachment': 'fixed'
     });
-
 
   }
 
