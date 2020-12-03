@@ -353,7 +353,9 @@ export default class Board {
         word = ord;
         this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 1;  // checks the dictionary
         if (this.falseCounter === 1) {
-          alert("'" + word.toUpperCase() + "' is NOT a correct word from the Swedish dictionary!");
+          let w = word.toUpperCase();
+          new Game().renderMessage(5, w);
+          //alert("'" + word.toUpperCase() + "' is NOT a correct word from the Swedish dictionary!");
           break;
         }
         //this.wordsPlayed.push(word); add another correct word to the list
