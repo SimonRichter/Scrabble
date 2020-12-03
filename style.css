@@ -268,14 +268,32 @@ body {
 /* ----------------- START PAGE ---------------- */
 
 .startpage {
-  background-color: rgba(137, 43, 226, 0.76);
+  background-color: rgba(137, 43, 226, 0);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-position: fixed;
+  position: fixed;
 }
 
+.btn-container > button {
+  color: rgba(255, 255, 255, 0.856);
+  font-size: 25px;
+  font-family: "Oswald", sans-serif;
+  border: solid rgba(0, 0, 0, 0.74) 1px;
+  text-align: center;
+  padding: 4px;
+  width: 400px;
+  margin-top: 32px;
+}
+
+.newgame {
+  background-color: #bb9236;
+}
+
+.joingame {
+  background-color: #9a572d;
+}
 
 /* ----------------- ETC ---------------- */
 

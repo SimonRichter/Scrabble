@@ -17,7 +17,7 @@ export default class StartPage {
       'background-image': 'url(scrabble_startpage.png)',
       'background-repeat': 'no-repeat',
       'background-position': 'center',
-      'background-size': '80%',
+      'background-size': '1020px',
       'background-attachment': 'fixed'
     });
 
