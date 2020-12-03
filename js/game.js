@@ -2,6 +2,7 @@ import Player from "./Player.js";
 import Board from "./Board.js";
 import Tile from "./Tile.js";
 import Bag from "./Bag.js";
+import Store from 'https://network-lite.nodehill.com/store';
 
 export default class Game {
   async start() {
@@ -9,6 +10,8 @@ export default class Game {
     this.board.createBoard();
     this.playerTurn = 0;
     this.skipCounter = 0;
+    this.localStore = Store.getLocalStore();
+    this.localStore.leaderBoard = this.localStore.leaderBoard || [];
 
 
     await this.tilesFromFile();
@@ -122,6 +125,8 @@ export default class Game {
     p.appendChild(text);
     t.appendChild(p);
   }
+
+
 
 
   addClickEvents() {
@@ -491,11 +496,15 @@ export default class Game {
   }
 
   renderGameOver() {
+    for (let player of this.players) {
+      this.localStore.leaderBoard.push(player.score);
+    }
     // Creates the Game Over div that covers whole page
     let $gameover = $('<div class="game-over"/>').appendTo("body");
     // Creates the smaller box with Game Over! text
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
+    console.log(this.localStore.leaderBoard.sort((a, b) => { return b - a }));
   }
 
   renderScoreBoard() {
