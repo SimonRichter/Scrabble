@@ -1,4 +1,5 @@
 import SAOLchecker from "./SAOLchecker.js";
+import Game from "./game.js";
 export default class Board {
 
   constructor() {
@@ -166,7 +167,8 @@ export default class Board {
         }
       }
     }
-    alert("Tiles must touch tiles placed in previous rounds");
+    new Game().renderMessage(6);
+    //alert("Tiles must touch tiles placed in previous rounds");
     return false;
   }
 
@@ -183,9 +185,8 @@ export default class Board {
         } else {
           // Checks if the loop is on the last tile in the putTilesThisRound array
           if (temp === this.putTilesThisRound.length - 1) {
-            alert(
-              "You must place one of your tiles in the middle of the board."
-            );
+            new Game().renderMessage(4);
+            //alert("You must place one of your tiles in the middle of the board.");
             return false;
           }
         }
@@ -352,7 +353,9 @@ export default class Board {
         word = ord;
         this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 1;  // checks the dictionary
         if (this.falseCounter === 1) {
-          alert("'" + word.toUpperCase() + "' is NOT a correct word from the Swedish dictionary!");
+          let w = word.toUpperCase();
+          new Game().renderMessage(5, w);
+          //alert("'" + word.toUpperCase() + "' is NOT a correct word from the Swedish dictionary!");
           break;
         }
         //this.wordsPlayed.push(word); add another correct word to the list
