@@ -284,11 +284,13 @@ export default class Game {
     });
 
     $("body").on("click", ".board > div > div", (e) => {
+      let y;
+      let x;
       let $me = $(e.currentTarget);
       let tileIndex = $me.attr('data-index');
       // convert to y and x coordinates
-      let y = Math.floor(tileIndex / 15);
-      let x = tileIndex % 15;
+      y = Math.floor(tileIndex / 15);
+      x = tileIndex % 15;
       if (that.board.matrix[y][x].tile.points === 0 && !that.board.matrix[y][x].tile.hasBeenPlaced) {
         that.changeLetterOfEmptyTile();
         $("body").on("click", "#chooseButton", function () {
