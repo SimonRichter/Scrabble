@@ -109,8 +109,37 @@ export default class Board {
 
   // This function checks if tiles of this round are touching each other
   checkXYAxisHM() {
-    if (this.putTilesThisRound.length) { // Only do the function if there are tiles on the board
-      let message = "Your tiles must touch each other."; // Alert message
+    let message = "Your tiles must touch each other."; // Alert message
+
+    if (this.putTilesThisRound.length > 1) { // Only do the function if there are tiles on the board
+      let pttrl = this.putTilesThisRound;
+      for (let tile of pttrl) {
+        tile.row = Math.floor(tile.boardIndex / 15);
+        tile.col = tile.boardIndex % 15;
+        console.log("tille row , tile col ", tile.row, tile.col)
+      }
+      let errorCounter = 0;
+
+      for (let i = 0; i < pttrl.length - 1; i++) {
+        if ((pttrl[i].row !== pttrl[i + 1].row)) {
+          errorCounter++;
+          console.log("hellloooooo pttrl[i].row and col ", pttrl[i].row, pttrl[i].col);
+
+          break;
+        }
+      }
+      for (let i = 0; i < pttrl.length - 1; i++) {
+        if ((pttrl[i].col !== pttrl[i + 1].col)) {
+          errorCounter++;
+          console.log("hellloooooo pttrl[i].row and col ", pttrl[i].row, pttrl[i].col);
+          break;
+        }
+      }
+      console.log("errorCounter", errorCounter)
+      if (errorCounter === 2) {
+        alert(message); return false;
+      }
+
       let tilesInOrder = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1); // Sort this.putTilesThisRound
       let startIndex = tilesInOrder[0].boardIndex; // Index of the tile with the lowest index
       let endIndex = tilesInOrder[tilesInOrder.length - 1].boardIndex; // Index of the tile with the highest index
@@ -136,8 +165,13 @@ export default class Board {
         }
       }
     }
+
+
+
     return true;
+
   }
+
 
 
   // this function is checks if tiles are touching tiles from previous rounds

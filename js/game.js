@@ -277,7 +277,7 @@ export default class Game {
         alert("Det finns inte tillräckligt med brickor i påsen för att kunna byta.")
       }
     });
-  
+
     $("body").on("click", ".board > div > div", (e) => {
       let $me = $(e.currentTarget);
       let tileIndex = $me.attr('data-index');
