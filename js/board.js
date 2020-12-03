@@ -104,7 +104,13 @@ export default class Board {
     }
     $(".tpirt").remove();
     let $tpirt = $('<div class="tpirt">Möjliga poäng för det här draget</div>').appendTo("body");
-    $tpirt.append(`<h3>+${x}</h3>`)
+    // $tpirt.append(`<h3>+${x}</h3>`)
+    if (x > 20)
+      $tpirt.append(`<h3>&#128079;+${x}&#128079;</h3>`)
+    if (x <= 20 && x >= 10)
+      $tpirt.append(`<h3>&#128077 +${x} &#128077;</h3>`)
+    if (x < 10)
+      $tpirt.append(`<h3>+${x}</h3>`)
   }
 
 

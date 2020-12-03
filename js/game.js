@@ -16,7 +16,7 @@ export default class Game {
 
     await this.tilesFromFile();
     // create players
-    this.players = [new Player(this, "Spelare 1"), new Player(this, "Spelare 2")];
+    this.players = [new Player(this, "&#128100; Spelare 1"), new Player(this, "&#128100;Spelare 2")];
     // render the menu + board + players
     this.board.render();
     this.renderMenu();
@@ -540,7 +540,7 @@ export default class Game {
     if (m === 2) { $msg.append(`<div>Klicka på de brickor i hållaren du vill byta ut.</div>`); }
     if (m === 3) { $msg.append(`<div>Inte tillräckligt med brickor i påsen för att kunna byta.</div>`); }
     if (m === 4) { $msg.append(`<div>Första rundan måste en bricka spelas i mittenrutan</div>`); }
-    if (m === 5) { $msg.append(`<div>` + w + ` är inte ett giltigt ord</div>`); }
+    if (m === 5) { $msg.append(`<div>&#9940 "` + w + `" är inte  ett giltigt  ord  &#9940</div>`); }
     if (m === 6) { $msg.append(`<div>Brickor måste hänga samman med tidigare lagda brickor</div>`); }
     if (m === 7) { $msg.append(`<div>Brickor du lägger måste hänga ihop</div>`); }
     $(".message").fadeIn(0);
