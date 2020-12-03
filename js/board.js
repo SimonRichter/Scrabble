@@ -1,4 +1,5 @@
 import SAOLchecker from "./SAOLchecker.js";
+import Game from "./game.js";
 export default class Board {
 
   constructor() {
@@ -166,7 +167,8 @@ export default class Board {
         }
       }
     }
-    alert("Tiles must touch tiles placed in previous rounds");
+    new Game().renderMessage(6);
+    //alert("Tiles must touch tiles placed in previous rounds");
     return false;
   }
 
@@ -183,9 +185,8 @@ export default class Board {
         } else {
           // Checks if the loop is on the last tile in the putTilesThisRound array
           if (temp === this.putTilesThisRound.length - 1) {
-            alert(
-              "You must place one of your tiles in the middle of the board."
-            );
+            new Game().renderMessage(4);
+            //alert("You must place one of your tiles in the middle of the board.");
             return false;
           }
         }

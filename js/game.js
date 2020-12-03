@@ -181,7 +181,8 @@ export default class Game {
         });
       }
       else
-        alert("No tiles played. Click on 'Passa' if you give up this round."); // if player clicks on "spela" without placeing tiles
+        //alert("No tiles played. Click on 'Passa' if you give up this round."); // if player clicks on "spela" without placeing tiles
+        that.renderMessage(1);
 
     });
 
@@ -233,7 +234,8 @@ export default class Game {
     // Click event for switching out tiles between the stand and the bag
     $("body").on("click", "#changeTilesButton", function () {
       if ($(".redBorder").length === 0) {
-        alert("Du måste choosea brickor i din hållare genom att trycka på dem för att kunna byta ut dem.");
+        that.renderMessage(2);
+        ///alert("Du måste choosea brickor i din hållare genom att trycka på dem för att kunna byta ut dem.");
         return;
       }
       // We make sure there are enough tiles in the bag to be switched out
@@ -274,10 +276,11 @@ export default class Game {
         that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
         that.renderStand();
       } else {
-        alert("Det finns inte tillräckligt med brickor i påsen för att kunna byta.")
+        renderMessage(3);
+        //alert("Det finns inte tillräckligt med brickor i påsen för att kunna byta.")
       }
     });
-  
+
     $("body").on("click", ".board > div > div", (e) => {
       let $me = $(e.currentTarget);
       let tileIndex = $me.attr('data-index');
@@ -522,6 +525,34 @@ export default class Game {
     }
 
   }
+  renderMessage(m, w) {
+    //Remove any old message
+    clearTimeout();
+    $("div").remove(".message");
+    // Create a div to contain message
+    let $msg = $('<div class="message"/>').appendTo("body");
 
+    // Select message (argument), append to message div and display it
+    if (m === 1) { $msg.append(`<div>Inga brickor lagda!</div>`); }
+    if (m === 2) { $msg.append(`<div>Klicka på de brickor i hållaren du vill byta ut.</div>`); }
+    if (m === 3) { $msg.append(`<div>Inte tillräckligt med brickor i påsen för att kunna byta.</div>`); }
+    if (m === 4) { $msg.append(`<div>Första rundan måste en bricka spelas i mittenrutan</div>`); }
+    if (m === 5) { $msg.append(`<div>` + w + ` är inte ett giltigt ord</div>`); }
+    if (m === 6) { $msg.append(`<div>Brickor måste hänga samman med tidigare lagda brickor</div>`); }
+    $(".message").fadeIn(0);
+
+
+    //Wait a bit then fade out the message
+    setTimeout(function () {
+      $(".message").fadeOut(1500);
+    }, 3000);
+
+    //And finally delete it
+    setTimeout(function () {
+      $("div").remove(".message");
+    }, 3700);
+
+
+  }
 
 }
