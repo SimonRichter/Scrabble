@@ -1,4 +1,5 @@
 import SAOLchecker from "./SAOLchecker.js";
+import Game from "./game.js";
 export default class Board {
 
   constructor() {
@@ -14,6 +15,7 @@ export default class Board {
     // field boardIndex in the tile object
     this.putTilesThisRound = [];
     this.falseCounter = 0;
+    this.wordsPlayed = []; // correct words played this game.
     this.specialSquares = {
       // Triple Word pts
       0: "TW", 7: "TW", 14: "TW", 105: "TW", 119: "TW", 210: "TW", 217: "TW", 224: "TW",
@@ -89,6 +91,7 @@ export default class Board {
     this.countPointsYAxis(); // console points on Y for test 
     this.countPointsXAxis(); //console points on x for test 
     this.testPointInRealTime() // Div in DOM for test 
+    this.renderWords();
 
 
   }
@@ -101,8 +104,26 @@ export default class Board {
       x = that.countPointsXAxis() + that.countPointsYAxis();
     }
     $(".tpirt").remove();
-    let $tpirt = $('<div class="tpirt">Points this Round</div>').appendTo("body");
-    $tpirt.append(`<h3>+${x}</h3>`)
+    let $tpirt = $('<div class="tpirt">Möjliga poäng för det här draget</div>').appendTo("body");
+    // $tpirt.append(`<h3>+${x}</h3>`)
+    if (x > 20)
+      $tpirt.append(`<h3>&#128081;+${x}&#128081;</h3>`)
+    if (x <= 20 && x >= 10)
+      $tpirt.append(`<h3>&#128077 +${x} &#128077;</h3>`)
+    if (x < 10)
+      $tpirt.append(`<h3>+${x}</h3>`)
+  }
+
+  renderWords() {
+    let t = this.uniqueWordsPlayed(this.wordsPlayed);
+    $(".wordsOnScreen").remove();
+    let $wordsOnscreen = $('<div class="wordsOnScreen">Words</div>').appendTo("body");
+    let $lis = $('<ul class="lis"></ul>');
+    $lis.appendTo($wordsOnscreen);
+    for (let w of t)
+      $lis.append(`<li data-tooltip="We can put the meaning of the word here" data-tooltip-position="right"> ${w}</li>`);
+
+
   }
 
 
@@ -323,6 +344,20 @@ export default class Board {
     return uniqueStrings;
   }
 
+  // For later (maybe) list of uniue words played in the game
+
+  uniqueWordsPlayed(wPlayed) {
+    let uniqueStrings = [];
+    $.each(wPlayed, (i, el) => {
+      if ($.inArray(el, uniqueStrings) === -1)
+        uniqueStrings.push(el);
+    });
+    console.log("words played:", wPlayed);//test
+    console.log("unique Words played", uniqueStrings)  //test
+    return uniqueStrings;
+
+  }
+
 
 
 
@@ -337,9 +372,12 @@ export default class Board {
         word = ord;
         this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 1;  // checks the dictionary
         if (this.falseCounter === 1) {
-          alert("'" + word.toUpperCase() + "' is NOT a correct word from the Swedish dictionary!");
+          let w = word.toUpperCase();
+          new Game().renderMessage(5, w);
+          //alert("'" + word.toUpperCase() + "' is NOT a correct word from the Swedish dictionary!");
           break;
         }
+        this.wordsPlayed.push(word); //add another correct word to the list
       }
 
     }

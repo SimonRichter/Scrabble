@@ -10,9 +10,18 @@
 }
 
 body {
-  margin: 10px;
+  /*
+  width: 50%;
+  margin-left: 25%;
+  margin-top: 2vh;
+  */
   font-family: "Oswald", sans-serif;
   background-color: rgb(133, 101, 72);
+  background: rgb(0,8,19);
+  background: linear-gradient(0deg, rgba(0,8,19,1) 0%, rgba(35,77,164,1) 100%);
+  height: 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 /* ----------------- BOARD ---------------- */
@@ -264,6 +273,41 @@ body {
   line-height: 10px;
 }
 
+.message {
+  z-index: 100;
+  margin-left: 3%;
+  background-color: rgba(0, 0, 0, 0);
+  text-align: left;
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 12%;
+  top: 0;
+  left: 0;
+}
+
+.message > div {
+  font-family: monospace;
+  
+  z-index: 100;
+  position: absolute;
+  width: 50%;
+  top: 65vh;
+  left: 0vh; 
+  color: rgb(0, 182, 24);
+  text-align: center;
+  font-size: 1.8vw;
+  color: #ffffff;
+  background: #0e8dbc;
+  background-color: rgba(0, 0, 0, 0.829);
+  text-shadow: 0 1px 0 #9b9b9b, 0 2px 0 #969696, 0 3px 0 rgb(136, 136, 136), 0 4px 0 #777777,
+  0 5px 0 rgb(85, 85, 85), 0 6px 1px rgba(0, 0, 0, 0.329), 0 0 5px rgba(0, 0, 0, 0.932), 0 1px 3px rgba(0, 0, 0, 0.918),
+  0 3px 5px rgba(0, 0, 0, 0.877), 0 5px 10px rgba(0, 0, 0, 0.808), 0 10px 10px rgba(0, 0, 0, 0.774), 10px 20px 20px rgb(0, 0, 0);
+  padding-bottom: 0.5vw;
+  
+  border-radius: 10px;
+}
+
 /* ----------------- ETC ---------------- */
 
 .TW {
@@ -285,12 +329,12 @@ body {
 .tpirt{
   float: left;
   color: rgb(9, 9, 95);
-  background-color: rgb(253, 253, 253);
+  background-color: rgb(255, 249, 238);
   font-size: 25px;
   text-align: center;
   position: absolute;
   width: 15vw;
-  height: 7vw;
+  height: 10vw;
   border: 2px solid #000000;
   border-radius: 5px;
   top: 20vw;
@@ -299,4 +343,126 @@ body {
 .tpirt > h3 {
   color: rgb(12, 105, 17);
   margin-top: 8px;
+}
+
+.redBorder {
+  border: 2px solid #ff0000;
+  border-radius: 5px;
+}
+
+.letterBox {
+  width: 20vw;
+  height: 8vw;
+  text-align: center;
+  position: absolute;
+  border: 5px solid #000000;
+  border-radius: 5px;
+  top: 40%;
+  left: 40%;
+  background-color: rgb(255, 249, 238);
+  z-index: 5;
+}
+
+.letterBox h4 {
+  margin: 10px 0;
+}
+
+.letterBox input {
+  margin-bottom: 15px;
+}
+
+.wordsOnScreen{
+  font-family: monospace;
+   float: left;
+  color: rgb(9, 9, 95);
+  background-color: rgb(255, 249, 238);
+  font-size: 20px;
+  text-align: center;
+  position: absolute;
+  width: 8vw;
+  height: 10vw;
+  border: 2px solid #000000;
+  border-radius: 5px;
+  top: 30vw;
+  right: 45vw;
+}
+
+ .wordsOnScreen >ul>li{  
+   font-size: 18px;
+   color: green;
+   text-align: right;
+   }
+
+/*-------------------tooltips  words dictionary ------*/
+[data-tooltip] {
+    display: inline-block;
+    position: relative;
+    cursor: help;
+    padding: 4px;
+}
+/* Tooltip styling */
+[data-tooltip]:before {
+    content: attr(data-tooltip);
+    display: none;
+    position: absolute;
+    background: #000;
+    color: #fff;
+    padding: 4px 8px;
+    font-size: 14px;
+    line-height: 1.4;
+    min-width: 100px;
+    text-align: center;
+    border-radius: 4px;
+}
+
+/* Dynamic vertical centering */
+[data-tooltip-position="right"]:before,
+[data-tooltip-position="left"]:before {
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+[data-tooltip-position="right"]:before {
+    left: 100%;
+    margin-left: 6px;
+}
+
+/* Tooltip arrow styling/placement */
+[data-tooltip]:after {
+    content: '';
+    display: none;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+}
+/* Dynamic horizontal centering for the tooltip */
+
+/* Dynamic vertical centering for the tooltip */
+[data-tooltip-position="right"]:after,
+[data-tooltip-position="left"]:after {
+    top: 50%;
+    margin-top: -6px;
+}
+
+[data-tooltip-position="right"]:after {
+    left: 100%;
+    border-width: 6px 6px 6px 0;
+    border-right-color: #000;
+}
+
+[data-tooltip-position="left"]:after {
+    right: 100%;
+    border-width: 6px 0 6px 6px;
+    border-left-color: #000;
+}
+/* Show the tooltip when hovering */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+    display: block;
+    z-index: 50;
 }

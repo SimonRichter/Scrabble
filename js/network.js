@@ -87,7 +87,7 @@ export default class Network {
     // Now call render to start the main game
     // if you are player 2
     if (s.playerNames.length > 1) {
-      new Game().start();
+      // new Game().start();
     }
   }
 }

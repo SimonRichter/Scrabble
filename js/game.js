@@ -2,26 +2,21 @@ import Player from "./Player.js";
 import Board from "./Board.js";
 import Tile from "./Tile.js";
 import Bag from "./Bag.js";
-import Network from "./Network.js";
+import Store from 'https://network-lite.nodehill.com/store';
 
 export default class Game {
-
   async start() {
     this.board = new Board();
     this.board.createBoard();
-    this.network = new Network(this.board);
-
     this.playerTurn = 0;
     this.skipCounter = 0;
+    this.localStore = Store.getLocalStore();
+    this.localStore.leaderBoard = this.localStore.leaderBoard || [];
+
 
     await this.tilesFromFile();
     // create players
-    this.players = [];
-    for (player of this.network.store.playerNames) {
-      console.log(player)
-      this.players.push(new Player(this, player));
-
-    }
+    this.players = [new Player(this, "&#128100; Spelare 1"), new Player(this, "&#128100;Spelare 2")];
     // render the menu + board + players
     this.board.render();
     this.renderMenu();
@@ -31,7 +26,6 @@ export default class Game {
     // Since the menu isn't re-rendered we only need to add the click event listener once.
     this.addClickEvents();
     this.renderScoreBoard();
-
   }
 
   async tilesFromFile() {
@@ -54,9 +48,9 @@ export default class Game {
     // Better random/shuffle of the bag. 
     let s, i; // s="storage" i="index"
     for (let t = this.bag.tiles.length - 1; t > 0; t--) { //we start the shuffle from the last t(tile) position of the array and until 0. 
-      i = Math.floor(Math.random() * t); // i(index) will be a random bettwen (1) and (tiles-available).
+      i = Math.floor(Math.random() * t); // i(index) will be a random between (1) and (tiles-available).
       s = this.bag.tiles[t]; // we put the current last tile position in a temporary storage.
-      this.bag.tiles[t] = this.bag.tiles[i]; // current  last tile postion will have the the random position from i(index)
+      this.bag.tiles[t] = this.bag.tiles[i]; // current last tile postion will have the random position from i(index)
       this.bag.tiles[i] = s; //  now we take the tile from the temporary storage 's' and put it the random index.
     }
   }
@@ -89,18 +83,21 @@ export default class Game {
     passa.setAttribute("id", "skipButton");
     passa.textContent = "Passa";
     menu.appendChild(passa);
-    /*
+
     // Byt button 
     let byt = document.createElement("button");
     byt.setAttribute("class", "btn skip");
+    byt.setAttribute("id", "changeTilesButton")
     byt.textContent = "Byt";
     menu.appendChild(byt);
-    */
+
+    /*
     let mix = document.createElement("button");
     mix.setAttribute("class", "btn skip");
     mix.setAttribute("id", "shuffle");
     mix.textContent = "Shuffle";
     menu.appendChild(mix);
+    */
   }
 
   renderStand() {
@@ -129,8 +126,10 @@ export default class Game {
     t.appendChild(p);
   }
 
-  addClickEvents() {
 
+
+
+  addClickEvents() {
     let that = this;
     $("#submitButton").click(function () {
       that.board.falseCounter = 1;    // falseCounter resets to 1 (false) at the begging of the round
@@ -142,9 +141,9 @@ export default class Game {
 
         that.board.checkIfWord(allWords).then(x => {     //it will wait for Promised to be fullfilled before running the next code.
 
-          //check  all functions must be True to to be able to go next player after pressing "spela"
+          //check  all functions must be True to be able to go next player after pressing "spela"
           if (that.board.checkMiddleSquare() && that.board.checkXYAxisHM() && that.board.nextToPutTilesHM() && that.board.falseCounter === 0) {
-            that.network.connectToStore();
+            //that.board.uniqueWordsPlayed(that.board.wordsPlayed); // Updates the list of unique words played in the game.
             that.skipCounter = 0; //Skip RESETS when a correct word is written. 
 
             // we add the points counted and add them to the Players Score.
@@ -153,7 +152,9 @@ export default class Game {
 
             // Fill the player stand with tiles again after they submit a correct word
             for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
-              that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
+              if (that.bag.tiles.length > 0) {
+                that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
+              }
             }
             // This while loop assigns a boardIndex to the placed tile objects
             // in the board matrix and makes sure that the tiles can't be moved
@@ -182,7 +183,8 @@ export default class Game {
         });
       }
       else
-        alert("No tiles played. Click on  'Passa' if you give up this round."); // if player clicks on "spela" without placeing tiles
+        //alert("No tiles played. Click on 'Passa' if you give up this round."); // if player clicks on "spela" without placeing tiles
+        that.renderMessage(1);
 
     });
 
@@ -195,6 +197,7 @@ export default class Game {
           let y = Math.floor(squareIndex / 15);
           let x = squareIndex % 15;
           delete that.board.matrix[y][x].tile;
+          that.changeBackEmptyTile(that.board.putTilesThisRound[i]);
           that.players[that.playerTurn].stand.push(that.board.putTilesThisRound[i]);
 
           that.board.putTilesThisRound.splice(i, 1);
@@ -204,8 +207,7 @@ export default class Game {
 
       that.skipCounter++; //Global skipCounter +1  when clicked. (4 consecutive times to 'Game Over')
 
-      if (that.skipCounter > 3 || (that.bag.tiles.length === 0 && !that.players[0].stand.length &&
-        !that.players[1].stand.length && !that.players[2].stand.length && !that.players[3].stand.length)) {
+      if (that.skipCounter > 3) {
         that.renderGameOver();
       }
 
@@ -224,6 +226,89 @@ export default class Game {
       that.renderStand();
     });
 
+
+    // Click event for toggling a border on tiles in the stand
+    $("body").on("click", ".stand .tile", (e) => {
+      let me = $(e.currentTarget);
+      me.toggleClass("redBorder");
+    });
+
+    // Click event for switching out tiles between the stand and the bag
+    $("body").on("click", "#changeTilesButton", function () {
+      if ($(".redBorder").length === 0) {
+        that.renderMessage(2);
+        ///alert("Du måste choosea brickor i din hållare genom att trycka på dem för att kunna byta ut dem.");
+        return;
+      }
+      // We make sure there are enough tiles in the bag to be switched out
+      if (that.bag.tiles.length >= $(".redBorder").length) {
+        // If tiles have been put on the board they go back to the players stand
+        if (that.board.putTilesThisRound.length > 0) {
+          for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
+            let squareIndex = that.board.putTilesThisRound[i].boardIndex;
+            let y = Math.floor(squareIndex / 15);
+            let x = squareIndex % 15;
+            delete that.board.matrix[y][x].tile;
+            that.changeBackEmptyTile(that.board.matrix[yStart][xStart].tile);
+            that.players[that.playerTurn].stand.push(that.board.putTilesThisRound[i]);
+            that.board.putTilesThisRound.splice(i, 1);
+          }
+          that.board.render()
+        }
+
+        for (let i = $(".redBorder").length - 1; i >= 0; i--) {
+          // select the last tile of tiles with the class "redBorder" and save it
+          // in the tileIndex variable
+          let tileIndex = $(".stand > div").index($(".redBorder")[i]);
+          // Push back the tile to the bag
+          that.bag.tiles.push(that.players[that.playerTurn
+          ].stand.splice(tileIndex, 1)[0]);
+
+          // Better random/shuffle of the bag. 
+          let s, j; // s="storage" i="index"
+          for (let t = that.bag.tiles.length - 1; t > 0; t--) { //we start the shuffle from the last t(tile) position of the array and until 0. 
+            j = Math.floor(Math.random() * t); // i(index) will be a random between (1) and (tiles-available).
+            s = that.bag.tiles[t]; // we put the current last tile position in a temporary storage.
+            that.bag.tiles[t] = that.bag.tiles[j]; // current last tile postion will have the random position from i(index)
+            that.bag.tiles[j] = s; //  now we take the tile from the temporary storage 's' and put it the random index.
+          }
+          that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
+        }
+        // We change the player turn to the next player
+        that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
+        that.renderStand();
+      } else {
+        renderMessage(3);
+        //alert("Det finns inte tillräckligt med brickor i påsen för att kunna byta.")
+      }
+    });
+
+    $("body").on("click", ".board > div > div", (e) => {
+      let y;
+      let x;
+      let $me = $(e.currentTarget);
+      let tileIndex = $me.attr('data-index');
+      // convert to y and x coordinates
+      y = Math.floor(tileIndex / 15);
+      x = tileIndex % 15;
+      if (that.board.matrix[y][x].tile.points === 0 && !that.board.matrix[y][x].tile.hasBeenPlaced) {
+        that.changeLetterOfEmptyTile();
+        $("body").on("click", "#chooseButton", function () {
+          if ($(".letterBox input").val()) {
+            let letterInBox = $(".letterBox input").val().toUpperCase();
+            let acceptedLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ';
+            if (letterInBox.length === 1 && acceptedLetters.includes(letterInBox)) {
+              that.board.matrix[y][x].tile.char = letterInBox;
+              $(".letterBox").remove();
+              that.board.render();
+              that.renderStand();
+            } else {
+              $(".letterBox input").val('Välj endast en bokstav')
+            }
+          }
+        });
+      }
+    });
   }
 
   addDragEvents() {
@@ -283,6 +368,26 @@ export default class Game {
         this.board.putTilesThisRound.push(this.board.matrix[y][x].tile);
         this.board.render();
         this.renderStand();
+        let that = this;
+        if (this.board.matrix[y][x].tile.char === ' ') {
+          this.changeLetterOfEmptyTile();
+          $("#chooseButton").click(function () {
+            if ($(".letterBox input").val()) {
+              let letterInBox = $(".letterBox input").val().toUpperCase();
+              let acceptedLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ';
+              if (letterInBox.length === 1 && acceptedLetters.includes(letterInBox)) {
+                that.board.matrix[y][x].tile.char = letterInBox;
+                that.board.matrix[y][x].tile.points = 0;
+                $(".letterBox").remove();
+                that.board.render();
+                that.renderStand();
+              } else {
+                $(".letterBox input").val('Välj endast en bokstav')
+              }
+            }
+          });
+        }
+
       });
 
     // These variables are declared here so that they can be used
@@ -332,6 +437,7 @@ export default class Game {
         if ($(".stand").hasClass("hover")) {
           // Put back the tile
           this.board.matrix[yStart][xStart].tile.hasBeenPlaced = false;
+          this.changeBackEmptyTile(this.board.matrix[yStart][xStart].tile);
           this.players[this.playerTurn].stand.push(
             this.board.matrix[yStart][xStart].tile
           );
@@ -341,6 +447,9 @@ export default class Game {
           // Remove the tile from putTilesThisRound and the board matrix
           this.board.putTilesThisRound.splice(indexOf, 1);
           delete this.board.matrix[yStart][xStart].tile;
+
+          // Remove the letterbox div
+          $(".letterBox").remove();
 
           // inside this else we have code that runs if the tile is dragged
           // from one place on the board to another place on the board
@@ -367,19 +476,50 @@ export default class Game {
       });
   }
 
+  changeBackEmptyTile(tile) {
+    if (tile.points === 0) {
+      tile.char = ' ';
+      tile.points = '';
+    }
+  }
+
+  changeLetterOfEmptyTile() {
+    let div = document.createElement("div");
+    div.className = "letterBox";
+
+    let h4 = document.createElement("h4");
+    h4.textContent = "välj en bokstav";
+    div.appendChild(h4);
+
+    let input = document.createElement("input");
+    div.appendChild(input);
+
+    let choose = document.createElement("button");
+    choose.setAttribute("class", "btn skip");
+    choose.setAttribute("id", "chooseButton");
+    choose.textContent = "Okej";
+    div.appendChild(choose);
+
+    document.body.appendChild(div);
+  }
+
   renderGameOver() {
+    for (let player of this.players) {
+      this.localStore.leaderBoard.push(player.score);
+    }
     // Creates the Game Over div that covers whole page
     let $gameover = $('<div class="game-over"/>').appendTo("body");
     // Creates the smaller box with Game Over! text
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
+    console.log(this.localStore.leaderBoard.sort((a, b) => { return b - a }));
   }
 
   renderScoreBoard() {
     // Removes any old scoreboard existing
     $(".scoreboard").remove();
     // Creates a new Score Board div
-    let $scoreboard = $('<div class="scoreboard"><h2>Scoreboard</h2></div>').appendTo("body");
+    let $scoreboard = $('<div class="scoreboard"><h2>Poäng</h2></div>').appendTo("body");
 
     for (let player of this.players) {
       $scoreboard.append(`<div> 
@@ -389,6 +529,34 @@ export default class Game {
     }
 
   }
+  renderMessage(m, w) {
+    //Remove any old message
+    $("div").remove(".message");
+    // Create a div to contain message
+    let $msg = $('<div class="message"/>').appendTo("body");
 
+    // Select message (argument), append to message div and display it
+    if (m === 1) { $msg.append(`<div>Inga brickor lagda!</div>`); }
+    if (m === 2) { $msg.append(`<div>Klicka på de brickor i hållaren du vill byta ut.</div>`); }
+    if (m === 3) { $msg.append(`<div>Inte tillräckligt med brickor i påsen för att kunna byta.</div>`); }
+    if (m === 4) { $msg.append(`<div>Första rundan måste en bricka spelas i mittenrutan</div>`); }
+    if (m === 5) { $msg.append(`<div>&#9940 "` + w + `" är inte  ett giltigt  ord  &#9940</div>`); }
+    if (m === 6) { $msg.append(`<div>Brickor måste hänga samman med tidigare lagda brickor</div>`); }
+    if (m === 7) { $msg.append(`<div>Brickor du lägger måste hänga ihop</div>`); }
+    $(".message").fadeIn(0);
+
+
+    //Wait a bit then fade out the message
+    setTimeout(function () {
+      $(".message").fadeOut(1500);
+    }, 3000);
+
+    //And finally delete it
+    setTimeout(function () {
+      $("div").remove(".message");
+    }, 3700);
+
+
+  }
 
 }
