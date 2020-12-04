@@ -15,7 +15,7 @@ export default class Board {
     // field boardIndex in the tile object
     this.putTilesThisRound = [];
     this.falseCounter = 0;
-    this.wordsPlayed = []; // correct words played this game.
+    //this.wordsPlayed = []; // correct words played this game.
     this.specialSquares = {
       // Triple Word pts
       0: "TW", 7: "TW", 14: "TW", 105: "TW", 119: "TW", 210: "TW", 217: "TW", 224: "TW",
@@ -114,23 +114,35 @@ export default class Board {
       $tpirt.append(`<h3>+${x}</h3>`)
   }
 
-  renderWords() {
-    let t = this.uniqueWordsPlayed(this.wordsPlayed);
-    $(".wordsOnScreen").remove();
-    let $wordsOnscreen = $('<div class="wordsOnScreen">Words</div>').appendTo("body");
-    let $lis = $('<ul class="lis"></ul>');
-    $lis.appendTo($wordsOnscreen);
-    for (let w of t)
-      $lis.append(`<li data-tooltip="We can put the meaning of the word here" data-tooltip-position="right"> ${w}</li>`);
-
-
-  }
-
 
   // This function checks if tiles of this round are touching each other
   checkXYAxisHM() {
-    if (this.putTilesThisRound.length) { // Only do the function if there are tiles on the board
-      let message = "Your tiles must touch each other."; // Alert message
+    //let message = "Your tiles must touch each other."; // Alert message
+
+    if (this.putTilesThisRound.length > 1) { // Only do the function if there are tiles on the board
+      let pttrl = this.putTilesThisRound;
+      for (let tile of pttrl) {
+        tile.row = Math.floor(tile.boardIndex / 15);
+        tile.col = tile.boardIndex % 15;
+      }
+      let errorCounter = 0;
+      for (let i = 0; i < pttrl.length - 1; i++) {
+        if ((pttrl[i].row !== pttrl[i + 1].row)) {
+          errorCounter++;
+          break;
+        }
+      }
+      for (let i = 0; i < pttrl.length - 1; i++) {
+        if ((pttrl[i].col !== pttrl[i + 1].col)) {
+          errorCounter++;
+          break;
+        }
+      }
+      if (errorCounter === 2) {
+        //alert(message);
+        new Game().renderMessage(7);
+        return false;
+      }
       let tilesInOrder = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1); // Sort this.putTilesThisRound
       let startIndex = tilesInOrder[0].boardIndex; // Index of the tile with the lowest index
       let endIndex = tilesInOrder[tilesInOrder.length - 1].boardIndex; // Index of the tile with the highest index
@@ -145,19 +157,20 @@ export default class Board {
         // Check if there are any gaps between the first and last tile
         // if so return false + message
         while (xStartIndex <= xEndIndex) {
-          if (!this.matrix[yStartIndex][xStartIndex].tile) { alert(message); return false; }
+          if (!this.matrix[yStartIndex][xStartIndex].tile) { new Game().renderMessage(7);/* alert(message) ;*/ return false; }
           xStartIndex++;
         }
       }
       if (yStartIndex !== yEndIndex) { // Same as before but in columns
         while (yStartIndex <= yEndIndex) {
-          if (!this.matrix[yStartIndex][xStartIndex].tile) { alert(message); return false; }
+          if (!this.matrix[yStartIndex][xStartIndex].tile) { new Game().renderMessage(7);/* alert(message);*/ return false; }
           yStartIndex++;
         }
       }
     }
     return true;
   }
+
 
 
   // this function is checks if tiles are touching tiles from previous rounds
@@ -186,7 +199,8 @@ export default class Board {
         }
       }
     }
-    alert("Tiles must touch tiles placed in previous rounds");
+    new Game().renderMessage(6);
+    //alert("Tiles must touch tiles placed in previous rounds");
     return false;
   }
 
@@ -203,9 +217,8 @@ export default class Board {
         } else {
           // Checks if the loop is on the last tile in the putTilesThisRound array
           if (temp === this.putTilesThisRound.length - 1) {
-            alert(
-              "You must place one of your tiles in the middle of the board."
-            );
+            new Game().renderMessage(4);
+            //alert("You must place one of your tiles in the middle of the board.");
             return false;
           }
         }
@@ -345,19 +358,19 @@ export default class Board {
   }
 
   // For later (maybe) list of uniue words played in the game
-
-  uniqueWordsPlayed(wPlayed) {
-    let uniqueStrings = [];
-    $.each(wPlayed, (i, el) => {
-      if ($.inArray(el, uniqueStrings) === -1)
-        uniqueStrings.push(el);
-    });
-    console.log("words played:", wPlayed);//test
-    console.log("unique Words played", uniqueStrings)  //test
-    return uniqueStrings;
-
-  }
-
+  /*
+    uniqueWordsPlayed(wPlayed) {
+      let uniqueStrings = [];
+      $.each(wPlayed, (i, el) => {
+        if ($.inArray(el, uniqueStrings) === -1)
+          uniqueStrings.push(el);
+      });
+      console.log("words played:", wPlayed);//test
+      console.log("unique Words played", uniqueStrings)  //test
+      return uniqueStrings;
+  
+    }
+  */
 
 
 
@@ -377,7 +390,7 @@ export default class Board {
           //alert("'" + word.toUpperCase() + "' is NOT a correct word from the Swedish dictionary!");
           break;
         }
-        this.wordsPlayed.push(word); //add another correct word to the list
+        //this.wordsPlayed.push(word); add another correct word to the list
       }
 
     }
