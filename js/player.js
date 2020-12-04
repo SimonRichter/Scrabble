@@ -3,7 +3,7 @@ export default class Player {
     this.game = game;
     this.name = name;
     this.score = 0;
-    this.stand = [...this.game.getTiles(), " "];
+    this.stand = [...this.game.getTiles()];
   }
 
   render() {

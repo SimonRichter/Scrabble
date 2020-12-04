@@ -273,6 +273,37 @@ body {
   line-height: 10px;
 }
 
+/* ----------------- START PAGE ---------------- */
+
+.startpage {
+  background-color: rgba(137, 43, 226, 0);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  position: fixed;
+}
+
+.btn-container > button {
+  color: rgba(255, 255, 255, 0.856);
+  font-size: 25px;
+  font-family: "Oswald", sans-serif;
+  border: solid rgba(0, 0, 0, 0.74) 1px;
+  text-align: center;
+  padding: 4px;
+  width: 400px;
+  margin-top: 32px;
+}
+
+.newgame {
+  background-color: #bb9236;
+}
+
+.joingame {
+  background-color: #9a572d;
+}
+
+
 .message {
   z-index: 100;
   margin-left: 3%;
@@ -299,7 +330,7 @@ body {
   font-size: 1.8vw;
   color: #ffffff;
   background: #0e8dbc;
-  background-color: rgba(0, 0, 0, 0.829);
+  background-color: rgba(0, 0, 0, 0.5);
   text-shadow: 0 1px 0 #9b9b9b, 0 2px 0 #969696, 0 3px 0 rgb(136, 136, 136), 0 4px 0 #777777,
   0 5px 0 rgb(85, 85, 85), 0 6px 1px rgba(0, 0, 0, 0.329), 0 0 5px rgba(0, 0, 0, 0.932), 0 1px 3px rgba(0, 0, 0, 0.918),
   0 3px 5px rgba(0, 0, 0, 0.877), 0 5px 10px rgba(0, 0, 0, 0.808), 0 10px 10px rgba(0, 0, 0, 0.774), 10px 20px 20px rgb(0, 0, 0);
