@@ -538,8 +538,18 @@ export default class Board {
       return points;  // we return  the points counted on X axis
     }
   }
-}
 
+  sevenTiles() {
+
+    let points = 0;
+
+    return this.putTilesThisRound.length === 7 ? points = 50 : points = 0;
+
+  }
+
+
+
+}
 
 
 

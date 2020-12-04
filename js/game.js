@@ -147,7 +147,7 @@ export default class Game {
             that.skipCounter = 0; //Skip RESETS when a correct word is written. 
 
             // we add the points counted and add them to the Players Score.
-            that.players[that.playerTurn].score += that.board.countPointsXAxis() + that.board.countPointsYAxis();
+            that.players[that.playerTurn].score += that.board.countPointsXAxis() + that.board.countPointsYAxis() + that.board.sevenTiles();
             console.log('SCORE ', that.players[that.playerTurn].name, '= ', that.players[that.playerTurn].score, " points"); //shows Score on console (for now)
 
             // Fill the player stand with tiles again after they submit a correct word
