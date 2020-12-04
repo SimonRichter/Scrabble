@@ -15,7 +15,7 @@ export default class Board {
     // field boardIndex in the tile object
     this.putTilesThisRound = [];
     this.falseCounter = 0;
-    //this.wordsPlayed = []; // correct words played this game.
+    this.wordsPlayed = []; // correct words played this game.
     this.specialSquares = {
       // Triple Word pts
       0: "TW", 7: "TW", 14: "TW", 105: "TW", 119: "TW", 210: "TW", 217: "TW", 224: "TW",

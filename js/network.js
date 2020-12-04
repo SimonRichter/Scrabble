@@ -2,6 +2,7 @@ import Store from 'https://network-lite.nodehill.com/store';
 import Game from './Game.js';
 import Player from "./Player.js";
 import Board from "./Board.js";
+import StartPage from "./StartPage.js";
 
 
 export default class Network {
@@ -14,10 +15,7 @@ export default class Network {
   renderStart() {
     $('body').html(/*html*/`
       <div class="start">
-        <h1>Super amazing sCRAPble</h1>
         <input type="text" name="playerName" placeholder="Name" required>
-        <button class="start-btn">Get key</button>
-        <button class="connect-btn">Connect</button>
       </div>
     `);
   }
@@ -35,15 +33,15 @@ export default class Network {
       return this.playerName;
     };
 
-    $('body').on('click', '.start-btn', async () => {
+    $('body').on('click', '.newgame', async () => {
       if (!getName()) { return; }
       this.networkKey = await Store.createNetworkKey();
-      $('.start').append('<p>get key: ' + this.networkKey + '</p>');
+      $('.start').append('<p style="title">get key ' + this.networkKey + '</p>');
       $('.start-btn').prop('disabled', true);
       this.connectToStore();
     });
 
-    $('body').on('click', '.connect-btn', () => {
+    $('body').on('click', '.joingame', () => {
       if (!getName()) { return; }
       this.networkKey = prompt('Enter the network key from your friend:');
       this.connectToStore();
