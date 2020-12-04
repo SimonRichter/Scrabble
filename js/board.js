@@ -100,7 +100,7 @@ export default class Board {
     let x = 0;
     if (this.putTilesThisRound.length) {
       let that = this;
-      x = that.countPointsXAxis() + that.countPointsYAxis();
+      x = that.countPointsXAxis() + that.countPointsYAxis() + that.sevenTiles();
     }
     $(".tpirt").remove();
     let $tpirt = $('<div class="tpirt">Möjliga poäng för det här draget</div>').appendTo("body");
