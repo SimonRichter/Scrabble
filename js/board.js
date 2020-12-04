@@ -114,6 +114,18 @@ export default class Board {
       $tpirt.append(`<h3>+${x}</h3>`)
   }
 
+  renderWords() {
+    let t = this.uniqueWordsPlayed(this.wordsPlayed);
+    $(".wordsOnScreen").remove();
+    let $wordsOnscreen = $('<div class="wordsOnScreen">Words</div>').appendTo("body");
+    let $lis = $('<ul class="lis"></ul>');
+    $lis.appendTo($wordsOnscreen);
+    for (let w of t)
+      $lis.append(`<li data-tooltip="We can put the meaning of the word here" data-tooltip-position="right"> ${w}</li>`);
+
+
+  }
+
 
   // This function checks if tiles of this round are touching each other
   checkXYAxisHM() {
@@ -358,19 +370,19 @@ export default class Board {
   }
 
   // For later (maybe) list of uniue words played in the game
-  /*
-    uniqueWordsPlayed(wPlayed) {
-      let uniqueStrings = [];
-      $.each(wPlayed, (i, el) => {
-        if ($.inArray(el, uniqueStrings) === -1)
-          uniqueStrings.push(el);
-      });
-      console.log("words played:", wPlayed);//test
-      console.log("unique Words played", uniqueStrings)  //test
-      return uniqueStrings;
-  
-    }
-  */
+
+  uniqueWordsPlayed(wPlayed) {
+    let uniqueStrings = [];
+    $.each(wPlayed, (i, el) => {
+      if ($.inArray(el, uniqueStrings) === -1)
+        uniqueStrings.push(el);
+    });
+    console.log("words played:", wPlayed);//test
+    console.log("unique Words played", uniqueStrings)  //test
+    return uniqueStrings;
+
+  }
+
 
 
 
@@ -390,7 +402,7 @@ export default class Board {
           //alert("'" + word.toUpperCase() + "' is NOT a correct word from the Swedish dictionary!");
           break;
         }
-        //this.wordsPlayed.push(word); add another correct word to the list
+        this.wordsPlayed.push(word); //add another correct word to the list
       }
 
     }
