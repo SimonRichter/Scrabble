@@ -1,4 +1,4 @@
-import StartPage from './startpage.js';
-import Game from './Game.js';
-new StartPage();
+import Game from './game.js'
+import Network from './Network.js';
 new Game().start();
+//new Network();
