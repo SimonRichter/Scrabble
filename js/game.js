@@ -292,6 +292,7 @@ export default class Game {
       y = Math.floor(tileIndex / 15);
       x = tileIndex % 15;
       if (that.board.matrix[y][x].tile.points === 0 && !that.board.matrix[y][x].tile.hasBeenPlaced) {
+        $('.letterBox').remove();
         that.changeLetterOfEmptyTile();
         $("body").on("click", "#chooseButton", function () {
           if ($(".letterBox input").val()) {
@@ -303,7 +304,8 @@ export default class Game {
               that.board.render();
               that.renderStand();
             } else {
-              $(".letterBox input").val('Välj endast en bokstav')
+              $(".letterBox h4").html("<h4 style='color: red;'>Välj endast EN bokstav</h4>");
+              $(".letterBox input").val("")
             }
           }
         });
@@ -370,6 +372,7 @@ export default class Game {
         this.renderStand();
         let that = this;
         if (this.board.matrix[y][x].tile.char === ' ') {
+          $('.letterBox').remove();
           this.changeLetterOfEmptyTile();
           $("#chooseButton").click(function () {
             if ($(".letterBox input").val()) {
@@ -382,7 +385,8 @@ export default class Game {
                 that.board.render();
                 that.renderStand();
               } else {
-                $(".letterBox input").val('Välj endast en bokstav')
+                $(".letterBox h4").html("<h4 style='color: red;'>Välj endast EN bokstav</h4>");
+                $(".letterBox input").val("");
               }
             }
           });
@@ -488,7 +492,7 @@ export default class Game {
     div.className = "letterBox";
 
     let h4 = document.createElement("h4");
-    h4.textContent = "välj en bokstav";
+    h4.textContent = "Välj en bokstav";
     div.appendChild(h4);
 
     let input = document.createElement("input");
