@@ -290,17 +290,18 @@ body {
   font-family: "Oswald", sans-serif;
   border: solid rgba(0, 0, 0, 0.74) 1px;
   text-align: center;
-  padding: 4px;
-  width: 400px;
+  width: 100%;
   margin-top: 32px;
 }
 
 .newgame {
   background-color: #bb9236;
+  float: left;
 }
 
 .joingame {
   background-color: #9a572d;
+  float: left;
 }
 
 
