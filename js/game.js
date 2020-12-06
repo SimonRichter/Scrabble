@@ -26,6 +26,7 @@ export default class Game {
     // Since the menu isn't re-rendered we only need to add the click event listener once.
     this.addClickEvents();
     this.renderScoreBoard();
+    this.renderHelp();
   }
 
   async tilesFromFile() {
@@ -563,4 +564,12 @@ export default class Game {
 
   }
 
+  renderHelp() {
+
+    $('body').append(`<div class="help"><a href=" https://www.betapet.se/rules/" target="_blank" rel="noopener noreferrer">?</a></div>`);
+
+  }
+
 }
+
+

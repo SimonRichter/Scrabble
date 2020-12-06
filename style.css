@@ -290,7 +290,8 @@ body {
   font-family: "Oswald", sans-serif;
   border: solid rgba(0, 0, 0, 0.74) 1px;
   text-align: center;
-  width: 100%;
+  padding: 6px;
+  width: 400px;
   margin-top: 32px;
 }
 
@@ -400,4 +401,16 @@ body {
 
 .letterBox input {
   margin-bottom: 15px;
+}
+
+.help {
+
+  font-size: 100px;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  color: #fff;
+
+  /*css commands remove underline and purple. Animation, hover - till reglerna*/
+
 }
