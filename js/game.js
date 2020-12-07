@@ -6,6 +6,7 @@ import Store from 'https://network-lite.nodehill.com/store';
 import StartPage from './startpage.js';
 
 
+
 export default class Game {
   constructor() {
     this.addEventListeners();
@@ -101,6 +102,7 @@ export default class Game {
 
   async start() {
     let s = this.store;
+
     this.board = new Board();
     this.board.createBoard();
     this.playerTurn = 0;
@@ -612,7 +614,8 @@ export default class Game {
     // Creates the smaller box with Game Over! text
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
-    console.log(this.localStore.leaderBoard.sort((a, b) => { return b - a }));
+    this.localStore.leaderBoard.sort((a, b) => { return b - a })
+    console.log(this.localStore.leaderBoard.splice(0, 10));
   }
 
   renderScoreBoard() {
