@@ -344,25 +344,26 @@ export default class Game {
       .not(".none")
       .draggabilly()
       .on("dragEnd", (e, pointer) => {
-        let { pageX, pageY } = pointer;
+        let { pageX, pageY } = pointer; // x and y values for the mouse pointer
 
+        // Pixel values describing where the stand is located
         let $stand = $('.stand');
         let { top, left } = $stand.offset();
         let bottom = top + $stand.height();
         let right = left + $stand.width();
-        // if dragged within the limit of the stand
+
         if (pageX > left && pageX < right
-          && pageY > top && pageY < bottom) {
-          let indexOfTile = e.currentTarget.getAttribute('data-tile');
-          let pt = this.players[this.playerTurn].stand;
-          let tile = pt[indexOfTile];
-          console.log('indexOfTile: ', indexOfTile);
-          console.log('tile: ', tile);
-          let newIndex = Math.floor(8 * (pageX - left) / $stand.width());
-          // move around
+          && pageY > top && pageY < bottom) { // If dragged within the limit of the stand
+          let indexOfTile = e.currentTarget.getAttribute('data-tile'); //index in the stand
+          let pt = this.players[this.playerTurn].stand; // Tiles inside the stand
+          let tile = pt[indexOfTile]; // The tile that is being dragged
+          let newIndex = Math.floor(8 * (pageX - left) / $stand.width()); // New index in stand
+          console.log('pageX: ', pageX, 'left: ', left, 'width: ', $stand.width());
+
+          // Move tile to the right location in the stand
           pt.splice(indexOfTile, 1, ' ');
-          pt.splice(newIndex + 1, 0, tile);
-          //preserve the space where the tile used to be
+          pt.splice(newIndex + (indexOfTile < newIndex ? 1 : 0), 0, tile); // Make it so you can move tiles to the left as well as right
+          // Make the render look good
           while (pt.length > 7) { pt.splice(pt[indexOfTile > newIndex ? 'indexOf' : 'lastIndexOf'](' '), 1); }
           this.renderStand();
         }
