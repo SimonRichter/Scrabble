@@ -71,7 +71,7 @@ export default class Game {
     this.store.board.putTilesThisRound = this.board.putTilesThisRound;
     this.store.board.wordsPlayed = this.board.wordsPlayed;
     this.store.firstRound = this.board.firstRound;
-    this.store.board.matrix = await this.board.matrix;
+    this.store.board.matrix = this.board.matrix;
     this.store.playerTurn = await this.playerTurn;
     this.store.skipCounter = 0;
     this.store.gameOver = false;
@@ -208,6 +208,7 @@ export default class Game {
 
             // we add the points counted and add them to the Players Score.
             console.log("Did we add the score correctly?", that.store.scores[that.playerTurn])
+            console.log("Player turn??", that.store.playerTurn);
             that.store.scores[that.playerTurn] += that.board.countPointsXAxis() + that.board.countPointsYAxis();
             console.log("Did we add the score correctly?", that.store.scores[that.playerTurn])
 
