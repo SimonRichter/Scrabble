@@ -343,7 +343,32 @@ export default class Game {
     $(".stand .tile")
       .not(".none")
       .draggabilly()
-      .on("dragEnd", (e) => {
+      .on("dragEnd", (e, pointer) => {
+        let { pageX, pageY } = pointer;
+
+        let $stand = $('.stand');
+        let { top, left } = $stand.offset();
+        let bottom = top + $stand.height();
+        let right = left + $stand.width();
+        // if dragged within the limit of the stand
+        if (pageX > left && pageX < right
+          && pageY > top && pageY < bottom) {
+          let indexOfTile = e.currentTarget.getAttribute('data-tile');
+          let pt = this.players[this.playerTurn].stand;
+          let tile = pt[indexOfTile];
+          console.log('indexOfTile: ', indexOfTile);
+          console.log('tile: ', tile);
+          let newIndex = Math.floor(8 * (pageX - left) / $stand.width());
+          // move around
+          pt.splice(indexOfTile, 1, ' ');
+          pt.splice(newIndex + 1, 0, tile);
+          //preserve the space where the tile used to be
+          while (pt.length > 7) { pt.splice(pt[indexOfTile > newIndex ? 'indexOf' : 'lastIndexOf'](' '), 1); }
+          this.renderStand();
+        }
+
+
+
         // get the dropZone square -
         // if none re-render the stand to put back the dragged tile and return
         let $dropZone = $(".hover");
