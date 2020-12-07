@@ -1,8 +1,11 @@
 export default class StartPage {
 
+
   constructor() {
     this.render();
     this.addClickEvents();
+    this.playerName = "";
+    this.playerCode = 0;
   }
 
   render() {
@@ -27,20 +30,37 @@ export default class StartPage {
   addClickEvents() {
     let that = this;
     $('.newgame').click(() => {
-      console.log('Starting new game...');
-      $('.startpage').html('<input type="text" name="playerName" placeholder="Namn:" class="entername"></input>');
-      console.log(getName());
+      $('.startpage').html('<input type="text" placeholder="Namn:" class="entername"></input>');
+      // When user types name and presses enter(13), players name gets stored in playerName
+      $(document).on("keypress", "input", function (e) {
+        if (e.which == 13) {
+          that.playerName = $(this).val();
+          // ENTER FUNCTION THAT STARTS GAME HERE (maybe game constructor can take in player name as argument)
+        }
+      });
+
     })
 
     $('.joingame').click(() => {
       console.log('Joining game...');
-      $('.startpage').html('<input type="text" name="playerName" placeholder="Kod:" class="enterkey"></input>');
+      $('.startpage').html('<input type="text" placeholder="Namn:" class="enterkey"></input>');
+      // When user types name and presses enter (13), players name gets stored in playerName
+      $(document).on("keypress", "input", function (e) {
+        if (e.which == 13) {
+          that.playerName = $(this).val();
+          $('.startpage').html('<input type="text" placeholder="Kod:" class="enterkey"></input>');
+          // ...then, player types in code which gets stored in playerCode
+          $(document).on("keypress", "input", function (e) {
+            if (e.which == 13) {
+              that.playerCode = $(this).val();
+              // ENTER FUNCTION THAT STARTS GAME WITH CODE HERE
+            }
+          });
+        }
+      });
+
     })
 
-    const getName = () => {
-      this.playerName = $('input[name="playerName"]').val();
-      return this.playerName;
-    };
   }
 
 
