@@ -1,6 +1,3 @@
-import Game from "./Game.js";
-import Network from "./Network.js";
-
 export default class StartPage {
 
   constructor() {
@@ -17,7 +14,7 @@ export default class StartPage {
     </div>
     </header>`);
 
-    /* $('body').css({
+     /*$('body').css({
        'background-color': '#0e2b3c',
        'background-image': 'url(scrabble_startpage.png)',
        'background-repeat': 'no-repeat',

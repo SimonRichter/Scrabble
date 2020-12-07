@@ -2,7 +2,6 @@ import Player from "./Player.js";
 import Board from "./Board.js";
 import Tile from "./Tile.js";
 import Bag from "./Bag.js";
-import Network from './Network.js';
 import Store from 'https://network-lite.nodehill.com/store';
 import StartPage from './startpage.js';
 
@@ -13,13 +12,10 @@ export default class Game {
   constructor() {
     this.addEventListeners();
     this.renderStart();
-    //if (this.store.playerNames.length > 1) {
-     
-    //}
+    this.startPage = new StartPage();
   }
 
   async startWithStoreParameters() {
-    console.log("startWithStoreParameters() running")
     this.board = new Board();
     this.store.board = this.store.board || {};
     this.board.matrix = await this.store.board.matrix;
@@ -28,7 +24,6 @@ export default class Game {
     this.playerTurn = await this.store.playerTurn;
     //this.store.players = this.store.players || [];
     //await this.store.players.push(new Player(this.store, this.playerName));
-    //console.log("Player pushed", this.store.players)
     this.player = new Player(this, this.store, this.playerName); //Are the players added correctly?
     this.store.scores = await this.store.scores || [];
     await this.store.scores.push(this.player.score);
@@ -47,63 +42,47 @@ export default class Game {
   }
 
   async start() {
-    let s = this.store;
     this.board = new Board();
     this.board.createBoard();
     this.localStore = await Store.getLocalStore();
     this.localStore.leaderBoard = this.localStore.leaderBoard || [];
     await this.tilesFromFile();
     await this.connectToStore();
-    console.log("We got this far");
+    let s = this.store;
     this.store.bag = this.bag;
     this.store.bag.tiles = this.bag.tiles;
     // create players
     this.player = new Player(this, this.store, this.playerName);
-    console.log("We created a player");
 
 
     // Push all the info to the store
     
-    let s = this.store;
     s.playerNames = await s.playerNames || [];
     // Add my name
     await s.playerNames.push(this.playerName);
     // Which player am I? (0 or 1)
     this.playerIndex = s.playerNames.length - 1;
     this.playerTurn = this.playerIndex;
-    console.log("Connect pressed, player index:", this.playerIndex);
     this.store.scores = await this.store.scores || [];
     await this.store.scores.push(this.player.score);
-    console.log("We pushed the player to the store");
-    console.log(this.store);
     this.store.board = this.store.board || {};
     this.store.board.matrix = this.board.matrix;
     this.store.board.putTiles = this.board.putTiles;
     this.store.board.putTilesThisRound = this.board.putTilesThisRound;
     this.store.board.wordsPlayed = this.board.wordsPlayed;
     this.store.firstRound = this.board.firstRound;
-    console.log("Updating store.board")
     this.store.board.matrix = await this.board.matrix;
-    console.log("Updating store.board.matrix")
     this.store.playerTurn = await this.playerTurn;
-    console.log("Updating store.playerTurn")
     this.store.skipCounter = 0;
-    console.log("Updating store.skipCounter")
     this.store.gameOver = false;
-    console.log("Updating store.gameOver")
-    console.log("this.playerName", this.playerName)
     //this.store.players = this.store.players || [];
-    //console.log("this.store.players", this.store.players)
     //await this.store.players.push(this.player);
-    console.log("Updating store.players")
     this.waitForNameToBeSaved = false;
-    $('.start').remove();
-    console.log("we tried removing everything");
+    $('.startpage').remove()
+	  $('.start').remove()
     
     // render the menu + board + players
-    console.log(this.players);
     this.board.render();
-    console.log("We tried rendering the board")
     this.renderMenu();
     this.renderStand();
     this.renderTilesLeft();
@@ -228,8 +207,9 @@ export default class Game {
             that.store.skipCounter = 0; //Skip RESETS when a correct word is written.
 
             // we add the points counted and add them to the Players Score.
+            console.log("Did we add the score correctly?", that.store.scores[that.playerTurn])
             that.store.scores[that.playerTurn] += that.board.countPointsXAxis() + that.board.countPointsYAxis();
-            //console.log('SCORE ', that.players[that.playerTurn].name, '= ', that.players[that.playerTurn].score, " points"); //shows Score on console (for now)
+            console.log("Did we add the score correctly?", that.store.scores[that.playerTurn])
 
             // Fill the player stand with tiles again after they submit a correct word
             for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
@@ -263,7 +243,6 @@ export default class Game {
             //that.renderTilesLeft();
             if (that.bag.tiles.length === 0 && that.player.stand.length === 0) {
               that.renderGameOver();
-              console.log("Line 262 did it!");
             }
           }
         });
@@ -293,9 +272,7 @@ export default class Game {
       that.store.skipCounter++;
 
       if (that.store.skipCounter > 3) {
-        console.log("What the heck?! Game over???")
         that.renderGameOver();
-        console.log("Line 294 did it!");
       }
       that.renderStand();
       that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn = that.playerTurn++);
@@ -652,13 +629,12 @@ export default class Game {
 
   }
 
-  renderStart() {
+
+renderStart() {
+
     $('body').html(/*html*/`
       <div class="start">
-        <h1>Super amazing Scrabble</h1>
-        <input type="text" name="playerName" placeholder="Name" required>
-        <button class="start-btn">Get key</button>
-        <button class="connect-btn">Connect</button>
+        <input type="text" name="playerName" placeholder="Namn" required>
       </div>
     `);
   }
@@ -672,12 +648,12 @@ export default class Game {
       return this.playerName;
     };
 
-    $('body').on('click', '.start-btn', async () => {
+    $('body').on('click', '.newgame', async () => {
       if (!getName()) { return; }
       this.playerName = $('input[name="playerName"]').val();
       this.key = await Store.createNetworkKey();
       $('.start').append('<p>get key: ' + this.key + '</p>');
-      $('.start-btn').prop('disabled', true);
+      $('.newgame').prop('disabled', true);
       this.willCreateGame = false;
       this.waitForNameToBeSaved = true;
       await this.connectToStore();
@@ -687,13 +663,11 @@ export default class Game {
       s.playerNames.push(this.playerName);
       // Which player am I? (0 or 1)
       this.playerIndex = s.playerNames.length - 1;
-      console.log("Start pressed, player index:", this.playerIndex);
     });
 
-    $('body').on('click', '.connect-btn', () => {
+    $('body').on('click', '.joingame', () => {
       if (!getName()) { return; }
       this.playerName = $('input[name="playerName"]').val();
-      console.log("saved playerName")
       this.key = prompt('Enter the network key from your friend:');
       this.willCreateGame = true;
       this.waitForNameToBeSaved = true;
@@ -709,11 +683,10 @@ export default class Game {
         return;
     }
     }
-    console.log("The network was changed. Length:", this.store.playerNames.length)
     if (this.store.playerNames) {
       if (this.store.playerNames.length > 1 && this.willCreateGame === false) {
+        $('.startpage').remove();
         $('.start').remove();
-        console.log("Tried to remove everything")
         this.startWithStoreParameters();
         this.willCreateGame = true;
       }
@@ -730,21 +703,19 @@ export default class Game {
       // this.player = this.store.players;
       this.scores = this.store.scores; // -- save the score everytime "Spela" is pressed. (TODO)
       this.playerTurn = this.store.playerTurn;
-      console.log("what is this?", this);
       this.board.render();
       this.renderTilesLeft();
+      this.renderScoreBoard();
       if (this.playerTurn === this.playerIndex) {
         this.renderStand(); // We might get too many active drag events..? 
       }
       if (this.store.gameOver === true && !(this.playerIndex === this.store.playerTurn)) {
         this.renderGameOver();
-        console.log("Line 737 did it!");
       }
     }
   }
 
   async connectToStore() {
-    console.log("connectToStore() this.key", this.key);
     this.store = await Store.getNetworkStore(
       this.key,
       () => this.listenForNetworkChanges()

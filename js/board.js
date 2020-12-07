@@ -199,14 +199,10 @@ export default class Board {
         let oldX = Math.floor(oldTile.boardIndex / 15);
         let oldY = oldTile.boardIndex % 15;
 
-        // console.log("x and y:s", newX, newY, oldX, oldY); //test
-
         if (Math.abs(oldX - newX) === 1 && oldY === newY) {
-          //console.log("Same axis Y, touching Y"); //test
           return true;
         }
         if (Math.abs(oldY - newY) === 1 && oldX === newX) {
-          //console.log("Same axis X, touching X"); //test
           return true;
         } else {
 
@@ -297,8 +293,6 @@ export default class Board {
       if ($.inArray(el, uniqueStrings) === -1) // if the element is NOT in our new uniqueStrings Array
         uniqueStrings.push(el); // push it haaaard.
     });
-    console.log("strings across X:", strings); //test
-    console.log("unique Strings across X", uniqueStrings)  //  test 
     return uniqueStrings; //we now return unique values /strings/potencial words
   }
 
@@ -368,8 +362,6 @@ export default class Board {
       if ($.inArray(el, uniqueStrings) === -1)
         uniqueStrings.push(el);
     });
-    console.log("strings across Y:", strings);//test
-    console.log("unique Strings across Y", uniqueStrings)  //test
     return uniqueStrings;
   }
 
@@ -381,8 +373,6 @@ export default class Board {
       if ($.inArray(el, uniqueStrings) === -1)
         uniqueStrings.push(el);
     });
-    console.log("words played:", wPlayed);//test
-    console.log("unique Words played", uniqueStrings)  //test
     return uniqueStrings;
 
   }
@@ -481,7 +471,6 @@ export default class Board {
 
         } catch (error) { }  // test
       }
-      console.log('Ypoints: ', points);
       return points;  // we returned the points counted on Y axis.
     }
   }
@@ -551,7 +540,6 @@ export default class Board {
         }
         catch (error) { }
       }
-      console.log('Xpoints: ', points);
       return points;  // we return  the points counted on X axis
     }
   }
