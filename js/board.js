@@ -96,6 +96,7 @@ export default class Board {
 
   //function for test of real time points in DOM
   testPointInRealTime() {
+
     let x = 0;
     if (this.putTilesThisRound.length) {
       let that = this;

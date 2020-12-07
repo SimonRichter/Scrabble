@@ -56,7 +56,7 @@ export default class Game {
 
 
     // Push all the info to the store
-    
+
     s.playerNames = await s.playerNames || [];
     // Add my name
     await s.playerNames.push(this.playerName);
@@ -79,8 +79,8 @@ export default class Game {
     //await this.store.players.push(this.player);
     this.waitForNameToBeSaved = false;
     $('.startpage').remove()
-	  $('.start').remove()
-    
+    $('.start').remove()
+
     // render the menu + board + players
     this.board.render();
     this.renderMenu();
@@ -117,7 +117,7 @@ export default class Game {
       this.bag.tiles[t] = this.bag.tiles[i]; // current last tile postion will have the random position from i(index)
       this.bag.tiles[i] = s; //  now we take the tile from the temporary storage 's' and put it the random index.
     }
-  
+
 
   }
 
@@ -230,6 +230,7 @@ export default class Game {
             }
             that.renderScoreBoard();
             that.renderStand();
+            that.board.render();
             // We change the player turn to the next player
             that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn = that.playerTurn++);
             that.store.playerTurn = that.playerTurn;
@@ -630,7 +631,7 @@ export default class Game {
   }
 
 
-renderStart() {
+  renderStart() {
 
     $('body').html(/*html*/`
       <div class="start">
@@ -681,7 +682,7 @@ renderStart() {
       if (this.store.playerNames.length > 3) {
         alert('Four players are already playing!');  // TODO: Make a nicer looking alert maybe
         return;
-    }
+      }
     }
     if (this.store.playerNames) {
       if (this.store.playerNames.length > 1 && this.willCreateGame === false) {
@@ -726,7 +727,7 @@ renderStart() {
 
   }
 
-    getTiles(howMany = 7) {
+  getTiles(howMany = 7) {
     // Return a number of tiles (and remove from this.bag.tiles)
     return this.store.bag.tiles.splice(0, howMany);
   }
