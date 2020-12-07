@@ -4,6 +4,8 @@ import Tile from "./Tile.js";
 import Bag from "./Bag.js";
 import Network from './Network.js';
 import Store from 'https://network-lite.nodehill.com/store';
+import StartPage from './startpage.js';
+
 
 
 export default class Game {
@@ -45,6 +47,7 @@ export default class Game {
   }
 
   async start() {
+    let s = this.store;
     this.board = new Board();
     this.board.createBoard();
     this.localStore = await Store.getLocalStore();
@@ -98,6 +101,7 @@ export default class Game {
     console.log("we tried removing everything");
     
     // render the menu + board + players
+    console.log(this.players);
     this.board.render();
     console.log("We tried rendering the board")
     this.renderMenu();

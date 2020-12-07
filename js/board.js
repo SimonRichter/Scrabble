@@ -115,6 +115,11 @@ export default class Board {
   renderWords() {
     let t = this.uniqueWordsPlayed(this.wordsPlayed);
     $(".wordsOnScreen").remove();
+    $(document).ready(function () {
+      $(".wordsOnScreen").click(function () {
+        $lis.toggle();
+      });
+    });
     let $wordsOnscreen = $('<div class="wordsOnScreen">Words</div>').appendTo("body");
     let $lis = $('<ul class="lis"></ul>');
     $lis.appendTo($wordsOnscreen);
@@ -127,7 +132,31 @@ export default class Board {
 
   // This function checks if tiles of this round are touching each other
   checkXYAxisHM(game) {
-    if (this.putTilesThisRound.length) { // Only do the function if there are tiles on the board
+
+    if (this.putTilesThisRound.length > 1) { // Only do the function if there are tiles on the board
+      let pttrl = this.putTilesThisRound;
+      for (let tile of pttrl) {
+        tile.row = Math.floor(tile.boardIndex / 15);
+        tile.col = tile.boardIndex % 15;
+      }
+      let errorCounter = 0;
+      for (let i = 0; i < pttrl.length - 1; i++) {
+        if ((pttrl[i].row !== pttrl[i + 1].row)) {
+          errorCounter++;
+          break;
+        }
+      }
+      for (let i = 0; i < pttrl.length - 1; i++) {
+        if ((pttrl[i].col !== pttrl[i + 1].col)) {
+          errorCounter++;
+          break;
+        }
+      }
+      if (errorCounter === 2) {
+        //alert(message);
+        game.renderMessage(7);
+        return false;
+      }
       let tilesInOrder = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1); // Sort this.putTilesThisRound
       let startIndex = tilesInOrder[0].boardIndex; // Index of the tile with the lowest index
       let endIndex = tilesInOrder[tilesInOrder.length - 1].boardIndex; // Index of the tile with the highest index
@@ -155,6 +184,7 @@ export default class Board {
     }
     return true;
   }
+
 
 
   // this function is checks if tiles are touching tiles from previous rounds
