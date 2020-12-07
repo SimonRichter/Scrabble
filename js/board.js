@@ -117,6 +117,11 @@ export default class Board {
   renderWords() {
     let t = this.uniqueWordsPlayed(this.wordsPlayed);
     $(".wordsOnScreen").remove();
+    $(document).ready(function () {
+      $(".wordsOnScreen").click(function () {
+        $lis.toggle();
+      });
+    });
     let $wordsOnscreen = $('<div class="wordsOnScreen">Words</div>').appendTo("body");
     let $lis = $('<ul class="lis"></ul>');
     $lis.appendTo($wordsOnscreen);

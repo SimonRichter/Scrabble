@@ -1,6 +1,9 @@
 import Game from './game.js'
 import Network from './Network.js';
 import StartPage from './startpage.js';
+
+new Game();
+/*
 let n = new Network();
 new StartPage();
 let start = 0;
@@ -9,5 +12,6 @@ setTimeout(() => {
   console.log('One minute has passed');
   if (start === 1) { $('.startpage').remove(); new Game().start(); }
 }, 30000);
+*/
 
 
