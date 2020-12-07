@@ -7,7 +7,12 @@
   user-select: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
+  text-decoration: none;
+  color: inherit;
+  
+  
 }
+
 
 body {
   /*
@@ -421,14 +426,35 @@ body {
   margin-bottom: 15px;
 }
 
-.help {
 
-  font-size: 100px;
+.help{
+  font-size: 40px;
   bottom: 0;
   right: 0;
+  margin-right: 50px;
+  margin-bottom: 50px;
   position: absolute;
-  color: #fff;
-
-  /*css commands remove underline and purple. Animation, hover - till reglerna*/
-
+  text-decoration: none ;
+  color: beige;
 }
+
+.help :hover .instruktioner {
+ color:beige;
+ text-decoration: none;
+ visibility: visible;
+ 
+}
+ 
+.help .instruktioner {
+  visibility: hidden;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  font-size: 30px;
+}
+
+
+
+  
+ 
