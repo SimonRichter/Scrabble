@@ -2,23 +2,104 @@ import Player from "./Player.js";
 import Board from "./Board.js";
 import Tile from "./Tile.js";
 import Bag from "./Bag.js";
+import Network from './Network.js';
 import Store from 'https://network-lite.nodehill.com/store';
 
+
 export default class Game {
+
+  constructor() {
+    this.addEventListeners();
+    this.renderStart();
+    //if (this.store.playerNames.length > 1) {
+     
+    //}
+  }
+
+  async startWithStoreParameters() {
+    console.log("startWithStoreParameters() running")
+    this.board = new Board();
+    this.store.board = this.store.board || {};
+    this.board.matrix = await this.store.board.matrix;
+    this.bag = new Bag();
+    this.bag.tiles = await this.store.bag.tiles;
+    this.playerTurn = await this.store.playerTurn;
+    //this.store.players = this.store.players || [];
+    //await this.store.players.push(new Player(this.store, this.playerName));
+    //console.log("Player pushed", this.store.players)
+    this.player = new Player(this, this.store, this.playerName); //Are the players added correctly?
+    this.store.scores = await this.store.scores || [];
+    await this.store.scores.push(this.player.score);
+    this.localStore = await Store.getLocalStore();
+    this.localStore.leaderBoard = this.localStore.leaderBoard || [];
+    this.store.gameOver = false;
+    this.waitForNameToBeSaved = false;
+    this.board.render();
+    this.renderMenu();
+    this.renderStand();
+    this.renderTilesLeft();
+    // add click event listener.
+    // Since the menu isn't re-rendered we only need to add the click event listener once.
+    this.addClickEvents();
+    this.renderScoreBoard();
+  }
+
   async start() {
     this.board = new Board();
     this.board.createBoard();
-    this.playerTurn = 0;
-    this.skipCounter = 0;
-    this.localStore = Store.getLocalStore();
+    this.localStore = await Store.getLocalStore();
     this.localStore.leaderBoard = this.localStore.leaderBoard || [];
-
-
     await this.tilesFromFile();
+    await this.connectToStore();
+    console.log("We got this far");
+    this.store.bag = this.bag;
+    this.store.bag.tiles = this.bag.tiles;
     // create players
-    this.players = [new Player(this, "&#128100; Spelare 1"), new Player(this, "&#128100;Spelare 2")];
+    this.player = new Player(this, this.store, this.playerName);
+    console.log("We created a player");
+
+
+    // Push all the info to the store
+    
+    let s = this.store;
+    s.playerNames = await s.playerNames || [];
+    // Add my name
+    await s.playerNames.push(this.playerName);
+    // Which player am I? (0 or 1)
+    this.playerIndex = s.playerNames.length - 1;
+    this.playerTurn = this.playerIndex;
+    console.log("Connect pressed, player index:", this.playerIndex);
+    this.store.scores = await this.store.scores || [];
+    await this.store.scores.push(this.player.score);
+    console.log("We pushed the player to the store");
+    console.log(this.store);
+    this.store.board = this.store.board || {};
+    this.store.board.matrix = this.board.matrix;
+    this.store.board.putTiles = this.board.putTiles;
+    this.store.board.putTilesThisRound = this.board.putTilesThisRound;
+    this.store.board.wordsPlayed = this.board.wordsPlayed;
+    this.store.firstRound = this.board.firstRound;
+    console.log("Updating store.board")
+    this.store.board.matrix = await this.board.matrix;
+    console.log("Updating store.board.matrix")
+    this.store.playerTurn = await this.playerTurn;
+    console.log("Updating store.playerTurn")
+    this.store.skipCounter = 0;
+    console.log("Updating store.skipCounter")
+    this.store.gameOver = false;
+    console.log("Updating store.gameOver")
+    console.log("this.playerName", this.playerName)
+    //this.store.players = this.store.players || [];
+    //console.log("this.store.players", this.store.players)
+    //await this.store.players.push(this.player);
+    console.log("Updating store.players")
+    this.waitForNameToBeSaved = false;
+    $('.start').remove();
+    console.log("we tried removing everything");
+    
     // render the menu + board + players
     this.board.render();
+    console.log("We tried rendering the board")
     this.renderMenu();
     this.renderStand();
     this.renderTilesLeft();
@@ -53,12 +134,8 @@ export default class Game {
       this.bag.tiles[t] = this.bag.tiles[i]; // current last tile postion will have the random position from i(index)
       this.bag.tiles[i] = s; //  now we take the tile from the temporary storage 's' and put it the random index.
     }
-  }
+  
 
-
-  getTiles(howMany = 7) {
-    // Return a number of tiles (and remove from this.bag.tiles)
-    return this.bag.tiles.splice(0, howMany);
   }
 
   renderMenu() {
@@ -106,7 +183,7 @@ export default class Game {
     let $players = $('<div class="players"/>').appendTo("body");
 
     // Render the players
-    $players.append(this.players[this.playerTurn].render());
+    $players.append(this.renderPlayer());
     // Add drag events
     this.addDragEvents();
   }
@@ -139,21 +216,21 @@ export default class Game {
         //we put both arrays together into one variable
         let allWords = that.board.findWordsAcrossXaxis().concat(that.board.findWordsAcrossYaxis());
 
-        that.board.checkIfWord(allWords).then(x => {     //it will wait for Promised to be fullfilled before running the next code.
+        that.board.checkIfWord(that, allWords).then(x => {     //it will wait for Promised to be fullfilled before running the next code.
 
           //check  all functions must be True to be able to go next player after pressing "spela"
-          if (that.board.checkMiddleSquare() && that.board.checkXYAxisHM() && that.board.nextToPutTilesHM() && that.board.falseCounter === 0) {
+          if (that.board.checkMiddleSquare(that) && that.board.checkXYAxisHM(that) && that.board.nextToPutTilesHM(that) && that.board.falseCounter === 0) {
             //that.board.uniqueWordsPlayed(that.board.wordsPlayed); // Updates the list of unique words played in the game.
-            that.skipCounter = 0; //Skip RESETS when a correct word is written. 
+            that.store.skipCounter = 0; //Skip RESETS when a correct word is written.
 
             // we add the points counted and add them to the Players Score.
-            that.players[that.playerTurn].score += that.board.countPointsXAxis() + that.board.countPointsYAxis();
-            console.log('SCORE ', that.players[that.playerTurn].name, '= ', that.players[that.playerTurn].score, " points"); //shows Score on console (for now)
+            that.store.scores[that.playerTurn] += that.board.countPointsXAxis() + that.board.countPointsYAxis();
+            //console.log('SCORE ', that.players[that.playerTurn].name, '= ', that.players[that.playerTurn].score, " points"); //shows Score on console (for now)
 
             // Fill the player stand with tiles again after they submit a correct word
             for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
               if (that.bag.tiles.length > 0) {
-                that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
+                that.player.stand.push(that.bag.tiles.pop());
               }
             }
             // This while loop assigns a boardIndex to the placed tile objects
@@ -168,16 +245,21 @@ export default class Game {
               that.board.putTiles.push(that.board.putTilesThisRound.shift());
             }
             that.renderScoreBoard();
-
-            // We change the player turn to the next player
-            that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
-            // We then re-render the stand and board
-            that.board.render();
             that.renderStand();
-            that.renderTilesLeft();
-            if (that.bag.tiles.length === 0 && !that.players[0].stand.length &&
-              !that.players[1].stand.length && !that.players[2].stand.length && !that.players[3].stand.length) {
+            // We change the player turn to the next player
+            that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn = that.playerTurn++);
+            that.store.playerTurn = that.playerTurn;
+            // We then re-render the stand and board
+            //that.board.render();
+            that.store.board.matrix = that.board.matrix;
+            that.store.board.putTiles = that.board.putTiles;
+            that.store.board.putTilesThisRound = that.board.putTilesThisRound;
+            that.store.board.wordsPlayed = that.board.wordsPlayed;
+            that.store.bag.tiles = that.bag.tiles;
+            //that.renderTilesLeft();
+            if (that.bag.tiles.length === 0 && that.player.stand.length === 0) {
               that.renderGameOver();
+              console.log("Line 262 did it!");
             }
           }
         });
@@ -198,32 +280,33 @@ export default class Game {
           let x = squareIndex % 15;
           delete that.board.matrix[y][x].tile;
           that.changeBackEmptyTile(that.board.putTilesThisRound[i]);
-          that.players[that.playerTurn].stand.push(that.board.putTilesThisRound[i]);
-
+          that.player.stand.push(that.board.putTilesThisRound[i]);
           that.board.putTilesThisRound.splice(i, 1);
-
         }
+        that.store.board.putTilesThisRound = that.board.putTilesThisRound;
       }
 
-      that.skipCounter++; //Global skipCounter +1  when clicked. (4 consecutive times to 'Game Over')
+      that.store.skipCounter++;
 
-      if (that.skipCounter > 3) {
+      if (that.store.skipCounter > 3) {
+        console.log("What the heck?! Game over???")
         that.renderGameOver();
+        console.log("Line 294 did it!");
       }
-
-      that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
-
-      that.board.render();
       that.renderStand();
-      that.renderTilesLeft();
+      that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn = that.playerTurn++);
+      that.store.playerTurn = that.playerTurn;
+      //that.board.render();
+      //that.renderStand();
+      //that.renderTilesLeft();
     });
 
 
 
     // Button to shuffle the tiles in the rack. (test)
     $("#shuffle").click(function () {
-      that.players[that.playerTurn].stand.sort(() => Math.random() - 0.5) // this random is ok for short arrays.
-      that.renderStand();
+      that.player.stand.sort(() => Math.random() - 0.5) // this random is ok for short arrays.
+      //that.renderStand();
     });
 
 
@@ -250,10 +333,10 @@ export default class Game {
             let x = squareIndex % 15;
             delete that.board.matrix[y][x].tile;
             that.changeBackEmptyTile(that.board.matrix[yStart][xStart].tile);
-            that.players[that.playerTurn].stand.push(that.board.putTilesThisRound[i]);
+            that.player.stand.push(that.board.putTilesThisRound[i]);
             that.board.putTilesThisRound.splice(i, 1);
           }
-          that.board.render()
+          //that.board.render()          
         }
 
         for (let i = $(".redBorder").length - 1; i >= 0; i--) {
@@ -261,8 +344,7 @@ export default class Game {
           // in the tileIndex variable
           let tileIndex = $(".stand > div").index($(".redBorder")[i]);
           // Push back the tile to the bag
-          that.bag.tiles.push(that.players[that.playerTurn
-          ].stand.splice(tileIndex, 1)[0]);
+          that.bag.tiles.push(that.player.stand.splice(tileIndex, 1)[0]);
 
           // Better random/shuffle of the bag. 
           let s, j; // s="storage" i="index"
@@ -272,17 +354,20 @@ export default class Game {
             that.bag.tiles[t] = that.bag.tiles[j]; // current last tile postion will have the random position from i(index)
             that.bag.tiles[j] = s; //  now we take the tile from the temporary storage 's' and put it the random index.
           }
-          that.players[that.playerTurn].stand.push(that.bag.tiles.pop());
+          that.player.stand.push(that.bag.tiles.pop());
         }
         // We change the player turn to the next player
-        that.playerTurn === 0 ? (that.playerTurn = 1) : (that.playerTurn = 0);
         that.renderStand();
+        that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn = that.playerTurn++);
+        that.store.playerTurn = that.playerTurn;
+        that.store.bag.tiles = that.bag.tiles;
       } else {
-        renderMessage(3);
+        that.renderMessage(3);
         //alert("Det finns inte tillräckligt med brickor i påsen för att kunna byta.")
       }
     });
 
+    // This code lets the player change the empty tile when it's on the board
     $("body").on("click", ".board > div > div", (e) => {
       let y;
       let x;
@@ -301,7 +386,8 @@ export default class Game {
               that.board.matrix[y][x].tile.char = letterInBox;
               $(".letterBox").remove();
               that.board.render();
-              that.renderStand();
+              //that.store.board.matrix = that.board.matrix;
+              //that.renderStand();
             } else {
               $(".letterBox input").val('Välj endast en bokstav')
             }
@@ -361,13 +447,11 @@ export default class Game {
         let tileIndex = $(".stand > div").index($tile);
 
         // put the tile in the board matrix and re-render the board and stand
-        this.board.matrix[y][x].tile = this.players[
-          this.playerTurn
-        ].stand.splice(tileIndex, 1)[0];
+        this.board.matrix[y][x].tile = this.player.stand.splice(tileIndex, 1)[0];
         this.board.matrix[y][x].tile.boardIndex = squareIndex;
         this.board.putTilesThisRound.push(this.board.matrix[y][x].tile);
-        this.board.render();
-        this.renderStand();
+        //this.board.render();
+        //this.renderStand();
         let that = this;
         if (this.board.matrix[y][x].tile.char === ' ') {
           this.changeLetterOfEmptyTile();
@@ -379,15 +463,17 @@ export default class Game {
                 that.board.matrix[y][x].tile.char = letterInBox;
                 that.board.matrix[y][x].tile.points = 0;
                 $(".letterBox").remove();
-                that.board.render();
-                that.renderStand();
+                //that.board.render();
+                //that.renderStand();
               } else {
                 $(".letterBox input").val('Välj endast en bokstav')
               }
             }
           });
         }
-
+        this.board.render();
+        this.renderStand();
+        //this.store.board.matrix = this.board.matrix;
       });
 
     // These variables are declared here so that they can be used
@@ -438,7 +524,7 @@ export default class Game {
           // Put back the tile
           this.board.matrix[yStart][xStart].tile.hasBeenPlaced = false;
           this.changeBackEmptyTile(this.board.matrix[yStart][xStart].tile);
-          this.players[this.playerTurn].stand.push(
+          this.player.stand.push(
             this.board.matrix[yStart][xStart].tile
           );
           let indexOf = this.board.putTilesThisRound.indexOf(
@@ -471,6 +557,8 @@ export default class Game {
         // Remove dragging and hover class and re-render board and stand
         let $tile = $(e.currentTarget);
         $tile.removeClass("dragging").removeClass("hover");
+        //this.store.board.matrix = this.board.matrix;
+        //this.store.board.putTilesThisRound = this.board.putTilesThisRound;
         this.board.render();
         this.renderStand();
       });
@@ -504,8 +592,8 @@ export default class Game {
   }
 
   renderGameOver() {
-    for (let player of this.players) {
-      this.localStore.leaderBoard.push(player.score);
+    for (let score of this.store.scores) {
+      this.localStore.leaderBoard.push(score);
     }
     // Creates the Game Over div that covers whole page
     let $gameover = $('<div class="game-over"/>').appendTo("body");
@@ -513,6 +601,7 @@ export default class Game {
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
     console.log(this.localStore.leaderBoard.sort((a, b) => { return b - a }));
+    this.store.gameOver = true;
   }
 
   renderScoreBoard() {
@@ -521,14 +610,14 @@ export default class Game {
     // Creates a new Score Board div
     let $scoreboard = $('<div class="scoreboard"><h2>Poäng</h2></div>').appendTo("body");
 
-    for (let player of this.players) {
+    for (let i = 0; i < this.store.playerNames.length; i++) {
       $scoreboard.append(`<div> 
-      <h3>${player.name}</h3>
-      <p>${player.score}</p>
+      <h3>${this.store.playerNames[i]}</h3>
+      <p>${this.store.scores[i]}</p>
       </div>`)
     }
-
   }
+
   renderMessage(m, w) {
     //Remove any old message
     $("div").remove(".message");
@@ -557,6 +646,133 @@ export default class Game {
     }, 3700);
 
 
+  }
+
+  renderStart() {
+    $('body').html(/*html*/`
+      <div class="start">
+        <h1>Super amazing Scrabble</h1>
+        <input type="text" name="playerName" placeholder="Name" required>
+        <button class="start-btn">Get key</button>
+        <button class="connect-btn">Connect</button>
+      </div>
+    `);
+  }
+
+  addEventListeners() {
+
+    $('body').off('click');
+
+    const getName = () => {
+      this.playerName = $('input[name="playerName"]').val();
+      return this.playerName;
+    };
+
+    $('body').on('click', '.start-btn', async () => {
+      if (!getName()) { return; }
+      this.playerName = $('input[name="playerName"]').val();
+      this.key = await Store.createNetworkKey();
+      $('.start').append('<p>get key: ' + this.key + '</p>');
+      $('.start-btn').prop('disabled', true);
+      this.willCreateGame = false;
+      this.waitForNameToBeSaved = true;
+      await this.connectToStore();
+      let s = this.store;
+      s.playerNames = s.playerNames || [];
+      // Add my name
+      s.playerNames.push(this.playerName);
+      // Which player am I? (0 or 1)
+      this.playerIndex = s.playerNames.length - 1;
+      console.log("Start pressed, player index:", this.playerIndex);
+    });
+
+    $('body').on('click', '.connect-btn', () => {
+      if (!getName()) { return; }
+      this.playerName = $('input[name="playerName"]').val();
+      console.log("saved playerName")
+      this.key = prompt('Enter the network key from your friend:');
+      this.willCreateGame = true;
+      this.waitForNameToBeSaved = true;
+      this.start();
+    });
+
+  }
+
+  listenForNetworkChanges() {
+    if (this.store.playerNames) {
+      if (this.store.playerNames.length > 3) {
+        alert('Four players are already playing!');  // TODO: Make a nicer looking alert maybe
+        return;
+    }
+    }
+    console.log("The network was changed. Length:", this.store.playerNames.length)
+    if (this.store.playerNames) {
+      if (this.store.playerNames.length > 1 && this.willCreateGame === false) {
+        $('.start').remove();
+        console.log("Tried to remove everything")
+        this.startWithStoreParameters();
+        this.willCreateGame = true;
+      }
+    }
+    // this method is called each time someone else
+    // changes this.store
+    if (this.waitForNameToBeSaved === false) {
+      this.board.matrix = this.store.board.matrix;
+      this.board.putTiles = this.store.board.putTiles;
+      this.board.putTilesThisRound = this.store.board.putTilesThisRound;
+      this.board.wordsPlayed = this.store.board.wordsPlayed;
+      this.board.firstRound = this.store.firstRound;
+      this.bag.tiles = this.store.bag.tiles;
+      // this.player = this.store.players;
+      this.scores = this.store.scores; // -- save the score everytime "Spela" is pressed. (TODO)
+      this.playerTurn = this.store.playerTurn;
+      console.log("what is this?", this);
+      this.board.render();
+      this.renderTilesLeft();
+      if (this.playerTurn === this.playerIndex) {
+        this.renderStand(); // We might get too many active drag events..? 
+      }
+      if (this.store.gameOver === true && !(this.playerIndex === this.store.playerTurn)) {
+        this.renderGameOver();
+        console.log("Line 737 did it!");
+      }
+    }
+  }
+
+  async connectToStore() {
+    console.log("connectToStore() this.key", this.key);
+    this.store = await Store.getNetworkStore(
+      this.key,
+      () => this.listenForNetworkChanges()
+    );
+
+    // Now call render to start the main game
+    // if you are player 2
+
+  }
+
+    getTiles(howMany = 7) {
+    // Return a number of tiles (and remove from this.bag.tiles)
+    return this.store.bag.tiles.splice(0, howMany);
+  }
+
+  renderPlayer() {
+    return `<div class="stand">
+      ${this.player.stand
+        .map(
+          (x, i) => `<div 
+          class="tile ${x.char ? "" : "none"}"
+          data-player="${this.store.playerNames.indexOf(this.player.name)}"
+          data-tile="${i}"
+        >
+        ${x.char || ""}
+        <span>${x.points || ""}</span>
+      </div>`
+        )
+        .join("")}
+      </div>
+      <div class="pname">${this.player.name}</div>
+      `;
   }
 
 }

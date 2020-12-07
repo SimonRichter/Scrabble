@@ -92,8 +92,6 @@ export default class Board {
     this.countPointsXAxis(); //console points on x for test 
     this.testPointInRealTime() // Div in DOM for test 
     this.renderWords();
-
-
   }
 
   //function for test of real time points in DOM
@@ -128,9 +126,8 @@ export default class Board {
 
 
   // This function checks if tiles of this round are touching each other
-  checkXYAxisHM() {
+  checkXYAxisHM(game) {
     if (this.putTilesThisRound.length) { // Only do the function if there are tiles on the board
-      let message = "Your tiles must touch each other."; // Alert message
       let tilesInOrder = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1); // Sort this.putTilesThisRound
       let startIndex = tilesInOrder[0].boardIndex; // Index of the tile with the lowest index
       let endIndex = tilesInOrder[tilesInOrder.length - 1].boardIndex; // Index of the tile with the highest index
@@ -145,13 +142,13 @@ export default class Board {
         // Check if there are any gaps between the first and last tile
         // if so return false + message
         while (xStartIndex <= xEndIndex) {
-          if (!this.matrix[yStartIndex][xStartIndex].tile) { alert(message); return false; }
+          if (!this.matrix[yStartIndex][xStartIndex].tile) { game.renderMessage(7); return false; }
           xStartIndex++;
         }
       }
       if (yStartIndex !== yEndIndex) { // Same as before but in columns
         while (yStartIndex <= yEndIndex) {
-          if (!this.matrix[yStartIndex][xStartIndex].tile) { alert(message); return false; }
+          if (!this.matrix[yStartIndex][xStartIndex].tile) { game.renderMessage(7); return false; }
           yStartIndex++;
         }
       }
@@ -161,7 +158,7 @@ export default class Board {
 
 
   // this function is checks if tiles are touching tiles from previous rounds
-  nextToPutTilesHM() {
+  nextToPutTilesHM(game) {
     if (!this.putTiles.length) {
       return true;
     }
@@ -186,12 +183,12 @@ export default class Board {
         }
       }
     }
-    alert("Tiles must touch tiles placed in previous rounds");
+    game.renderMessage(6);
     return false;
   }
 
 
-  checkMiddleSquare() {
+  checkMiddleSquare(game) {
     // If the first round is being played
     if (this.firstRound) {
       let temp = 0;
@@ -199,13 +196,15 @@ export default class Board {
         // If one of the newly placed tiles is on the middle square, function returns true
         if (tile.boardIndex === 112) {
           this.firstRound = false;
+          game.store.firstRound = false;
           return true;
         } else {
           // Checks if the loop is on the last tile in the putTilesThisRound array
           if (temp === this.putTilesThisRound.length - 1) {
-            alert(
+            /*alert(
               "You must place one of your tiles in the middle of the board."
-            );
+            );*/
+            game.renderMessage(4);
             return false;
           }
         }
@@ -364,7 +363,7 @@ export default class Board {
   // array of potencial words from methods  findWordsAcrossYaxis() and
   // findWordsAcrossXaxis() 
 
-  async checkIfWord(array) {
+  async checkIfWord(game, array) {
 
     let word = ""; // we will put each potencial word of the array here.
     for (let ord of array) {
@@ -373,7 +372,7 @@ export default class Board {
         this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 1;  // checks the dictionary
         if (this.falseCounter === 1) {
           let w = word.toUpperCase();
-          new Game().renderMessage(5, w);
+          game.renderMessage(5, w);
           //alert("'" + word.toUpperCase() + "' is NOT a correct word from the Swedish dictionary!");
           break;
         }
