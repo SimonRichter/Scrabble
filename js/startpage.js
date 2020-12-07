@@ -4,14 +4,9 @@ import Network from "./Network.js";
 export default class StartPage {
 
   constructor() {
-    let n = new Network();
+
     this.render();
-    let start = 0;
-    setTimeout(() => {
-      if (n.store.playerNames.length > 1) { start = 1; }
-      console.log('One minute has passed');
-      if (start === 1) { $('.startpage').remove(); new Game().start(); }
-    }, 30000);
+
   }
 
   render() {

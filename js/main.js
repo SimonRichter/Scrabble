@@ -13,8 +13,3 @@ setTimeout(() => {
   if (start === 1) { $('.startpage').remove(); new Game().start(); }
 }, 30000);
 */
-
-
-
-
-

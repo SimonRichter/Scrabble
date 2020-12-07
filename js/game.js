@@ -6,12 +6,11 @@ import Store from 'https://network-lite.nodehill.com/store';
 import StartPage from './startpage.js';
 
 
-
 export default class Game {
   constructor() {
     this.addEventListeners();
     this.renderStart();
-    this.StartPage = new StartPage();
+    this.startPage = new StartPage();
 
   }
 
@@ -95,14 +94,13 @@ export default class Game {
 
     // changes this.store
 
-    this.board.render();
+    this.start();
 
   }
 
 
   async start() {
     let s = this.store;
-
     this.board = new Board();
     this.board.createBoard();
     this.playerTurn = 0;
@@ -120,7 +118,7 @@ export default class Game {
     }
     // render the menu + board + players
     console.log(this.players);
-    s.board.render();
+    this.board.render();
     this.renderMenu();
     this.renderStand();
     this.renderTilesLeft();
@@ -614,8 +612,7 @@ export default class Game {
     // Creates the smaller box with Game Over! text
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
-    this.localStore.leaderBoard.sort((a, b) => { return b - a })
-    console.log(this.localStore.leaderBoard.splice(0, 10));
+    console.log(this.localStore.leaderBoard.sort((a, b) => { return b - a }));
   }
 
   renderScoreBoard() {
