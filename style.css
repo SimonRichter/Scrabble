@@ -290,9 +290,10 @@ body {
   font-family: "Oswald", sans-serif;
   border: solid rgba(0, 0, 0, 0.74) 1px;
   text-align: center;
-  padding: 6px;
-  width: 400px;
-  margin-top: 32px;
+  padding: 5px;
+  width: 100%;
+  margin-top: 18px;
+  cursor: pointer;
 }
 
 .newgame {
@@ -305,6 +306,23 @@ body {
   float: left;
 }
 
+.entername {
+  color: rgba(255, 255, 255, 0.856);
+  background-color: #bb9236;
+  font-size: 25px;
+  font-family: "Oswald", sans-serif;
+  text-align: center;
+}
+
+.enterkey {
+  color: rgba(255, 255, 255, 0.856);
+  background-color: #9a572d;
+  font-size: 25px;
+  font-family: "Oswald", sans-serif;
+  text-align: center;
+}
+
+/*---------------------------------------------*/
 
 .message {
   z-index: 100;

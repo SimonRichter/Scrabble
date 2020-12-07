@@ -2,6 +2,7 @@ export default class StartPage {
 
   constructor() {
     this.render();
+    this.addClickEvents();
   }
 
   render() {
@@ -21,6 +22,25 @@ export default class StartPage {
       'background-attachment': 'fixed'
     });
 
+  }
+
+  addClickEvents() {
+    let that = this;
+    $('.newgame').click(() => {
+      console.log('Starting new game...');
+      $('.startpage').html('<input type="text" name="playerName" placeholder="Namn:" class="entername"></input>');
+      console.log(getName());
+    })
+
+    $('.joingame').click(() => {
+      console.log('Joining game...');
+      $('.startpage').html('<input type="text" name="playerName" placeholder="Kod:" class="enterkey"></input>');
+    })
+
+    const getName = () => {
+      this.playerName = $('input[name="playerName"]').val();
+      return this.playerName;
+    };
   }
 
 
