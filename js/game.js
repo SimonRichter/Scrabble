@@ -92,6 +92,14 @@ export default class Game {
     byt.textContent = "Byt";
     menu.appendChild(byt);
 
+    /*  let ångra = document.createElement("button");      //New clear button, code is on row 296.
+      ångra.setAttribute("class", "btn skip");
+      ångra.setAttribute("id", "clearButton");
+      ångra.textContent = "Ångra";
+      menu.appendChild(ångra);*/
+
+
+
     /*
     let mix = document.createElement("button");
     mix.setAttribute("class", "btn skip");
@@ -283,6 +291,35 @@ export default class Game {
         //alert("Det finns inte tillräckligt med brickor i påsen för att kunna byta.")
       }
     });
+
+
+    /*  $("#clearButton").click(function () {
+  
+        if (that.board.putTilesThisRound.length) {
+  
+          for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
+  
+            let squareIndex = that.board.putTilesThisRound[i].boardIndex;
+            let y = Math.floor(squareIndex / 15);
+            let x = squareIndex % 15;
+            delete that.board.matrix[y][x].tile;
+            that.changeBackEmptyTile(that.board.putTilesThisRound[i]);
+            that.players[that.playerTurn].stand.push(that.board.putTilesThisRound[i]);
+  
+            that.board.putTilesThisRound.splice(i, 1);
+  
+          }
+        }
+  
+        that.board.render();
+        that.renderStand();
+        that.renderTilesLeft();
+  
+      });*/
+
+
+
+
 
     $("body").on("click", ".board > div > div", (e) => {
       let y;
