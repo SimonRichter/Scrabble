@@ -592,7 +592,7 @@ export default class Game {
 
   renderHelp() {
 
-    $('body').append(`<div class="help"><a href=" https://www.betapet.se/rules/" target="_blank">? <span class="instruktioner">Till spelets instruktioner</span>
+    $('body').append(`<div class="help"><a href=" https://www.betapet.se/rules/" target="_blank">? <span class="spelregler">Till spelreglerna</span>
 </div</div>`);
 
   }

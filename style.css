@@ -431,21 +431,21 @@ body {
   font-size: 40px;
   bottom: 0;
   right: 0;
-  margin-right: 50px;
+  margin-right: 100px;
   margin-bottom: 50px;
   position: absolute;
   text-decoration: none ;
   color: beige;
 }
 
-.help :hover .instruktioner {
+.help :hover .spelregler {
  color:beige;
  text-decoration: none;
  visibility: visible;
  
 }
  
-.help .instruktioner {
+.help .spelregler {
   visibility: hidden;
   color: #fff;
   text-align: center;
