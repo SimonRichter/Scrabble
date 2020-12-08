@@ -1,0 +1,272 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
+
+img {
+    max-width: 100%;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+
+/*------------body, containers-------------*/
+
+body {
+  font-family: "Oswald", sans-serif;
+  background: rgb(0,8,19);
+  background: linear-gradient(0deg, rgba(0,8,19,1) 0%, rgb(39, 148, 211) 100%);
+  height: 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.container {
+  margin-left: 25%;
+  width: 1200px;
+  height: 800px; 
+  /* width: 90wv; */
+  background-color: rgba(255, 0, 0, 0);
+}
+
+.left {
+  float: left;
+  width: 900px;
+  /*width: 75%; */
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.right {
+  float: right;
+  width: 300px;
+  height: 800px;
+  margin-left: 0%;
+  margin-top: 0%;
+  background-color: rgba(255, 0, 0, 0);
+}
+
+/*----------------main gui-------------------*/
+
+.ui_container {
+  margin-top: -4px;
+  width: 100%;
+  padding-top: 20px;
+  height: 70px;
+  text-align: center;
+  background: rgb(59,19,14);
+  background: linear-gradient(180deg, rgb(207, 119, 90) 0%, rgb(128, 62, 36) 40%, rgba(50,9,9,1) 100%);  
+  border: none; 
+  border-radius: 2px;
+}
+
+#ui_left {
+  float:left;
+  width: 28%;
+}
+
+#ui_stand {
+  width: 44%;
+  margin-top: -10px;
+  float:left; 
+}
+
+#ui_right {
+  float: right;
+  width: 28%;
+  
+}
+
+.btn {
+  display: inline-block;
+  cursor: pointer;
+  width: 100px;
+  height: 48px; 
+  margin-right: 10px;
+  margin-left: 9px;
+  border-color: rgb(48, 40, 40);
+  border: groove;
+  border-width: 1px;
+  border-radius: 3px;
+  font-family: 'Shadows Into Light Two', cursive;
+  font-size: 24px;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 0.07em;
+  text-align: center;
+  text-shadow: 2px 2px 2px #380000;
+  color: #d3cfcf;
+  background-color: rgba(138, 86, 86, 0.445);
+   /* 
+  background: rgba(143, 90, 83, 0.404);
+  background: linear-gradient(180deg, rgba(75,24,17,1) 0%, rgba(186,63,26,1) 0%, rgba(173,0,0,1) 100%);  */
+}
+
+.btn:hover {
+  border-color: rgba(0, 0, 0, 0.445);
+}
+
+.skip {
+  color: #d3cfcf;
+  }
+
+.play {
+  color: #69e06f;
+}
+
+/*----------------scoreboard-------------------*/
+.scoreboard {
+  position: relative;
+  width: 300px;
+  height: 230px;
+  background-color: rgba(255, 255, 255, 0.363);
+  font-size: 22px;
+  letter-spacing: 0.03em;
+  text-align: center;
+  border: 1px solid #000000;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.212);
+}
+
+#score_header {
+  left: 0;
+  right: 0;
+  color: rgb(235, 235, 235);
+  font-style: italic;
+  font-size: 24px;
+  font-weight: 700;
+  text-shadow: 2px 2px 2px #380000;
+  padding-bottom: 4px;
+  background: linear-gradient(180deg, rgb(207, 119, 90) 0%, rgb(114, 55, 55) 88%, rgb(77, 14, 14) 100%); 
+}
+
+#score_players {
+  float: left;
+  width: 120px;
+  line-height: 26px;
+  margin-left: 20px;
+  text-align: left;
+}
+
+#score_score {
+  float: right;
+  width: 50px;
+  margin-right: 20px;
+  line-height: 26px;
+  text-align: right;
+}
+
+#score_tilesleft {
+  position: absolute;
+  bottom: 15px;
+  left: 25%;
+  width: 150px;
+  margin-right: 20px;
+  line-height: 26px;
+  text-align: center;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  background-color: rgba(255, 255, 255, 0.212);
+  border-radius: 8px;
+}
+
+/*-----------Possible Points-------------*/
+
+.points {
+  position: relative;
+  width: 300px;
+  height: 100px;
+  top: -1px;
+  background-color: rgba(255, 255, 255, 0.363);
+  /* font-family: 'Shadows Into Light Two', cursive;
+  font-weight: 600; */
+  letter-spacing: 0.04em;
+  font-size: 18px;
+  text-align: center;
+  border: 1px solid #000000;
+  border-radius: 2px;
+}
+
+#points_header {
+  left: 0;
+  right: 0;
+  color: rgb(235, 235, 235);
+  font-style: italic;
+  font-size: 24px;
+  font-weight: 700;
+  text-shadow: 2px 2px 2px #380000;
+  padding-bottom: 4px;
+  background: linear-gradient(180deg, rgb(207, 119, 90) 0%, rgb(114, 55, 55) 88%, rgb(77, 14, 14) 100%); 
+}
+
+#points_possible {
+  position: absolute;
+  left: 40%;
+  bottom: 20px;
+  width: 50px;
+  line-height: 26px;
+  text-align: center;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  background-color: rgba(255, 255, 255, 0.212);
+  border-radius: 8px;
+}
+
+
+/*----------------Chat-------------------*/
+.chat {
+  width: 300px;
+  height: 350px;
+  position: relative;
+  top: -2px;
+  background-color: rgba(255, 255, 255, 0.363);
+  /*background-color: rgb(245, 211, 160); 
+  font-family: 'Shadows Into Light Two', cursive;
+  */
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  font-size: 18px;
+  text-align: center;
+  margin-right: 50px;
+  border: 1px solid #000000;
+  border-radius: 2px;
+}
+
+#chat_header {
+  width: 100%;
+  left: 0;
+  right: 0;
+  color: rgb(235, 235, 235);
+  font-style: italic;
+  font-size: 24px;
+  font-weight: 700;
+  text-shadow: 2px 2px 2px #380000;
+  padding-bottom: 4px;
+  background: linear-gradient(180deg, rgb(207, 119, 90) 0%, rgb(114, 55, 55) 88%, rgb(77, 14, 14) 100%); 
+}
+
+#chat_window {
+  position: absolute;
+  box-sizing: border-box;
+  left: 2.5%;
+  width: 95%;
+  height: 272px;
+  line-height: 26px;
+  text-align: right;
+}
+
+#chat_window span {
+  position: absolute;
+  right: 0px;
+  bottom: 0;
+}
+
+#chat_type {
+  position: absolute;
+  box-sizing: border-box;
+  bottom: 0;
+  width: 100%;
+  margin-top: 120px;
+  padding: 5px;
+  text-align: right;
+  letter-spacing: 0.1em;
+  border-top: 1px solid #000000;
+  background: rgba(13, 104, 89, 0.096);
+
+}
