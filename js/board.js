@@ -18,21 +18,21 @@ export default class Board {
     this.wordsPlayed = []; // correct words played this game.
     this.specialSquares = {
       // Triple Word pts
-      0: "TW", 7: "TW", 14: "TW", 105: "TW", 119: "TW", 210: "TW", 217: "TW", 224: "TW",
+      0: "TO", 7: "TO", 14: "TO", 105: "TO", 119: "TO", 210: "TO", 217: "TO", 224: "TO",
 
       // Triple letter pts
-      20: "TL", 24: "TL", 76: "TL", 80: "TL", 84: "TL", 88: "TL", 136: "TL", 140: "TL", 144: "TL", 148: "TL", 200: "TL", 204: "TL",
+      20: "TB", 24: "TB", 76: "TB", 80: "TB", 84: "TB", 88: "TB", 136: "TB", 140: "TB", 144: "TB", 148: "TB", 200: "TB", 204: "TB",
 
       //Double Word pts
-      16: "DW", 32: "DW", 48: "DW", 64: "DW", 64: "DW", 196: "DW", 182: "DW", 168: "DW", 154: "DW", 28: "DW", 42: "DW", 56: "DW",
-      70: "DW", 160: "DW", 176: "DW", 192: "DW", 208: "DW",
+      16: "DO", 32: "DO", 48: "DO", 64: "DO", 64: "DO", 196: "DO", 182: "DO", 168: "DO", 154: "DO", 28: "DO", 42: "DO", 56: "DO",
+      70: "DO", 160: "DO", 176: "DO", 192: "DO", 208: "DO",
 
       //Double letter pts
-      3: "DL", 36: "DL", 45: "DL", 52: "DL", 92: "DL", 96: "DL", 108: "DL", 11: "DL", 38: "DL", 59: "DL", 98: "DL", 102: "DL", 122: "DL",
-      126: "DL", 128: "DL", 165: "DL", 172: "DL", 179: "DL", 186: "DL", 188: "DL", 213: "DL", 221: "DL", 116: "DL", 132: "DL",
+      3: "DB", 36: "DB", 45: "DB", 52: "DB", 92: "DB", 96: "DB", 108: "DB", 11: "DB", 38: "DB", 59: "DB", 98: "DB", 102: "DB", 122: "DB",
+      126: "DB", 128: "DB", 165: "DB", 172: "DB", 179: "DB", 186: "DB", 188: "DB", 213: "DB", 221: "DB", 116: "DB", 132: "DB",
 
       // Middle of the board
-      112: "CS",
+      112: "MB",
     };
   }
 
@@ -439,11 +439,11 @@ export default class Board {
 
                   //mutiply by the value of special square. Letter are added now. Word multipler will be added later.
                   switch (this.matrix[yIndex][xIndex].specialS) {
-                    case 'TW': wordMultiplyer *= 3; break;
-                    case 'DW': wordMultiplyer *= 2; break;
-                    case 'CS': wordMultiplyer *= 2; break;
-                    case 'DL': letterPoints *= 2; break;
-                    case 'TL': letterPoints *= 3; break;
+                    case 'TO': wordMultiplyer *= 3; break;
+                    case 'DO': wordMultiplyer *= 2; break;
+                    case 'MB': wordMultiplyer *= 2; break;
+                    case 'DB': letterPoints *= 2; break;
+                    case 'TB': letterPoints *= 3; break;
                   }
                 }
                 points += letterPoints; //add the letter points to "points"
@@ -463,11 +463,11 @@ export default class Board {
                 letterPoints += this.matrix[yIndex][xIndex].tile.points;
                 if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
                   switch (this.matrix[yIndex][xIndex].specialS) {
-                    case 'TW': wordMultiplyer *= 3; break;
-                    case 'DW': wordMultiplyer *= 2; break;
-                    case 'CS': wordMultiplyer *= 2; break;
-                    case 'DL': letterPoints *= 2; break;
-                    case 'TL': letterPoints *= 3; break;
+                    case 'TO': wordMultiplyer *= 3; break;
+                    case 'DO': wordMultiplyer *= 2; break;
+                    case 'MB': wordMultiplyer *= 2; break;
+                    case 'DB': letterPoints *= 2; break;
+                    case 'TB': letterPoints *= 3; break;
                   }
                 }
                 points += letterPoints; // add the letter points 
@@ -508,11 +508,11 @@ export default class Board {
                 letterPoints += this.matrix[yIndex][xIndex].tile.points;
                 if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
                   switch (this.matrix[yIndex][xIndex].specialS) {
-                    case 'TW': wordMultiplyer *= 3; break;
-                    case 'DW': wordMultiplyer *= 2; break;
-                    case 'CS': wordMultiplyer *= 2; break;
-                    case 'DL': letterPoints *= 2; break;
-                    case 'TL': letterPoints *= 3; break;
+                    case 'TO': wordMultiplyer *= 3; break;
+                    case 'DO': wordMultiplyer *= 2; break;
+                    case 'MB': wordMultiplyer *= 2; break;
+                    case 'DB': letterPoints *= 2; break;
+                    case 'TB': letterPoints *= 3; break;
                   }
                 }
                 points += letterPoints;
@@ -531,11 +531,11 @@ export default class Board {
                 letterPoints += this.matrix[yIndex][xIndex].tile.points;
                 if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
                   switch (this.matrix[yIndex][xIndex].specialS) {
-                    case 'TW': wordMultiplyer *= 3; break;
-                    case 'DW': wordMultiplyer *= 2; break;
-                    case 'CS': wordMultiplyer *= 2; break;
-                    case 'DL': letterPoints *= 2; break;
-                    case 'TL': letterPoints *= 3; break;
+                    case 'TO': wordMultiplyer *= 3; break;
+                    case 'DO': wordMultiplyer *= 2; break;
+                    case 'MB': wordMultiplyer *= 2; break;
+                    case 'DB': letterPoints *= 2; break;
+                    case 'TB': letterPoints *= 3; break;
                   }
                 }
                 points += letterPoints;

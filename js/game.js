@@ -33,12 +33,13 @@ export default class Game {
     this.waitForNameToBeSaved = false;
     this.board.render();
     this.renderMenu();
-    this.renderStand();
+    //this.renderStand();
     this.renderTilesLeft();
     // add click event listener.
     // Since the menu isn't re-rendered we only need to add the click event listener once.
-    this.addClickEvents();
+    //this.addClickEvents();
     this.renderScoreBoard();
+    this.listenForNetworkChanges();
   }
 
   async start() {
@@ -88,13 +89,12 @@ export default class Game {
     this.renderTilesLeft();
     // add click event listener.
     // Since the menu isn't re-rendered we only need to add the click event listener once.
-    this.addClickEvents();
     this.renderScoreBoard();
-    this.disableButtons()
+    //this.disableButtons()
   }
 
   //not working at the moment. keep looking  a way to have the rigth turn for each player.
-  disableButtons() {
+  /*disableButtons() {
     let s = this.store;
     if (s.playerTurn === 0) {
       $('#submitButton').prop('disabled', false);
@@ -110,7 +110,7 @@ export default class Game {
 
 
     }
-  }
+  }*/
 
   async tilesFromFile() {
     this.bag = new Bag();
@@ -137,8 +137,6 @@ export default class Game {
       this.bag.tiles[t] = this.bag.tiles[i]; // current last tile postion will have the random position from i(index)
       this.bag.tiles[i] = s; //  now we take the tile from the temporary storage 's' and put it the random index.
     }
-
-
   }
 
   renderMenu() {
@@ -253,10 +251,10 @@ export default class Game {
             that.renderStand();
             that.board.render();
             // We change the player turn to the next player
-            that.store.playerTurn === (that.store.playerNames.length - 1) ? (that.store.playerTurn = 0) : (that.store.playerTurn = that.store.playerTurn = 1);
-            that.disableButtons();
-
+            that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
             that.store.playerTurn = that.playerTurn;
+            that.renderDisableEventListeners();
+            //that.disableButtons();
             // We then re-render the stand and board
             //that.board.render();
             that.store.board.matrix = that.board.matrix;
@@ -299,8 +297,9 @@ export default class Game {
         that.renderGameOver();
       }
       that.renderStand();
-      that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn = that.playerTurn++);
+      that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
       that.store.playerTurn = that.playerTurn;
+      that.renderDisableEventListeners();
       //that.board.render();
       //that.renderStand();
       //that.renderTilesLeft();
@@ -363,9 +362,10 @@ export default class Game {
         }
         // We change the player turn to the next player
         that.renderStand();
-        that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn = that.playerTurn++);
+      that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
         that.store.playerTurn = that.playerTurn;
-        that.store.bag.tiles = that.bag.tiles;
+                that.renderDisableEventListeners();
+      that.store.bag.tiles = that.bag.tiles;
       } else {
         that.renderMessage(3);
         //alert("Det finns inte tillräckligt med brickor i påsen för att kunna byta.")
@@ -469,8 +469,8 @@ export default class Game {
                 that.board.matrix[y][x].tile.char = letterInBox;
                 that.board.matrix[y][x].tile.points = 0;
                 $(".letterBox").remove();
-                //that.board.render();
-                //that.renderStand();
+                that.board.render();
+                that.renderStand();
               } else {
                 $(".letterBox input").val('Välj endast en bokstav')
               }
@@ -693,7 +693,10 @@ export default class Game {
     $('body').on('click', '.joingame', () => {
       if (!getName()) { return; }
       this.playerName = $('input[name="playerName"]').val();
-      this.key = prompt('Enter the network key from your friend:');
+      this.maxLength = 6;
+      while (!this.key) {
+        this.key = prompt('Enter the network key from your friend:');
+      };
       this.willCreateGame = true;
       this.waitForNameToBeSaved = true;
       this.start();
@@ -731,14 +734,29 @@ export default class Game {
       this.board.render();
       this.renderTilesLeft();
       this.renderScoreBoard();
+      console.log("playerIndex:", this.playerIndex)
+      console.log("playerTurn:", this.playerTurn)
       if (this.playerTurn === this.playerIndex) {
-        this.renderStand(); // We might get too many active drag events..? 
+        $('.disabler').remove();
+        this.renderStand();
+        this.addClickEvents();
+        $('#submitButton').prop('disabled', false);
+        $('#skipButton').prop('disabled', false);
+        $('#changeTilesButton').prop('disabled', false);
+      }
+      if (this.playerTurn != this.playerIndex) {
+        $('#submitButton').prop('disabled', true);
+        $('#skipButton').prop('disabled', true);
+        $('#changeTilesButton').prop('disabled', true);
+        $(".stand .tile").off();
+        $(".tilePlacedThisRound").off();
+        $("body").off();
+    }
       }
       if (this.store.gameOver === true && !(this.playerIndex === this.store.playerTurn)) {
         this.renderGameOver();
       }
     }
-  }
 
   async connectToStore() {
     this.store = await Store.getNetworkStore(
@@ -774,5 +792,9 @@ export default class Game {
       <div class="pname">${this.player.name}</div>
       `;
   }
+
+  renderDisableEventListeners() {
+    $('<div class="disabler"/>').appendTo("body");
+}
 
 }
