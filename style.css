@@ -108,9 +108,10 @@ body {
   color: white;
   /*  left: -37vh;
   top: 1.3vh; */
-  left: -10vh;
+  left:-4vh;
   top: 1.3vh;
-  margin-bottom: 0px;
+  margin-top: 30px;
+  z-index: 2;
 }
 
 /* ----------------- TILES ---------------- */

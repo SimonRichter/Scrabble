@@ -16,7 +16,7 @@ export default class Game {
 
     await this.tilesFromFile();
     // create players
-    this.players = [new Player(this, "&#128100; Spelare 1"), new Player(this, "&#128100;Spelare 2")];
+    this.players = [new Player(this, "&#128100; 1 "), new Player(this, "&#128100; 2")];
     // render the menu + board + players
     this.board.render();
     this.renderMenu();
@@ -92,11 +92,11 @@ export default class Game {
     byt.textContent = "Byt";
     menu.appendChild(byt);
 
-    /*  let ångra = document.createElement("button");      //New clear button, code is on row 296.
-      ångra.setAttribute("class", "btn skip");
-      ångra.setAttribute("id", "clearButton");
-      ångra.textContent = "Ångra";
-      menu.appendChild(ångra);*/
+    let ångra = document.createElement("button");      //New clear button, code is on row 296.
+    ångra.setAttribute("class", "btn skip");
+    ångra.setAttribute("id", "clearButton");
+    ångra.textContent = "Ångra";
+    menu.appendChild(ångra);
 
 
 
@@ -293,29 +293,29 @@ export default class Game {
     });
 
 
-    /*  $("#clearButton").click(function () {
-  
-        if (that.board.putTilesThisRound.length) {
-  
-          for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
-  
-            let squareIndex = that.board.putTilesThisRound[i].boardIndex;
-            let y = Math.floor(squareIndex / 15);
-            let x = squareIndex % 15;
-            delete that.board.matrix[y][x].tile;
-            that.changeBackEmptyTile(that.board.putTilesThisRound[i]);
-            that.players[that.playerTurn].stand.push(that.board.putTilesThisRound[i]);
-  
-            that.board.putTilesThisRound.splice(i, 1);
-  
-          }
+    $("#clearButton").click(function () {
+
+      if (that.board.putTilesThisRound.length) {
+
+        for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
+
+          let squareIndex = that.board.putTilesThisRound[i].boardIndex;
+          let y = Math.floor(squareIndex / 15);
+          let x = squareIndex % 15;
+          delete that.board.matrix[y][x].tile;
+          that.changeBackEmptyTile(that.board.putTilesThisRound[i]);
+          that.players[that.playerTurn].stand.push(that.board.putTilesThisRound[i]);
+
+          that.board.putTilesThisRound.splice(i, 1);
+
         }
-  
-        that.board.render();
-        that.renderStand();
-        that.renderTilesLeft();
-  
-      });*/
+      }
+
+      that.board.render();
+      that.renderStand();
+      that.renderTilesLeft();
+
+    });
 
 
 
