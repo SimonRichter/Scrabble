@@ -815,7 +815,7 @@ export default class Game {
 
   listenForNetworkChanges() {
     if (this.store.playerNames) {
-      if (this.store.playerNames.length > 3) {
+      if (this.store.playerNames.length > 4) {
         alert('Four players are already playing!');  // TODO: Make a nicer looking alert maybe
         return;
       }
