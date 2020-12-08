@@ -233,7 +233,7 @@ export default class Game {
             that.renderStand();
             that.board.render();
             // We change the player turn to the next player
-            that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn = that.playerTurn++);
+            that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn = that.playerTurn = 1);
             that.store.playerTurn = that.playerTurn;
             // We then re-render the stand and board
             //that.board.render();

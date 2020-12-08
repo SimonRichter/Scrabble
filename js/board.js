@@ -91,7 +91,7 @@ export default class Board {
     this.countPointsYAxis(); // console points on Y for test 
     this.countPointsXAxis(); //console points on x for test 
     this.testPointInRealTime() // Div in DOM for test
-    this.renderWords();
+    //this.renderWords();
   }
 
   //function for test of real time points in DOM
@@ -113,34 +113,34 @@ export default class Board {
       $tpirt.append(`<h3>+${x}</h3>`)
   }
 
-  async renderWords() {
-    let t = this.uniqueWordsPlayed(this.wordsPlayed);
-    $(".wordsOnScreen").remove();
-    $(document).ready(function () {
-      $(".wordsOnScreen").click(function () {
-        $lis.toggle();
-      });
-    });
-    let $wordsOnscreen = $('<div class="wordsOnScreen">Words</div>').appendTo("body");
-    let $lis = $('<ul class="lis"></ul>');
-    $lis.appendTo($wordsOnscreen);
-    for (let w of t) {
-      let html = $('<div>' + await SAOLchecker.lookupWord(w) + '</div>');
-      let meaning = html.find('.def').text();
-      if (meaning.length < 200) {
-        console.log(meaning)
-        $lis.append(`<li data-tooltip="` + meaning + `" data-tooltip-position="right"> ${w}</li>`);
-      }
-      else {
-        console.log(meaning);
-        $lis.append(`<li data-tooltip=" way too long" data-tooltip-position="right"> ${w}</li>`); // words too long. find a way to fiter
-      }
-
-    }
-
-
-
-  }
+  /* async renderWords() {
+     let t = this.uniqueWordsPlayed(this.wordsPlayed);
+     $(".wordsOnScreen").remove();
+     $(document).ready(function () {
+       $(".wordsOnScreen").click(function () {
+         $lis.toggle();
+       });
+     });
+     let $wordsOnscreen = $('<div class="wordsOnScreen">Words</div>').appendTo("body");
+     let $lis = $('<ul class="lis"></ul>');
+     $lis.appendTo($wordsOnscreen);
+     for (let w of t) {
+       let html = $('<div>' + await SAOLchecker.lookupWord(w) + '</div>');
+       let meaning = html.find('.def').text();
+       if (meaning.length < 200) {
+         console.log(meaning)
+         $lis.append(`<li data-tooltip="` + meaning + `" data-tooltip-position="right"> ${w}</li>`);
+       }
+       else {
+         console.log(meaning);
+         $lis.append(`<li data-tooltip=" way too long" data-tooltip-position="right"> ${w}</li>`); // words too long. find a way to fiter
+       }
+ 
+     }
+ 
+ 
+ 
+   }*/
 
 
   // This function checks if tiles of this round are touching each other
