@@ -3,12 +3,14 @@ export default class StartPage {
 
   constructor() {
     this.render();
-    this.addClickEvents();
     this.playerName = "";
     this.playerCode = 0;
   }
 
   render() {
+    if ($('.startpage').length) {
+      $('.startpage').remove();
+    }
     $('body').append(`<header class="startpage">
     <div class="btn-container">
     <button class="newgame">NYTT SPEL</button>
@@ -25,12 +27,14 @@ export default class StartPage {
       'background-attachment': 'fixed'
     });
 
+    this.addClickEvents();
   }
 
   addClickEvents() {
     let that = this;
+
     $('.newgame').click(() => {
-      $('.startpage').html('<input type="text" placeholder="Namn:" class="entername"></input>');
+      $('.btn-container').html('<input type="text" placeholder="Namn:" maxlength="15" class="entername"></input>');
       // When user types name and presses enter(13), players name gets stored in playerName
       $(document).on("keypress", "input", function (e) {
         if (e.which == 13) {
@@ -42,13 +46,12 @@ export default class StartPage {
     })
 
     $('.joingame').click(() => {
-      console.log('Joining game...');
-      $('.startpage').html('<input type="text" placeholder="Namn:" class="enterkey"></input>');
+      $('.btn-container').html('<input type="text" placeholder="Namn:" class="enterkey"></input>');
       // When user types name and presses enter (13), players name gets stored in playerName
       $(document).on("keypress", "input", function (e) {
         if (e.which == 13) {
           that.playerName = $(this).val();
-          $('.startpage').html('<input type="text" placeholder="Kod:" class="enterkey"></input>');
+          $('.btn-container').html('<input type="text" placeholder="Kod:" class="enterkey"></input>');
           // ...then, player types in code which gets stored in playerCode
           $(document).on("keypress", "input", function (e) {
             if (e.which == 13) {
@@ -61,7 +64,23 @@ export default class StartPage {
 
     })
 
+    this.unclickingButton();
   }
 
+  // Function that lets you "click off" the buttons and return to original startpage options
+  unclickingButton() {
+    let that = this;
+
+    $(document).mouseup(function (e) {
+      let container = $(".btn-container");
+      // if clicking outside button container, re-renders startpage as is was
+      if (!container.is(e.target) && container.has(e.target).length === 0) {
+        that.render();
+      }
+    });
+
+  }
 
 }
+
+
