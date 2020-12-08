@@ -127,7 +127,7 @@ export default class Board {
     for (let w of t) {
       let html = $('<div>' + await SAOLchecker.lookupWord(w) + '</div>');
       let meaning = html.find('.def').text();
-      if (meaning.length < 100) {
+      if (meaning.length < 200) {
         console.log(meaning)
         $lis.append(`<li data-tooltip="` + meaning + `" data-tooltip-position="right"> ${w}</li>`);
       }

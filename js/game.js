@@ -360,6 +360,7 @@ export default class Game {
       y = Math.floor(tileIndex / 15);
       x = tileIndex % 15;
       if (that.board.matrix[y][x].tile.points === 0 && !that.board.matrix[y][x].tile.hasBeenPlaced) {
+        $('.letterBox').remove();
         that.changeLetterOfEmptyTile();
         $("body").on("click", "#chooseButton", function () {
           if ($(".letterBox input").val()) {
@@ -369,10 +370,10 @@ export default class Game {
               that.board.matrix[y][x].tile.char = letterInBox;
               $(".letterBox").remove();
               that.board.render();
-              //that.store.board.matrix = that.board.matrix;
-              //that.renderStand();
+              that.renderStand();
             } else {
-              $(".letterBox input").val('Välj endast en bokstav')
+              $(".letterBox h4").html("<h4 style='color: red;'>Välj endast EN bokstav</h4>");
+              $(".letterBox input").val("")
             }
           }
         });
