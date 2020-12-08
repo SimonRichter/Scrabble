@@ -90,6 +90,26 @@ export default class Game {
     // Since the menu isn't re-rendered we only need to add the click event listener once.
     this.addClickEvents();
     this.renderScoreBoard();
+    this.disableButtons()
+  }
+
+  //not working at the moment. keep looking  a way to have the rigth turn for each player.
+  disableButtons() {
+    let s = this.store;
+    if (s.playerTurn === 0) {
+      $('#submitButton').prop('disabled', false);
+      $('#skipButton').prop('disabled', false);
+      $('#changeTilesButton').prop('disabled', false);
+
+
+    }
+    else if (s.playerTurn === 1) {
+      $('#submitButton').prop('disabled', true);
+      $('#skipButton').prop('disabled', true);
+      $('#changeTilesButton').prop('disabled', true);
+
+
+    }
   }
 
   async tilesFromFile() {
@@ -233,7 +253,9 @@ export default class Game {
             that.renderStand();
             that.board.render();
             // We change the player turn to the next player
-            that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn = that.playerTurn = 1);
+            that.store.playerTurn === (that.store.playerNames.length - 1) ? (that.store.playerTurn = 0) : (that.store.playerTurn = that.store.playerTurn = 1);
+            that.disableButtons();
+
             that.store.playerTurn = that.playerTurn;
             // We then re-render the stand and board
             //that.board.render();
