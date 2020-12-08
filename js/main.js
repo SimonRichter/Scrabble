@@ -1,4 +1,2 @@
-//import StartPage from './startpage.js';
-import Game from './Game.js';
-//new StartPage();
-new Game().start();
+import Game from './game.js'
+new Game();

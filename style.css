@@ -328,6 +328,13 @@ body {
   text-align: center;
 }
 
+.startGame {
+  color: rgba(255, 255, 255, 0.856);
+  background-color: #9a572d;
+  font-size: 25px;
+  font-family: "Oswald", sans-serif;
+  text-align: center;
+}
 /*---------------------------------------------*/
 
 .message {
@@ -344,6 +351,7 @@ body {
 }
 
 .message > div {
+  font-family: monospace;
   
   z-index: 100;
   position: absolute;
@@ -366,19 +374,19 @@ body {
 
 /* ----------------- ETC ---------------- */
 
-.TW {
+.TO {
   background-color: rgb(255, 166, 0);
 }
-.DW {
+.DO {
   background-color: rgb(197, 32, 32);
 }
-.DL {
+.DB {
   background-color: rgb(25, 156, 231);
 }
-.TL {
+.TB {
   background-color: rgb(109, 206, 70);
 }
-.CS {
+.MB {
   background-color: rgb(195, 0, 255);
 }
 /*radom div for test purposes (test points in real time)*/
@@ -454,8 +462,109 @@ body {
   padding: 5px 0;
   font-size: 30px;
 }
-
-
-
-  
  
+.wordsOnScreen{
+  font-family: monospace;
+   float: left;
+  color: rgb(9, 9, 95);
+  background-color: rgb(255, 249, 238);
+  font-size: 20px;
+  text-align: center;
+  position: absolute;
+  width: 8vw;
+  height: 10vw;
+  border: 2px solid #000000;
+  border-radius: 5px;
+  top: 30vw;
+  right: 45vw;
+}
+
+ .wordsOnScreen >ul>li{  
+   font-size: 18px;
+   color: green;
+   text-align: right;
+   }
+
+/*-------------------tooltips  words dictionary ------*/
+[data-tooltip] {
+    display: inline-block;
+    position: relative;
+    cursor: help;
+    padding: 4px;
+}
+/* Tooltip styling */
+[data-tooltip]:before {
+    content: attr(data-tooltip);
+    display: none;
+    position: absolute;
+    background: #000;
+    color: #fff;
+    padding: 4px 8px;
+    font-size: 14px;
+    line-height: 1.4;
+    min-width: 150px;
+    text-align: center;
+    border-radius: 4px;
+}
+
+/* Dynamic vertical centering */
+[data-tooltip-position="right"]:before,
+[data-tooltip-position="left"]:before {
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+[data-tooltip-position="right"]:before {
+    left: 100%;
+    margin-left: 6px;
+}
+
+/* Tooltip arrow styling/placement */
+[data-tooltip]:after {
+    content: '';
+    display: none;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+}
+/* Dynamic horizontal centering for the tooltip */
+
+/* Dynamic vertical centering for the tooltip */
+[data-tooltip-position="right"]:after,
+[data-tooltip-position="left"]:after {
+    top: 50%;
+    margin-top: -6px;
+}
+
+[data-tooltip-position="right"]:after {
+    left: 100%;
+    border-width: 6px 6px 6px 0;
+    border-right-color: #000;
+}
+
+[data-tooltip-position="left"]:after {
+    right: 100%;
+    border-width: 6px 0 6px 6px;
+    border-left-color: #000;
+}
+/* Show the tooltip when hovering */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+    display: block;
+    z-index: 50;
+}
+
+.disabler {
+  top: 0;
+  left: 0;
+  z-index: 9000;
+  opacity: .3;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+}

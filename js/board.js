@@ -15,24 +15,24 @@ export default class Board {
     // field boardIndex in the tile object
     this.putTilesThisRound = [];
     this.falseCounter = 0;
-    //this.wordsPlayed = []; // correct words played this game.
+    this.wordsPlayed = []; // correct words played this game.
     this.specialSquares = {
       // Triple Word pts
-      0: "TW", 7: "TW", 14: "TW", 105: "TW", 119: "TW", 210: "TW", 217: "TW", 224: "TW",
+      0: "TO", 7: "TO", 14: "TO", 105: "TO", 119: "TO", 210: "TO", 217: "TO", 224: "TO",
 
       // Triple letter pts
-      20: "TL", 24: "TL", 76: "TL", 80: "TL", 84: "TL", 88: "TL", 136: "TL", 140: "TL", 144: "TL", 148: "TL", 200: "TL", 204: "TL",
+      20: "TB", 24: "TB", 76: "TB", 80: "TB", 84: "TB", 88: "TB", 136: "TB", 140: "TB", 144: "TB", 148: "TB", 200: "TB", 204: "TB",
 
       //Double Word pts
-      16: "DW", 32: "DW", 48: "DW", 64: "DW", 64: "DW", 196: "DW", 182: "DW", 168: "DW", 154: "DW", 28: "DW", 42: "DW", 56: "DW",
-      70: "DW", 160: "DW", 176: "DW", 192: "DW", 208: "DW",
+      16: "DO", 32: "DO", 48: "DO", 64: "DO", 64: "DO", 196: "DO", 182: "DO", 168: "DO", 154: "DO", 28: "DO", 42: "DO", 56: "DO",
+      70: "DO", 160: "DO", 176: "DO", 192: "DO", 208: "DO",
 
       //Double letter pts
-      3: "DL", 36: "DL", 45: "DL", 52: "DL", 92: "DL", 96: "DL", 108: "DL", 11: "DL", 38: "DL", 59: "DL", 98: "DL", 102: "DL", 122: "DL",
-      126: "DL", 128: "DL", 165: "DL", 172: "DL", 179: "DL", 186: "DL", 188: "DL", 213: "DL", 221: "DL", 116: "DL", 132: "DL",
+      3: "DB", 36: "DB", 45: "DB", 52: "DB", 92: "DB", 96: "DB", 108: "DB", 11: "DB", 38: "DB", 59: "DB", 98: "DB", 102: "DB", 122: "DB",
+      126: "DB", 128: "DB", 165: "DB", 172: "DB", 179: "DB", 186: "DB", 188: "DB", 213: "DB", 221: "DB", 116: "DB", 132: "DB",
 
       // Middle of the board
-      112: "CS",
+      112: "MB",
     };
   }
 
@@ -90,13 +90,13 @@ export default class Board {
     );
     this.countPointsYAxis(); // console points on Y for test 
     this.countPointsXAxis(); //console points on x for test 
-    this.testPointInRealTime() // Div in DOM for test 
-
-
+    this.testPointInRealTime() // Div in DOM for test
+    //this.renderWords();
   }
 
   //function for test of real time points in DOM
   testPointInRealTime() {
+
     let x = 0;
     if (this.putTilesThisRound.length) {
       let that = this;
@@ -106,17 +106,45 @@ export default class Board {
     let $tpirt = $('<div class="tpirt">Möjliga poäng för det här draget</div>').appendTo("body");
     // $tpirt.append(`<h3>+${x}</h3>`)
     if (x > 20)
-      $tpirt.append(`<h3>&#128079;+${x}&#128079;</h3>`)
+      $tpirt.append(`<h3>&#128081;+${x}&#128081;</h3>`)
     if (x <= 20 && x >= 10)
       $tpirt.append(`<h3>&#128077 +${x} &#128077;</h3>`)
     if (x < 10)
       $tpirt.append(`<h3>+${x}</h3>`)
   }
 
+  /* async renderWords() {
+     let t = this.uniqueWordsPlayed(this.wordsPlayed);
+     $(".wordsOnScreen").remove();
+     $(document).ready(function () {
+       $(".wordsOnScreen").click(function () {
+         $lis.toggle();
+       });
+     });
+     let $wordsOnscreen = $('<div class="wordsOnScreen">Words</div>').appendTo("body");
+     let $lis = $('<ul class="lis"></ul>');
+     $lis.appendTo($wordsOnscreen);
+     for (let w of t) {
+       let html = $('<div>' + await SAOLchecker.lookupWord(w) + '</div>');
+       let meaning = html.find('.def').text();
+       if (meaning.length < 200) {
+         console.log(meaning)
+         $lis.append(`<li data-tooltip="` + meaning + `" data-tooltip-position="right"> ${w}</li>`);
+       }
+       else {
+         console.log(meaning);
+         $lis.append(`<li data-tooltip=" way too long" data-tooltip-position="right"> ${w}</li>`); // words too long. find a way to fiter
+       }
+ 
+     }
+ 
+ 
+ 
+   }*/
+
 
   // This function checks if tiles of this round are touching each other
-  checkXYAxisHM() {
-    //let message = "Your tiles must touch each other."; // Alert message
+  checkXYAxisHM(game) {
 
     if (this.putTilesThisRound.length > 1) { // Only do the function if there are tiles on the board
       let pttrl = this.putTilesThisRound;
@@ -139,7 +167,7 @@ export default class Board {
       }
       if (errorCounter === 2) {
         //alert(message);
-        new Game().renderMessage(7);
+        game.renderMessage(7);
         return false;
       }
       let tilesInOrder = this.putTilesThisRound.sort((a, b) => a.boardIndex > b.boardIndex ? 1 : -1); // Sort this.putTilesThisRound
@@ -156,13 +184,13 @@ export default class Board {
         // Check if there are any gaps between the first and last tile
         // if so return false + message
         while (xStartIndex <= xEndIndex) {
-          if (!this.matrix[yStartIndex][xStartIndex].tile) { new Game().renderMessage(7);/* alert(message) ;*/ return false; }
+          if (!this.matrix[yStartIndex][xStartIndex].tile) { game.renderMessage(7); return false; }
           xStartIndex++;
         }
       }
       if (yStartIndex !== yEndIndex) { // Same as before but in columns
         while (yStartIndex <= yEndIndex) {
-          if (!this.matrix[yStartIndex][xStartIndex].tile) { new Game().renderMessage(7);/* alert(message);*/ return false; }
+          if (!this.matrix[yStartIndex][xStartIndex].tile) { game.renderMessage(7); return false; }
           yStartIndex++;
         }
       }
@@ -173,7 +201,7 @@ export default class Board {
 
 
   // this function is checks if tiles are touching tiles from previous rounds
-  nextToPutTilesHM() {
+  nextToPutTilesHM(game) {
     if (!this.putTiles.length) {
       return true;
     }
@@ -184,27 +212,22 @@ export default class Board {
         let oldX = Math.floor(oldTile.boardIndex / 15);
         let oldY = oldTile.boardIndex % 15;
 
-        // console.log("x and y:s", newX, newY, oldX, oldY); //test
-
         if (Math.abs(oldX - newX) === 1 && oldY === newY) {
-          //console.log("Same axis Y, touching Y"); //test
           return true;
         }
         if (Math.abs(oldY - newY) === 1 && oldX === newX) {
-          //console.log("Same axis X, touching X"); //test
           return true;
         } else {
 
         }
       }
     }
-    new Game().renderMessage(6);
-    //alert("Tiles must touch tiles placed in previous rounds");
+    game.renderMessage(6);
     return false;
   }
 
 
-  checkMiddleSquare() {
+  checkMiddleSquare(game) {
     // If the first round is being played
     if (this.firstRound) {
       let temp = 0;
@@ -212,12 +235,15 @@ export default class Board {
         // If one of the newly placed tiles is on the middle square, function returns true
         if (tile.boardIndex === 112) {
           this.firstRound = false;
+          game.store.firstRound = false;
           return true;
         } else {
           // Checks if the loop is on the last tile in the putTilesThisRound array
           if (temp === this.putTilesThisRound.length - 1) {
-            new Game().renderMessage(4);
-            //alert("You must place one of your tiles in the middle of the board.");
+            /*alert(
+              "You must place one of your tiles in the middle of the board."
+            );*/
+            game.renderMessage(4);
             return false;
           }
         }
@@ -280,8 +306,6 @@ export default class Board {
       if ($.inArray(el, uniqueStrings) === -1) // if the element is NOT in our new uniqueStrings Array
         uniqueStrings.push(el); // push it haaaard.
     });
-    console.log("strings across X:", strings); //test
-    console.log("unique Strings across X", uniqueStrings)  //  test 
     return uniqueStrings; //we now return unique values /strings/potencial words
   }
 
@@ -351,32 +375,28 @@ export default class Board {
       if ($.inArray(el, uniqueStrings) === -1)
         uniqueStrings.push(el);
     });
-    console.log("strings across Y:", strings);//test
-    console.log("unique Strings across Y", uniqueStrings)  //test
     return uniqueStrings;
   }
 
   // For later (maybe) list of uniue words played in the game
-  /*
-    uniqueWordsPlayed(wPlayed) {
-      let uniqueStrings = [];
-      $.each(wPlayed, (i, el) => {
-        if ($.inArray(el, uniqueStrings) === -1)
-          uniqueStrings.push(el);
-      });
-      console.log("words played:", wPlayed);//test
-      console.log("unique Words played", uniqueStrings)  //test
-      return uniqueStrings;
-  
-    }
-  */
+
+  uniqueWordsPlayed(wPlayed) {
+    let uniqueStrings = [];
+    $.each(wPlayed, (i, el) => {
+      if ($.inArray(el, uniqueStrings) === -1)
+        uniqueStrings.push(el);
+    });
+    return uniqueStrings;
+
+  }
+
 
 
 
   // array of potencial words from methods  findWordsAcrossYaxis() and
   // findWordsAcrossXaxis() 
 
-  async checkIfWord(array) {
+  async checkIfWord(game, array) {
 
     let word = ""; // we will put each potencial word of the array here.
     for (let ord of array) {
@@ -385,11 +405,11 @@ export default class Board {
         this.falseCounter = (await SAOLchecker.scrabbleOk(word)) ? 0 : 1;  // checks the dictionary
         if (this.falseCounter === 1) {
           let w = word.toUpperCase();
-          new Game().renderMessage(5, w);
+          game.renderMessage(5, w);
           //alert("'" + word.toUpperCase() + "' is NOT a correct word from the Swedish dictionary!");
           break;
         }
-        //this.wordsPlayed.push(word); add another correct word to the list
+        this.wordsPlayed.push(word); //add another correct word to the list
       }
 
     }
@@ -419,11 +439,11 @@ export default class Board {
 
                   //mutiply by the value of special square. Letter are added now. Word multipler will be added later.
                   switch (this.matrix[yIndex][xIndex].specialS) {
-                    case 'TW': wordMultiplyer *= 3; break;
-                    case 'DW': wordMultiplyer *= 2; break;
-                    case 'CS': wordMultiplyer *= 2; break;
-                    case 'DL': letterPoints *= 2; break;
-                    case 'TL': letterPoints *= 3; break;
+                    case 'TO': wordMultiplyer *= 3; break;
+                    case 'DO': wordMultiplyer *= 2; break;
+                    case 'MB': wordMultiplyer *= 2; break;
+                    case 'DB': letterPoints *= 2; break;
+                    case 'TB': letterPoints *= 3; break;
                   }
                 }
                 points += letterPoints; //add the letter points to "points"
@@ -443,11 +463,11 @@ export default class Board {
                 letterPoints += this.matrix[yIndex][xIndex].tile.points;
                 if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
                   switch (this.matrix[yIndex][xIndex].specialS) {
-                    case 'TW': wordMultiplyer *= 3; break;
-                    case 'DW': wordMultiplyer *= 2; break;
-                    case 'CS': wordMultiplyer *= 2; break;
-                    case 'DL': letterPoints *= 2; break;
-                    case 'TL': letterPoints *= 3; break;
+                    case 'TO': wordMultiplyer *= 3; break;
+                    case 'DO': wordMultiplyer *= 2; break;
+                    case 'MB': wordMultiplyer *= 2; break;
+                    case 'DB': letterPoints *= 2; break;
+                    case 'TB': letterPoints *= 3; break;
                   }
                 }
                 points += letterPoints; // add the letter points 
@@ -464,7 +484,6 @@ export default class Board {
 
         } catch (error) { }  // test
       }
-      console.log('Ypoints: ', points);
       return points;  // we returned the points counted on Y axis.
     }
   }
@@ -489,11 +508,11 @@ export default class Board {
                 letterPoints += this.matrix[yIndex][xIndex].tile.points;
                 if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
                   switch (this.matrix[yIndex][xIndex].specialS) {
-                    case 'TW': wordMultiplyer *= 3; break;
-                    case 'DW': wordMultiplyer *= 2; break;
-                    case 'CS': wordMultiplyer *= 2; break;
-                    case 'DL': letterPoints *= 2; break;
-                    case 'TL': letterPoints *= 3; break;
+                    case 'TO': wordMultiplyer *= 3; break;
+                    case 'DO': wordMultiplyer *= 2; break;
+                    case 'MB': wordMultiplyer *= 2; break;
+                    case 'DB': letterPoints *= 2; break;
+                    case 'TB': letterPoints *= 3; break;
                   }
                 }
                 points += letterPoints;
@@ -512,11 +531,11 @@ export default class Board {
                 letterPoints += this.matrix[yIndex][xIndex].tile.points;
                 if (this.matrix[yIndex][xIndex].specialS && !this.matrix[yIndex][xIndex].tile.hasBeenPlaced) {
                   switch (this.matrix[yIndex][xIndex].specialS) {
-                    case 'TW': wordMultiplyer *= 3; break;
-                    case 'DW': wordMultiplyer *= 2; break;
-                    case 'CS': wordMultiplyer *= 2; break;
-                    case 'DL': letterPoints *= 2; break;
-                    case 'TL': letterPoints *= 3; break;
+                    case 'TO': wordMultiplyer *= 3; break;
+                    case 'DO': wordMultiplyer *= 2; break;
+                    case 'MB': wordMultiplyer *= 2; break;
+                    case 'DB': letterPoints *= 2; break;
+                    case 'TB': letterPoints *= 3; break;
                   }
                 }
                 points += letterPoints;
@@ -534,7 +553,6 @@ export default class Board {
         }
         catch (error) { }
       }
-      console.log('Xpoints: ', points);
       return points;  // we return  the points counted on X axis
     }
   }
