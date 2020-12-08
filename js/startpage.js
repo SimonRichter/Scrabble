@@ -1,10 +1,10 @@
 export default class StartPage {
 
-
   constructor() {
     this.render();
     this.playerName = "";
     this.playerCode = 0;
+    this.enteredName = false;
   }
 
   render() {
@@ -32,12 +32,14 @@ export default class StartPage {
 
   addClickEvents() {
     let that = this;
+    let keyCodeCheckLoop = false;
 
     $('.newgame').click(() => {
+
       $('.btn-container').html('<input type="text" placeholder="Namn:" maxlength="15" class="entername"></input>');
       // When user types name and presses enter(13), players name gets stored in playerName
-      $(document).on("keypress", "input", function (e) {
-        if (e.which == 13) {
+      $(".entername").keyup(function (e) {
+        if (e.keyCode === 13) {
           that.playerName = $(this).val();
           // ENTER FUNCTION THAT STARTS GAME HERE (maybe game constructor can take in player name as argument)
         }
@@ -46,23 +48,27 @@ export default class StartPage {
     })
 
     $('.joingame').click(() => {
-      $('.btn-container').html('<input type="text" placeholder="Namn:" class="enterkey"></input>');
+      keyCodeCheckLoop = true;
+      $('.btn-container').html('<input type="text" placeholder="Namn:" maxlength="15" class="enterkey"></input>');
       // When user types name and presses enter (13), players name gets stored in playerName
-      $(document).on("keypress", "input", function (e) {
-        if (e.which == 13) {
+      $('.enterkey').keyup(function (e) {
+        if (e.keyCode === 13) {
           that.playerName = $(this).val();
-          $('.btn-container').html('<input type="text" placeholder="Kod:" class="enterkey"></input>');
+          $('.btn-container').html('<input type="text" placeholder="Kod: UTP548" maxlength="6" class="enterkey"></input>');
           // ...then, player types in code which gets stored in playerCode
-          $(document).on("keypress", "input", function (e) {
-            if (e.which == 13) {
-              that.playerCode = $(this).val();
+          $('.enterkey').keyup(function (e) {
+            if (e.keyCode === 13) {
+              that.playerCode = $(this).val().toUpperCase();
+              return;
               // ENTER FUNCTION THAT STARTS GAME WITH CODE HERE
             }
           });
+
         }
       });
 
     })
+
 
     this.unclickingButton();
   }
