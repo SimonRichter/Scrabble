@@ -150,18 +150,25 @@ export default class Game {
 
     // Create buttons and append to menu div
     let menu = document.getElementsByClassName("menu")[0];
-    // Spela button
-    let spela = document.createElement("button");
-    spela.setAttribute("class", "btn skip");
-    spela.setAttribute("id", "submitButton");
-    spela.textContent = "Spela";
-    menu.appendChild(spela);
+
+    let ångra = document.createElement("button");      //New clear button, code is on row 296.
+    ångra.setAttribute("class", "btn skip");
+    ångra.setAttribute("id", "clearButton");
+    ångra.textContent = "Ångra";
+    menu.appendChild(ångra);
+
     // Passa button
     let passa = document.createElement("button");
     passa.setAttribute("class", "btn skip");
     passa.setAttribute("id", "skipButton");
     passa.textContent = "Passa";
     menu.appendChild(passa);
+    // Spela button
+    let spela = document.createElement("button");
+    spela.setAttribute("class", "btn skip");
+    spela.setAttribute("id", "submitButton");
+    spela.textContent = "Spela";
+    menu.appendChild(spela);
 
     // Byt button 
     let byt = document.createElement("button");
@@ -170,11 +177,7 @@ export default class Game {
     byt.textContent = "Byt";
     menu.appendChild(byt);
 
-    let ångra = document.createElement("button");      //New clear button, code is on row 296.
-    ångra.setAttribute("class", "btn skip");
-    ångra.setAttribute("id", "clearButton");
-    ångra.textContent = "Ångra";
-    menu.appendChild(ångra);
+
 
 
 
@@ -368,10 +371,10 @@ export default class Game {
         }
         // We change the player turn to the next player
         that.renderStand();
-      that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
+        that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
         that.store.playerTurn = that.playerTurn;
-                that.renderDisableEventListeners();
-      that.store.bag.tiles = that.bag.tiles;
+        that.renderDisableEventListeners();
+        that.store.bag.tiles = that.bag.tiles;
       } else {
         that.renderMessage(3);
         //alert("Det finns inte tillräckligt med brickor i påsen för att kunna byta.")
@@ -728,12 +731,12 @@ export default class Game {
   /* renderStart() {
 
     $('body').html(/*html*//*`
-      <div class="start">
-        <input type="text" name="playerName" placeholder="Namn" required>
-      </div>
-    `);
-  }
-  */
+<div class="start">
+<input type="text" name="playerName" placeholder="Namn" required>
+</div>
+`);
+}
+*/
 
   addEventListeners() {
     let that = this;
@@ -770,45 +773,45 @@ export default class Game {
         that.playerName = $('.entername').val();
         that.startPage.renderStartPageButtons = false;
         that.key = await Store.createNetworkKey();
-      $('.entername').val("Nätverksnyckel: " + that.key);
-      //$('.start').append('<p>get key: ' + this.key + '</p>');
-      //$('.newgame').prop('disabled', true);
-      that.willCreateGame = false;
-      that.waitForNameToBeSaved = true;
-      await that.connectToStore();
-      let s = that.store;
-      s.playerNames = s.playerNames || [];
-      // Add my name
-      s.playerNames.push(that.playerName);
-      // Which player am I? (0 or 1)
-      that.playerIndex = s.playerNames.length - 1;
-        }
-      })
+        $('.entername').val("Nätverksnyckel: " + that.key);
+        //$('.start').append('<p>get key: ' + this.key + '</p>');
+        //$('.newgame').prop('disabled', true);
+        that.willCreateGame = false;
+        that.waitForNameToBeSaved = true;
+        await that.connectToStore();
+        let s = that.store;
+        s.playerNames = s.playerNames || [];
+        // Add my name
+        s.playerNames.push(that.playerName);
+        // Which player am I? (0 or 1)
+        that.playerIndex = s.playerNames.length - 1;
+      }
+    })
 
     $('body').on('click', '.joingame', () => {
 
       //if (!getName()) { return; }
-      
+
       if ($('.startGame').length === 6) {
-      that.playerName = that.startPage.playerName;
-      that.key = $('.startGame').val().toUpperCase();
-      that.willCreateGame = true;
-      that.waitForNameToBeSaved = true;
+        that.playerName = that.startPage.playerName;
+        that.key = $('.startGame').val().toUpperCase();
+        that.willCreateGame = true;
+        that.waitForNameToBeSaved = true;
         that.start();
-        }
+      }
     });
 
     $("body").on('keyup', '.startGame', function (e) {
       if (e.keyCode === 13) {
-      that.playerName = that.startPage.playerName;
+        that.playerName = that.startPage.playerName;
         if ($('.startGame').val().length === 6) {
-        that.startPage.renderStartPageButtons = false;
-      that.key = $('.startGame').val().toUpperCase();
-      that.willCreateGame = true;
-      that.waitForNameToBeSaved = true;
-        that.start();
+          that.startPage.renderStartPageButtons = false;
+          that.key = $('.startGame').val().toUpperCase();
+          that.willCreateGame = true;
+          that.waitForNameToBeSaved = true;
+          that.start();
         }
-    }
+      }
     });
 
   }
@@ -858,12 +861,12 @@ export default class Game {
         $(".stand .tile").off();
         $(".tilePlacedThisRound").off();
         $("body").off();
-    }
-      }
-      if (this.store.gameOver === true && !(this.playerIndex === this.store.playerTurn)) {
-        this.renderGameOver();
       }
     }
+    if (this.store.gameOver === true && !(this.playerIndex === this.store.playerTurn)) {
+      this.renderGameOver();
+    }
+  }
 
   async connectToStore() {
     this.store = await Store.getNetworkStore(
@@ -902,7 +905,7 @@ export default class Game {
 
   renderDisableEventListeners() {
     $('<div class="disabler"/>').appendTo("body");
-}
+  }
 
 }
 

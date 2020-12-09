@@ -34,6 +34,7 @@ body {
   border: 5px solid #000000;
   border-radius: 5px;
   margin-top: -7px;
+  margin-left: 15%;
   display: inline-block;
   background-color: rgb(176, 194, 218);
   background: rgb(217,233,238);
@@ -77,8 +78,7 @@ body {
   background-color: rgb(54, 8, 8);
   border-radius: 3px;
   padding: 0.5vh;
-  /* width: 52vh; */
-  width: 49.5vh;
+  
 }
 
 .stand::after {
