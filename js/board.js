@@ -8,6 +8,7 @@ export default class Board {
     this.firstRound = true;
     // All the tiles that have been put on the board are in this array
     this.putTiles = [];
+    this.goodTimeTorenderwords = false;
     // When a tile is placed on the board,
     // the tile object for that tile is copied into this array
     // The tile object should contain information on where
@@ -91,7 +92,10 @@ export default class Board {
     this.countPointsYAxis(); // console points on Y for test 
     this.countPointsXAxis(); //console points on x for test 
     this.testPointInRealTime() // Div in DOM for test
-    this.renderWords();
+    if (this.goodTimeTorenderwords) {
+      this.renderWords();
+      this.goodTimeTorenderwords = false;
+    }
   }
 
   //function for test of real time points in DOM
@@ -122,7 +126,7 @@ export default class Board {
       });
     });
     let $wordsOnscreen = $('<div class="wordsOnScreen"></div>').appendTo("body");
-    let $wordsTitle = $(' <div class= "wordsTitle" >Words</div > ');
+    let $wordsTitle = $(' <div class= "wordsTitle" >Spelade Ord</div > ');
     $wordsTitle.appendTo($wordsOnscreen);
     let $box = $('<div class="box"></div>')
     $box.appendTo($wordsOnscreen);
@@ -153,6 +157,7 @@ export default class Board {
         }
       }
     }
+
   }
 
 
