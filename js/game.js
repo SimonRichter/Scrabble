@@ -799,6 +799,7 @@ export default class Game {
         that.start();
       }
     });
+    let x = 0;
 
     $("body").on('keyup', '.startGame', function (e) {
       if (e.keyCode === 13) {
@@ -808,10 +809,15 @@ export default class Game {
           that.key = $('.startGame').val().toUpperCase();
           that.willCreateGame = true;
           that.waitForNameToBeSaved = true;
+          x = 1;
           that.start();
         }
       }
     });
+
+    if (x === 1) {
+      that.startPage.unclickingButton();
+    }
 
   }
 
