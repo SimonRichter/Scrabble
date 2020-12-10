@@ -103,7 +103,7 @@ export default class Board {
       x = that.countPointsXAxis() + that.countPointsYAxis() + that.sevenTiles();
     }
     $(".tpirt").remove();
-    let $tpirt = $('<div class="tpirt">Möjliga poäng för det här draget</div>').appendTo("body");
+    let $tpirt = $('<div class="tpirt"><h2>Möjliga poäng</h2></div>').appendTo("body");
     // $tpirt.append(`<h3>+${x}</h3>`)
     if (x > 20)
       $tpirt.append(`<h3>&#128081;+${x}&#128081;</h3>`)
@@ -121,38 +121,38 @@ export default class Board {
         $lis.toggle();
       });
     });
-    let $wordsOnscreen = $('<div class="wordsOnScreen">Words</div>').appendTo("body");
+    let $wordsOnscreen = $('<div class="wordsOnScreen"></div>').appendTo("body");
+    let $wordsTitle = $(' <div class= "wordsTitle" >Words</div > ');
+    $wordsTitle.appendTo($wordsOnscreen);
+    let $box = $('<div class="box"></div>')
+    $box.appendTo($wordsOnscreen);
     let $lis = $('<ul class="lis"></ul>');
-    $lis.appendTo($wordsOnscreen);
+    $lis.appendTo($box);
     for (let w of t) {
       let html = $('<div>' + await SAOLchecker.lookupWord(w) + '</div>');
       let meaning = html.find('.lexem').text();
       let meaning2 = html.find('.def').text();
       if (meaning) {
         if (meaning.length < 200) {
-          console.log("LEXEM CLASS meaning", meaning)
+          //console.log("LEXEM CLASS meaning", meaning)
           $lis.append(`<li data-tooltip="` + meaning + `" data-tooltip-position="right"> ${w}</li>`);
         }
         else {
-          console.log("LEXEM CLASS meaning", meaning.substring(0, 100))
+          //console.log("LEXEM CLASS meaning", meaning.substring(0, 100))
           $lis.append(`<li data-tooltip="` + meaning.substring(0, 100) + `" data-tooltip-position="right"> ${w}</li>`); // words too long. find a way to fiter
         }
       }
       else if (meaning2) {
         if (meaning2.length < 200) {
-          console.log("DEF CLASS  meaning", meaning2)
+          // console.log("DEF CLASS  meaning", meaning2)
           $lis.append(`<li data-tooltip="` + meaning2 + `" data-tooltip-position="right"> ${w}</li>`);
         }
         else {
-          console.log("DEF CLASS  meaning", meaning.substring(0, 100))
+          //console.log("DEF CLASS  meaning", meaning.substring(0, 100))
           $lis.append(`<li data-tooltip="` + meaning2.substring(0, 100) + `" data-tooltip-position="right"> ${w}</li>`); // words too long. find a way to fiter
         }
       }
-
     }
-
-
-
   }
 
 
