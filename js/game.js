@@ -224,6 +224,7 @@ export default class Game {
             // we add the points counted and add them to the Players Score.
             that.store.scores[that.playerTurn] += that.board.countPointsXAxis() + that.board.countPointsYAxis() + that.board.sevenTiles();
 
+
             // Fill the player stand with tiles again after they submit a correct word
             for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
               if (that.bag.tiles.length > 0) {
@@ -241,6 +242,7 @@ export default class Game {
               // We also push the tiles from putTilesThisRound to putTiles
               that.board.putTiles.push(that.board.putTilesThisRound.shift());
             }
+            that.board.goodTimeTorenderwords = true;
             that.renderScoreBoard();
 
             that.board.render();
@@ -286,22 +288,21 @@ export default class Game {
         that.store.board.putTilesThisRound = that.board.putTilesThisRound;
       }
 
-      that.store.skipCounter++;
-
       if (that.store.skipCounter > 4) {
         that.renderGameOver();
         return;
       }
-
+      that.store.skipCounter++;
+      console.log("skipc ounter before ???:", that.store.skipCounter, "that.playerTurn", that.playerTurn)
       that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
+      console.log("skipc ounter after ???:", that.store.skipCounter, "that.playerTurn", that.playerTurn)
       that.renderStand();
       that.store.playerTurn = that.playerTurn;
-
-
       that.renderDisableEventListeners();
       //that.board.render();
       //that.renderStand();
       //that.renderTilesLeft();
+
     });
 
 
@@ -799,7 +800,6 @@ export default class Game {
         that.start();
       }
     });
-    let x = 0;
 
     $("body").on('keyup', '.startGame', function (e) {
       if (e.keyCode === 13) {
@@ -809,15 +809,14 @@ export default class Game {
           that.key = $('.startGame').val().toUpperCase();
           that.willCreateGame = true;
           that.waitForNameToBeSaved = true;
-          x = 1;
           that.start();
         }
       }
     });
 
-    if (x === 1) {
-      that.startPage.unclickingButton();
-    }
+    //  {doest work properly
+    //     that.startPage.unclickingButton();
+    //   }
 
   }
 
@@ -855,10 +854,10 @@ export default class Game {
         $('.disabler').remove();
         this.renderStand();
         this.addClickEvents();
-        $('#submitButton').prop('disabled', false);
-        $('#skipButton').prop('disabled', false);
-        $('#changeTilesButton').prop('disabled', false);
-        $('#clearButton').prop('disabled', false);
+        // $('#submitButton').prop('disabled', false);
+        // $('#skipButton').prop('disabled', false);
+        // $('#changeTilesButton').prop('disabled', false);
+        // $('#clearButton').prop('disabled', false);
 
       }
       if (this.playerTurn != this.playerIndex) {
@@ -901,7 +900,7 @@ export default class Game {
         )
         .join("")}
       </div>
-      <div class="pname">${this.playerTurn != this.playerIndex ? "Vänta på din tur... &#8987;" : "Din tur att spela !"}</div>
+      <div class="pname">${this.playerTurn != this.playerIndex ? "Var snäll och vänta på din tur... &#8987;" : "Din tur att spela !"}</div>
       `;
   }
 
