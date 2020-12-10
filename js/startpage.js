@@ -19,14 +19,14 @@ export default class StartPage {
     </div>
     </div>`);
 
-     /*$('body').css({
-       'background-color': '#0e2b3c',
-       'background-image': 'url(scrabble_startpage.png)',
-       'background-repeat': 'no-repeat',
-       'background-position': 'center',
-       'background-size': '1020px',
-       'background-attachment': 'fixed'
-     });*/
+    /*$('body').css({
+      'background-color': '#0e2b3c',
+      'background-image': 'url(scrabble_startpage.png)',
+      'background-repeat': 'no-repeat',
+      'background-position': 'center',
+      'background-size': '1020px',
+      'background-attachment': 'fixed'
+    });*/
 
     this.addStartPageClickEvents();
   }
@@ -37,7 +37,7 @@ export default class StartPage {
 
     $('.newgame').click(() => {
 
-      $('.btn-container').html('<input type="text" placeholder="Namn:" minlength="2" maxlength="15" class="entername" required></input>');
+      $('.btn-container').html('<input type="text" placeholder="Namn:" minlength="2" maxlength="15" class="entername" required style="width: 400px" ></input>');
       // When user types name and presses enter(13), players name gets stored in playerName
       /*$(".entername").keyup(function (e) {
         if (e.keyCode === 13) {
@@ -78,13 +78,13 @@ export default class StartPage {
   unclickingButton() {
     let that = this;
     if (this.renderStartPageButtons) {
-          $(document).mouseup(function (e) {
-      let container = $(".btn-container");
-      // if clicking outside button container, re-renders startpage as is was
-      if (!container.is(e.target) && container.has(e.target).length === 0) {
-        that.render();
-      }
-    });
+      $(document).mouseup(function (e) {
+        let container = $(".btn-container");
+        // if clicking outside button container, re-renders startpage as is was
+        if (!container.is(e.target) && container.has(e.target).length === 0) {
+          that.render();
+        }
+      });
     }
   }
 }
