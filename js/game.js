@@ -242,10 +242,11 @@ export default class Game {
               that.board.putTiles.push(that.board.putTilesThisRound.shift());
             }
             that.renderScoreBoard();
-            that.renderStand();
+
             that.board.render();
             // We change the player turn to the next player
             that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
+            that.renderStand();
             that.store.playerTurn = that.playerTurn;
             that.renderDisableEventListeners();
             //that.disableButtons();
@@ -289,10 +290,14 @@ export default class Game {
 
       if (that.store.skipCounter > 4) {
         that.renderGameOver();
+        return;
       }
-      //that.renderStand();
+
       that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
+      that.renderStand();
       that.store.playerTurn = that.playerTurn;
+
+
       that.renderDisableEventListeners();
       //that.board.render();
       //that.renderStand();
@@ -355,8 +360,9 @@ export default class Game {
           that.player.stand.push(that.bag.tiles.pop());
         }
         // We change the player turn to the next player
-        that.renderStand();
+
         that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
+        that.renderStand();
         that.store.playerTurn = that.playerTurn;
         that.renderDisableEventListeners();
         that.store.bag.tiles = that.bag.tiles;
