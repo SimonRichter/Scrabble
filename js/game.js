@@ -16,6 +16,8 @@ export default class Game {
   }
 
   async startWithStoreParameters() {
+    this.localStore = Store.getLocalStore();
+    this.localStore.leaderBoard = this.localStore.leaderBoard || [];
     this.board = new Board();
     this.store.board = this.store.board || {};
     this.board.matrix = await this.store.board.matrix;
@@ -27,13 +29,13 @@ export default class Game {
     this.player = new Player(this, this.store, this.playerName); //Are the players added correctly?
     this.store.scores = await this.store.scores || [];
     await this.store.scores.push(this.player.score);
-    this.localStore = await Store.getLocalStore();
-    this.localStore.leaderBoard = this.localStore.leaderBoard || [];
+    //console.log(this.localStore.leaderBoard)
+
     this.store.gameOver = false;
     this.waitForNameToBeSaved = false;
     this.board.render();
     this.renderMenu();
-    //this.renderStand();
+    this.renderStand();
     this.renderTilesLeft();
     // add click event listener.
     // Since the menu isn't re-rendered we only need to add the click event listener once.
@@ -44,10 +46,12 @@ export default class Game {
   }
 
   async start() {
+    this.localStore = Store.getLocalStore();
+    this.localStore.leaderBoard = this.localStore.leaderBoard || [];
+
     this.board = new Board();
     this.board.createBoard();
-    this.localStore = await Store.getLocalStore();
-    this.localStore.leaderBoard = this.localStore.leaderBoard || [];
+
     await this.tilesFromFile();
     await this.connectToStore();
     let s = this.store;
@@ -93,25 +97,6 @@ export default class Game {
     this.renderScoreBoard();
     this.renderHelp();
   }
-
-  //not working at the moment. keep looking  a way to have the rigth turn for each player.
-  /*disableButtons() {
-    let s = this.store;
-    if (s.playerTurn === 0) {
-      $('#submitButton').prop('disabled', false);
-      $('#skipButton').prop('disabled', false);
-      $('#changeTilesButton').prop('disabled', false);
-
-
-    }
-    else if (s.playerTurn === 1) {
-      $('#submitButton').prop('disabled', true);
-      $('#skipButton').prop('disabled', true);
-      $('#changeTilesButton').prop('disabled', true);
-
-
-    }
-  }*/
 
   async tilesFromFile() {
     this.bag = new Bag();
@@ -211,7 +196,7 @@ export default class Game {
     let t = document.getElementsByClassName("tilesLeft")[0];
     // Create <p> element and append to div
     let p = document.createElement("p");
-    let text = document.createTextNode("Brickor kvar: " + this.bag.tiles.length);
+    let text = document.createTextNode(this.bag.tiles.length + "  brickor kvar");
     p.appendChild(text);
     t.appendChild(p);
   }
@@ -302,10 +287,10 @@ export default class Game {
 
       that.store.skipCounter++;
 
-      if (that.store.skipCounter > 3) {
+      if (that.store.skipCounter > 4) {
         that.renderGameOver();
       }
-      that.renderStand();
+      //that.renderStand();
       that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
       that.store.playerTurn = that.playerTurn;
       that.renderDisableEventListeners();
@@ -663,15 +648,24 @@ export default class Game {
   }
 
   renderGameOver() {
-    for (let score of this.store.scores) {
-      this.localStore.leaderBoard.push(score);
-    }
+    // for (let score of this.store.scores) {
+    //   this.localStore.leaderBoard.push(score);
+    // }
+    // console.log("leader lenght?", this.localStore.leaderBoard.length)
+    // let topTen = (this.localStore.leaderBoard.sort((a, b) => { return b - a }));
+    // console.log(topTen.splice(0, 10))
+    // let $leaderBoard = $('<div class="leaderBoard"><h2>Top 10 Scores</h2></div>').appendTo("body");
+
+    // for (let bigPoints of topTen) {
+    // $leaderBoard.append(`<h1 class="topTen">${bigPoints}</h1 >`)
+    // }
     // Creates the Game Over div that covers whole page
     let $gameover = $('<div class="game-over"/>').appendTo("body");
+
     // Creates the smaller box with Game Over! text
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
-    console.log(this.localStore.leaderBoard.sort((a, b) => { return b - a }));
+
     this.store.gameOver = true;
   }
 
@@ -683,8 +677,7 @@ export default class Game {
 
     for (let i = 0; i < this.store.playerNames.length; i++) {
       $scoreboard.append(`<div> 
-      <h3>${this.store.playerNames[i]}</h3>
-      <p>${this.store.scores[i]}</p>
+      <h3><span class="numberPlayer">${i + 1}. </span class="playerNames"> ${this.store.playerNames[i]} <span class="scorePlayer">${this.store.scores[i]}</span></h3>
       </div>`)
     }
   }
@@ -696,13 +689,13 @@ export default class Game {
     let $msg = $('<div class="message"/>').appendTo("body");
 
     // Select message (argument), append to message div and display it
-    if (m === 1) { $msg.append(`<div>Inga brickor lagda!</div>`); }
+    if (m === 1) { $msg.append(`<div>&#128683; Inga brickor lagda! &#128683;</div>`); }
     if (m === 2) { $msg.append(`<div>Klicka på de brickor i hållaren du vill byta ut.</div>`); }
-    if (m === 3) { $msg.append(`<div>Inte tillräckligt med brickor i påsen för att kunna byta.</div>`); }
-    if (m === 4) { $msg.append(`<div>Första rundan måste en bricka spelas i mittenrutan</div>`); }
+    if (m === 3) { $msg.append(`<div>&#128683; Inte tillräckligt med brickor i påsen för att kunna byta. &#128683;</div>`); }
+    if (m === 4) { $msg.append(`<div>&#128683; Första rundan måste en bricka spelas i mittenrutan &#128683;</div>`); }
     if (m === 5) { $msg.append(`<div>&#9940 "` + w + `" är inte  ett giltigt  ord  &#9940</div>`); }
-    if (m === 6) { $msg.append(`<div>Brickor måste hänga samman med tidigare lagda brickor</div>`); }
-    if (m === 7) { $msg.append(`<div>Brickor du lägger måste hänga ihop</div>`); }
+    if (m === 6) { $msg.append(`<div>&#128683; Brickor måste hänga samman med tidigare lagda brickor &#128683;</div>`); }
+    if (m === 7) { $msg.append(`<div>&#128683; Brickor du lägger måste hänga ihop &#128683;</div>`); }
     $(".message").fadeIn(0);
 
 
@@ -773,7 +766,7 @@ export default class Game {
         that.playerName = $('.entername').val();
         that.startPage.renderStartPageButtons = false;
         that.key = await Store.createNetworkKey();
-        $('.entername').val("Nätverksnyckel: " + that.key);
+        $('.entername').val("Ge den här nyckeln till din vän: " + that.key);
         //$('.start').append('<p>get key: ' + this.key + '</p>');
         //$('.newgame').prop('disabled', true);
         that.willCreateGame = false;
@@ -853,14 +846,11 @@ export default class Game {
         $('#submitButton').prop('disabled', false);
         $('#skipButton').prop('disabled', false);
         $('#changeTilesButton').prop('disabled', false);
+        $('#clearButton').prop('disabled', false);
+
       }
       if (this.playerTurn != this.playerIndex) {
-        $('#submitButton').prop('disabled', true);
-        $('#skipButton').prop('disabled', true);
-        $('#changeTilesButton').prop('disabled', true);
-        $(".stand .tile").off();
-        $(".tilePlacedThisRound").off();
-        $("body").off();
+        this.renderDisableEventListeners();
       }
     }
     if (this.store.gameOver === true && !(this.playerIndex === this.store.playerTurn)) {
@@ -899,7 +889,7 @@ export default class Game {
         )
         .join("")}
       </div>
-      <div class="pname">${this.player.name}</div>
+      <div class="pname">${this.playerTurn != this.playerIndex ? "Vänta på din tur... &#8987;" : "Din tur att spela !"}</div>
       `;
   }
 
