@@ -20,10 +20,9 @@ body {
   margin-left: 25%;
   margin-top: 2vh;
   */
-  font-family: "Oswald", sans-serif;
-  background-color: rgb(133, 101, 72);
+ font-family: "Oswald", sans-serif;
   background: rgb(0,8,19);
-  background: linear-gradient(0deg, rgba(0,8,19,1) 0%, rgb(16, 76, 100) 100%);
+  background: linear-gradient(0deg, rgba(0,8,19,1) 0%, rgb(39, 148, 211) 100%);
   height: 100%;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -31,6 +30,7 @@ body {
 
 /* ----------------- BOARD ---------------- */
 .board {
+  position: absolute;
   border: 5px solid #000000;
   border-radius: 5px;
   margin-top: -7px;
@@ -75,9 +75,12 @@ body {
 
 /* ----------------- STAND ---------------- */
 .stand {
-  background-color: rgb(54, 8, 8);
+  
+  background: transparent;
   border-radius: 3px;
   padding: 0.5vh;
+ 
+
   
 }
 
@@ -99,18 +102,19 @@ body {
   position: absolute; 
   /* top: 95.2vh;
   left: 42vh; */
-  top: 92.4vh;
-  left: 41.5vh;
+  bottom:2.1vh;
+  left: 28.7vw;
 }
 .pname {
   position: absolute;
-  font-size: 2.2vh;
+  font-size: 30px;
   color: white;
   /*  left: -37vh;
   top: 1.3vh; */
-  left:-4vh;
-  top: 1.3vh;
-  margin-top: 30px;
+  left:70vh;
+  top: -100px;
+  width: 150px;
+
   z-index: 2;
 }
 
@@ -130,6 +134,7 @@ body {
   /* margin: 0 1px; */
   margin: 0 1px;
   font-size: 3.5vh;
+   z-index: 9002;
 }
 
 .tilePlacedThisRound {
@@ -164,40 +169,46 @@ body {
 /* ----------------- MENU/BUTTONS/TEXT ---------------- */
 .menu {
   position: absolute;
-  /* top: 91.5vh; */
+
+ 
+  height: 70px;
   top: 92vh;
   left: 1.5vh;
-  text-align: left;
   background-color: rgb(90, 40, 40);
+  padding-top: 20px;
+  width: 90vh;
+  margin-top: -10px;
+  padding-top: 10px;
+  height: 80px;
+  text-align: center;
   background: rgb(59,19,14);
-  background: linear-gradient(180deg, rgba(59,19,14,1) 0%, rgba(125,30,30,1) 50%, rgba(50,9,9,1) 100%);  
-  border: none;
-  padding: 1.6vmin 0vh 0vh 1.5vmin;
-  /* padding-top: 2vh; */
-  width: 91vh;
-  height: 7.5vh;
-  border-radius: 0.5vmin;
+  background: linear-gradient(180deg, rgb(207, 119, 90) 0%, rgb(128, 62, 36) 40%, rgba(50,9,9,1) 100%);  
+  border: none; 
+  border-radius: 2px;
+  margin-left:  14.9%;
+  
 }
 
 .btn {
-  width: 9vh; 
-  background: rgb(75,24,17);
-  background: linear-gradient(180deg, rgba(75,24,17,1) 0%, rgba(186,63,26,1) 0%, rgba(173,0,0,1) 100%);         
-  background-color: rgb(143, 50, 50);
+ display: inline-block;
+  cursor: pointer;
+  width: 100px;
+  height: 48px; 
+  margin-right: 10px;
+  margin-left: 9px;
   border-color: rgb(48, 40, 40);
   border: groove;
-  border-width: 0.2vmin;
-  border-radius: 1.0vmin;
-  margin-right: 0.5vh;
-  padding: 0.66vh 1vh;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 2vmin;
+  border-width: 1px;
+  border-radius: 3px;
+  font-family: 'Shadows Into Light Two', cursive;
+  font-size: 24px;
   font-weight: 600;
-  line-height: 2.5vh;
+  font-style: italic;
+  letter-spacing: 0.07em;
   text-align: center;
-  text-shadow: 2px 2px 8px #800000;
-  cursor: pointer;
-  display: inline-block;
+  text-shadow: 2px 2px 2px #380000;
+  color: #d3cfcf;
+  background-color: rgba(138, 86, 86, 0.445);
 }
 
 .skip {
@@ -207,21 +218,21 @@ body {
 
 .skip:hover {
   /* background: #a74c4c; */
-  color: rgba(0, 0, 0, 0.445);
+  border-color: rgba(0, 0, 0, 0.445);
 }
 
 .tilesLeft {
   position: absolute;
-  top: 2vh;
-  left: 96vh;
-  text-align: left;
-  font-size: 2vmin;
-  line-height: 0vh;
-  background-color: rgb(94, 34, 34);
-  color: rgb(218, 176, 176);
-  border: none;
-  padding: 0vh 1vh 0vh 1vh;
-  border-radius: 5px;
+  top: 17%;
+  left: 67%;
+  width: 150px;
+  line-height: 6px;
+  text-align: center;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  background-color: rgba(255, 255, 255, 0.212);
+  border-radius: 8px;
 }
 
 .tilesLeft > p {
@@ -232,7 +243,7 @@ body {
   background-color: rgba(0, 0, 0, 0.486);
   display: none;
   position: fixed;
-  z-index: 4;
+  z-index: 9003;
   width: 100%;
   height: 100%;
   top: 0;
@@ -253,31 +264,58 @@ body {
   font-size: 10vw;
   background-color: rgb(44, 44, 44);
 }
+.leaderBoard{
+  position: absolute;
+  font-size: 30px;
+}
+.topTen{
+  color: red;
+  font-size: 100px;
+}
 
 .scoreboard {
   float: left;
-  background-color: rgb(255, 249, 238);
-  font-size: 18px;
+  background-color: rgba(255, 255, 255, 0.212);
+  font-size: 20px;
+  letter-spacing: 0.03em;
   text-align: center;
   position: absolute;
-  width: 30vw;
-  height: 10vw;
-  border: 5px solid #000000;
-  border-radius: 5px;
-  top: 8vw;
+  width: 300px;
+  height: 230px;
+  border: 1px solid #000000;
+  border-radius: 2px;
+  top: 1px;
   right: 8vw;
+  margin-right: 14%;
 }
 
-.scoreboard h2 {
-  margin: 5px 0 5px 0;
-  border-bottom: solid rgb(0, 0, 0);
+.scoreboard>h2 {
+
+  margin-top: 0;
+  left: 0;
+  right: 0;
+  color: rgb(235, 235, 235);
+  font-style: italic;
+  font-size: 30px;
+  font-weight: 700;
+  text-shadow: 2px 2px 2px #380000;
+  padding-bottom: 4px;
+  background: linear-gradient(180deg, rgb(207, 119, 90) 0%, rgb(114, 55, 55) 88%, rgb(77, 14, 14) 100%); 
+}
+.scoreboard h3 {
+  margin-top: -15px;
+  text-align: left;
+}
+.numberPlayer{
+  margin-left: 10px;
+  font-size: 17px;
+}
+.scorePlayer{
+  padding-left: 100px;
+
+  margin-left: 10px;
 }
 
-.scoreboard > div {
-  display: inline-block;
-  margin: 0 25px 0 10px;
-  line-height: 10px;
-}
 
 /* ----------------- START PAGE ---------------- */
 
@@ -357,8 +395,7 @@ body {
   position: absolute;
   width: 50%;
   top: 65vh;
-  left: 0vh; 
-  color: rgb(0, 182, 24);
+  left: 11%; 
   text-align: center;
   font-size: 1.8vw;
   color: #ffffff;
@@ -392,25 +429,45 @@ body {
 /*radom div for test purposes (test points in real time)*/
 .tpirt{
   float: left;
-  color: rgb(9, 9, 95);
-  background-color: rgb(255, 249, 238);
+  color: rgb(0, 0, 0);
+   background-color: rgba(255, 255, 255, 0.363);
   font-size: 25px;
   text-align: center;
   position: absolute;
-  width: 15vw;
-  height: 10vw;
-  border: 2px solid #000000;
-  border-radius: 5px;
-  top: 20vw;
-  right: 15vw;
+  width: 300px;
+  height: 100px;
+  border: 1px solid #000000;
+  border-radius: 2px;
+  top: calc(1px + 11.2vw);
+  right: 8vw;
+  margin-right: 14%;
+  
+}
+.tpirt>h2{
+  margin-top: 0;
+  left: 0;
+  right: 0;
+  color: rgb(235, 235, 235);
+  font-style: italic;
+  font-size: 24px;
+  font-weight: 700;
+  text-shadow: 2px 2px 2px #380000;
+  padding-bottom: 4px;
+  background: linear-gradient(180deg, rgb(207, 119, 90) 0%, rgb(114, 55, 55) 88%, rgb(77, 14, 14) 100%);
+
 }
 .tpirt > h3 {
-  color: rgb(12, 105, 17);
-  margin-top: 8px;
+
+  text-align: center;
+  font-style: italic;
+  font-weight: 500;
+  background-color: rgba(255, 255, 255, 0);
+  border-radius: 8px;
+  margin-top: -15px;
 }
 
 .redBorder {
-  border: 2px solid #ff0000;
+  border: 5px solid #ff0000;
   border-radius: 5px;
 }
 
@@ -445,6 +502,7 @@ body {
   position: absolute;
   text-decoration: none ;
   color: beige;
+  z-index: 9002;
 }
 
 .help :hover .spelregler {
@@ -464,33 +522,71 @@ body {
 }
  
 .wordsOnScreen{
-  font-family: monospace;
-   float: left;
-  color: rgb(9, 9, 95);
-  background-color: rgb(255, 249, 238);
+ 
+  z-index: 9001;
+  float: left;
   font-size: 20px;
-  text-align: center;
   position: absolute;
   width: 8vw;
-  height: 10vw;
-  border: 2px solid #000000;
   border-radius: 5px;
-  top: 30vw;
-  right: 45vw;
-}
+   top: calc(16.1vw);
+  right: 8vw;
+   margin-right: 20.6vw;
+   
+ 
 
- .wordsOnScreen >ul>li{  
-   font-size: 18px;
-   color: green;
-   text-align: right;
+}
+.wordsTitle{
+
+ 
+   border-radius: 2px;
+  border: 1px solid #000000;  
+  width: 300px;
+  font-style: italic;
+  text-align: center;
+  letter-spacing: 0.04em;
+  background-color: rgb(42, 99, 146);
+  z-index: 9001;
+  position: fixed;
+  font-size: 25px;
+  font-weight: 600;
+  text-shadow: 2px 2px 2px #380000;
+  background: linear-gradient(180deg, rgb(207, 119, 90) 0%, rgb(114, 55, 55) 88%, rgb(77, 14, 14) 100%);
+  color: rgb(235, 235, 235);
+  
+
+
+}
+.box{
+  
+   
+  margin-top: 15px;
+  position: absolute;
+  width: 300px; 
+  height: 200px;
+  overflow-x: hidden;
+ 
+  
+}
+ .box >ul>li{
+   font-family: monospace;
+   font-size:20px;
+  list-style-type: none;
+  margin-left: -38px;
+  background-color: rgba(255, 255, 255, 0.212);
+  font-weight: bold;
    }
+
+
+   
 
 /*-------------------tooltips  words dictionary ------*/
 [data-tooltip] {
-    display: inline-block;
+   
     position: relative;
     cursor: help;
     padding: 4px;
+
 }
 /* Tooltip styling */
 [data-tooltip]:before {
@@ -502,41 +598,44 @@ body {
     padding: 4px 8px;
     font-size: 14px;
     line-height: 1.4;
-    min-width: 150px;
+    min-width: 100px;
     text-align: center;
     border-radius: 4px;
+   
+   
 }
 
 /* Dynamic vertical centering */
-[data-tooltip-position="right"]:before,
-[data-tooltip-position="left"]:before {
+[data-tooltip-position="right"]:before
+ {
     top: 50%;
     -ms-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
+ 
 }
 
 [data-tooltip-position="right"]:before {
-    left: 100%;
+    left: 20%;
     margin-left: 6px;
 }
 
 /* Tooltip arrow styling/placement */
 [data-tooltip]:after {
     content: '';
-    display: none;
     position: absolute;
+    display: none;
     width: 0;
     height: 0;
     border-color: transparent;
     border-style: solid;
+   
 }
 /* Dynamic horizontal centering for the tooltip */
 
 /* Dynamic vertical centering for the tooltip */
-[data-tooltip-position="right"]:after,
-[data-tooltip-position="left"]:after {
+[data-tooltip-position="right"]:after{
     top: 50%;
     margin-top: -6px;
 }
@@ -547,18 +646,13 @@ body {
     border-right-color: #000;
 }
 
-[data-tooltip-position="left"]:after {
-    right: 100%;
-    border-width: 6px 0 6px 6px;
-    border-left-color: #000;
-}
+
 /* Show the tooltip when hovering */
 [data-tooltip]:hover:before,
 [data-tooltip]:hover:after {
     display: block;
-    z-index: 50;
+    z-index: 9003;
 }
-
 .disabler {
   top: 0;
   left: 0;
@@ -567,4 +661,12 @@ body {
   width: 100%;
   height: 100%;
   position: fixed;
+}
+#submitButton{
+   color: #69e06f;
+  margin-left: 23vw;
+
+}
+#submitButton:hover {
+  border-color: rgba(0, 0, 0, 0.445);
 }
