@@ -225,7 +225,7 @@ body {
 .tilesLeft {
   position: absolute;
   top: 17%;
-  left: 67%;
+  right: 20vw;
   width: 150px;
   line-height: 6px;
   text-align: center;
@@ -287,7 +287,7 @@ body {
   border-radius: 2px;
   top: 1px;
   right: 8vw;
-  margin-right: 14%;
+  margin-right: 8vw;
 }
 
 .scoreboard>h2 {
@@ -439,9 +439,9 @@ body {
   height: 100px;
   border: 1px solid #000000;
   border-radius: 2px;
-  top: calc(1px + 11.2vw);
+  top: calc(1px + 15vw);
   right: 8vw;
-  margin-right: 14%;
+  margin-right: 8vw;
   
 }
 .tpirt>h2{
@@ -544,9 +544,9 @@ body {
   position: absolute;
   width: 8vw;
   border-radius: 5px;
-   top: calc(16.1vw);
+   top: 45vh;
   right: 8vw;
-   margin-right: 20.6vw;
+   margin-right: 14.5vw;
    
  
 
