@@ -30,17 +30,16 @@ export default class StartPage {
 
       $('.btn-container').html('<input type="text" placeholder="Namn:" minlength="2" maxlength="15" class="entername" id="newGameInputField" spellcheck="false" required></input>');
       // When user types name and presses enter(13), players name gets stored in playerName
-      /*$(".entername").keyup(function (e) {
+      $(".entername").keyup(function (e) {
         if (e.keyCode === 13) {
           that.playerName = $(this).val();
           // ENTER FUNCTION THAT STARTS GAME HERE (maybe game constructor can take in player name as argument)
         }
-      });*/
+      });
 
     })
 
     $('.joingame').click(() => {
-      //keyCodeCheckLoop = true;
       $('.btn-container').html('<input type="text" placeholder="Namn:" minlength="2" maxlength="15" class="enterkey" spellcheck="false" required></input>');
       // When user types name and presses enter (13), players name gets stored in playerName
       $('.enterkey').keyup(function (e) {
@@ -48,13 +47,13 @@ export default class StartPage {
           that.playerName = $(this).val();
           $('.btn-container').html('<input type="text" placeholder="Kodexempel: UTP548" minlength="6" maxlength="6" class="startGame" spellcheck="false" required></input>');
           // ...then, player types in code which gets stored in playerCode
-          /*$('.enterkey').keyup(function (e) {
+          $('.enterkey').keyup(function (e) {
             if (e.keyCode === 13) {
               that.playerCode = $(this).val().toUpperCase();
               return;
               // ENTER FUNCTION THAT STARTS GAME WITH CODE HERE
             }
-          });*/
+          });
 
         }
       });
