@@ -19,15 +19,6 @@ export default class StartPage {
     </div>
     </div>`);
 
-    /*$('body').css({
-      'background-color': '#0e2b3c',
-      'background-image': 'url(scrabble_startpage.png)',
-      'background-repeat': 'no-repeat',
-      'background-position': 'center',
-      'background-size': '1020px',
-      'background-attachment': 'fixed'
-    });*/
-
     this.addStartPageClickEvents();
   }
 
