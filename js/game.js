@@ -10,7 +10,6 @@ import StartPage from './startpage.js';
 export default class Game {
 
   constructor() {
-    //this.renderStart();
     this.startPage = new StartPage();
     this.addEventListeners();
   }
@@ -24,24 +23,11 @@ export default class Game {
     this.bag = new Bag();
     this.bag.tiles = await this.store.bag.tiles;
     this.playerTurn = await this.store.playerTurn;
-    //this.store.players = this.store.players || [];
-    //await this.store.players.push(new Player(this.store, this.playerName));
     this.player = new Player(this, this.store, this.playerName); //Are the players added correctly?
     this.store.scores = await this.store.scores || [];
     await this.store.scores.push(this.player.score);
-    //console.log(this.localStore.leaderBoard)
-
     this.store.gameOver = false;
     this.waitForNameToBeSaved = false;
-    this.board.render();
-    this.renderMenu();
-    this.renderStand();
-    this.renderTilesLeft();
-    // add click event listener.
-    // Since the menu isn't re-rendered we only need to add the click event listener once.
-    //this.addClickEvents();
-    this.renderScoreBoard();
-    this.renderHelp();
     this.listenForNetworkChanges();
   }
 
@@ -81,21 +67,7 @@ export default class Game {
     this.store.playerTurn = await this.playerTurn;
     this.store.skipCounter = 0;
     this.store.gameOver = false;
-    //this.store.players = this.store.players || [];
-    //await this.store.players.push(this.player);
     this.waitForNameToBeSaved = false;
-    $('.startpage').remove()
-    //$('.start').remove()
-
-    // render the menu + board + players
-    this.board.render();
-    this.renderMenu();
-    this.renderStand();
-    this.renderTilesLeft();
-    // add click event listener.
-    // Since the menu isn't re-rendered we only need to add the click event listener once.
-    this.renderScoreBoard();
-    this.renderHelp();
   }
 
   async tilesFromFile() {
@@ -127,16 +99,15 @@ export default class Game {
 
   renderMenu() {
     // Create menu div
+    $('.menu').remove();
     let div = document.createElement("div");
     div.className = "menu";
     document.body.appendChild(div);
-    //document.getElementsByClassName("board").appendChild(div);
-
 
     // Create buttons and append to menu div
     let menu = document.getElementsByClassName("menu")[0];
 
-    let ångra = document.createElement("button");      //New clear button, code is on row 296.
+    let ångra = document.createElement("button");
     ångra.setAttribute("class", "btn skip");
     ångra.setAttribute("id", "clearButton");
     ångra.textContent = "Ångra";
@@ -162,17 +133,6 @@ export default class Game {
     byt.textContent = "Byt";
     menu.appendChild(byt);
 
-
-
-
-
-    /*
-    let mix = document.createElement("button");
-    mix.setAttribute("class", "btn skip");
-    mix.setAttribute("id", "shuffle");
-    mix.textContent = "Shuffle";
-    menu.appendChild(mix);
-    */
   }
 
   renderStand() {
@@ -206,7 +166,7 @@ export default class Game {
 
   addClickEvents() {
     let that = this;
-    $("#submitButton").click(function () {
+    $("body").on("click", "#submitButton", (e) => {
       that.board.falseCounter = 1;    // falseCounter resets to 1 (false) at the begging of the round
 
       if (that.board.putTilesThisRound.length) { //if there are tiles on the board
@@ -220,6 +180,7 @@ export default class Game {
           if (that.board.checkMiddleSquare(that) && that.board.checkXYAxisHM(that) && that.board.nextToPutTilesHM(that) && that.board.falseCounter === 0) {
             //that.board.uniqueWordsPlayed(that.board.wordsPlayed); // Updates the list of unique words played in the game.
             that.store.skipCounter = 0; //Skip RESETS when a correct word is written.
+            $('.menu').addClass('gray');
 
             // we add the points counted and add them to the Players Score.
             that.store.scores[that.playerTurn] += that.board.countPointsXAxis() + that.board.countPointsYAxis() + that.board.sevenTiles();
@@ -267,12 +228,11 @@ export default class Game {
         });
       }
       else
-        //alert("No tiles played. Click on 'Passa' if you give up this round."); // if player clicks on "spela" without placeing tiles
         that.renderMessage(1);
 
     });
 
-    $("#skipButton").click(function () {
+    $("body").on("click", "#skipButton", (e) => {
       if (that.board.putTilesThisRound.length) {
 
         for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
@@ -287,32 +247,26 @@ export default class Game {
         }
         that.store.board.putTilesThisRound = that.board.putTilesThisRound;
       }
-
-      if (that.store.skipCounter > 4) {
+      $('.menu').addClass('gray');
+      that.store.skipCounter++;
+            if (that.store.skipCounter > 3) {
         that.renderGameOver();
         return;
       }
-      that.store.skipCounter++;
-      console.log("skipc ounter before ???:", that.store.skipCounter, "that.playerTurn", that.playerTurn)
       that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
-      console.log("skipc ounter after ???:", that.store.skipCounter, "that.playerTurn", that.playerTurn)
       that.renderStand();
       that.store.playerTurn = that.playerTurn;
+      that.board.render();
       that.renderDisableEventListeners();
-      //that.board.render();
-      //that.renderStand();
-      //that.renderTilesLeft();
 
     });
 
 
 
     // Button to shuffle the tiles in the rack. (test)
-    $("#shuffle").click(function () {
-      that.player.stand.sort(() => Math.random() - 0.5) // this random is ok for short arrays.
-      //that.renderStand();
+    $("body").on("click", "#shuffle", (e) => {
+      that.player.stand.sort(() => Math.random() - 0.5);
     });
-
 
     // Click event for toggling a border on tiles in the stand
     $("body").on("click", ".stand .tile", (e) => {
@@ -324,23 +278,24 @@ export default class Game {
     $("body").on("click", "#changeTilesButton", function () {
       if ($(".redBorder").length === 0) {
         that.renderMessage(2);
-        ///alert("Du måste choosea brickor i din hållare genom att trycka på dem för att kunna byta ut dem.");
         return;
       }
       // We make sure there are enough tiles in the bag to be switched out
       if (that.bag.tiles.length >= $(".redBorder").length) {
         // If tiles have been put on the board they go back to the players stand
         if (that.board.putTilesThisRound.length > 0) {
-          for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
-            let squareIndex = that.board.putTilesThisRound[i].boardIndex;
-            let y = Math.floor(squareIndex / 15);
-            let x = squareIndex % 15;
-            delete that.board.matrix[y][x].tile;
-            that.changeBackEmptyTile(that.board.matrix[yStart][xStart].tile);
-            that.player.stand.push(that.board.putTilesThisRound[i]);
-            that.board.putTilesThisRound.splice(i, 1);
-          }
-          //that.board.render()          
+
+        for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
+
+          let squareIndex = that.board.putTilesThisRound[i].boardIndex;
+          let y = Math.floor(squareIndex / 15);
+          let x = squareIndex % 15;
+          delete that.board.matrix[y][x].tile;
+          that.changeBackEmptyTile(that.board.putTilesThisRound[i]);
+          that.player.stand.push(that.board.putTilesThisRound[i]);
+          that.board.putTilesThisRound.splice(i, 1);
+
+        }
         }
 
         for (let i = $(".redBorder").length - 1; i >= 0; i--) {
@@ -361,7 +316,7 @@ export default class Game {
           that.player.stand.push(that.bag.tiles.pop());
         }
         // We change the player turn to the next player
-
+        $('.menu').addClass('gray');
         that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
         that.renderStand();
         that.store.playerTurn = that.playerTurn;
@@ -369,13 +324,10 @@ export default class Game {
         that.store.bag.tiles = that.bag.tiles;
       } else {
         that.renderMessage(3);
-        //alert("Det finns inte tillräckligt med brickor i påsen för att kunna byta.")
       }
     });
 
-
-    $("#clearButton").click(function () {
-
+    $("body").on("click", "#clearButton", (e) => {
       if (that.board.putTilesThisRound.length) {
 
         for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
@@ -386,21 +338,13 @@ export default class Game {
           delete that.board.matrix[y][x].tile;
           that.changeBackEmptyTile(that.board.putTilesThisRound[i]);
           that.player.stand.push(that.board.putTilesThisRound[i]);
-
           that.board.putTilesThisRound.splice(i, 1);
 
         }
       }
-
       that.board.render();
       that.renderStand();
-      // that.renderTilesLeft();
-
     });
-
-
-
-
 
     $("body").on("click", ".board > div > div", (e) => {
       let y;
@@ -485,8 +429,6 @@ export default class Game {
           while (pt.length > 7) { pt.splice(pt[indexOfTile > newIndex ? 'indexOf' : 'lastIndexOf'](' '), 1); }
           this.renderStand();
         }
-
-
 
         // get the dropZone square -
         // if none re-render the stand to put back the dragged tile and return
@@ -620,8 +562,6 @@ export default class Game {
         // Remove dragging and hover class and re-render board and stand
         let $tile = $(e.currentTarget);
         $tile.removeClass("dragging").removeClass("hover");
-        //this.store.board.matrix = this.board.matrix;
-        //this.store.board.putTilesThisRound = this.board.putTilesThisRound;
         this.board.render();
         this.renderStand();
       });
@@ -726,18 +666,6 @@ export default class Game {
 
   }
 
-
-
-  /* renderStart() {
-
-    $('body').html(/*html*//*`
-<div class="start">
-<input type="text" name="playerName" placeholder="Namn" required>
-</div>
-`);
-}
-*/
-
   addEventListeners() {
     let that = this;
 
@@ -754,8 +682,6 @@ export default class Game {
 
       that.key = await Store.createNetworkKey();
       $('.entername').html("Ge den här nyckeln till din vän: <b>" + that.key + "</b>");
-      //$('.start').append('<p>get key: ' + this.key + '</p>');
-      //$('.newgame').prop('disabled', true);
       that.willCreateGame = false;
       that.waitForNameToBeSaved = true;
       await that.connectToStore();
@@ -785,12 +711,11 @@ export default class Game {
         s.playerNames.push(that.playerName);
         // Which player am I? (0 or 1)
         that.playerIndex = s.playerNames.length - 1;
+        $("body").off();
       }
     })
 
     $('body').on('click', '.joingame', () => {
-
-      //if (!getName()) { return; }
 
       if ($('.startGame').length === 6) {
         that.playerName = that.startPage.playerName;
@@ -810,13 +735,10 @@ export default class Game {
           that.willCreateGame = true;
           that.waitForNameToBeSaved = true;
           that.start();
+          $("body").off();
         }
       }
     });
-
-    //  {doest work properly
-    //     that.startPage.unclickingButton();
-    //   }
 
   }
 
@@ -830,7 +752,6 @@ export default class Game {
     if (this.store.playerNames) {
       if (this.store.playerNames.length > 1 && this.willCreateGame === false) {
         $('.startpage').remove();
-        //$('.start').remove();
         this.startWithStoreParameters();
         this.willCreateGame = true;
       }
@@ -838,30 +759,30 @@ export default class Game {
     // this method is called each time someone else
     // changes this.store
     if (this.waitForNameToBeSaved === false) {
+      $('.startpage').remove();
       this.board.matrix = this.store.board.matrix;
       this.board.putTiles = this.store.board.putTiles;
       this.board.putTilesThisRound = this.store.board.putTilesThisRound;
       this.board.wordsPlayed = this.store.board.wordsPlayed;
       this.board.firstRound = this.store.firstRound;
       this.bag.tiles = this.store.bag.tiles;
-      // this.player = this.store.players;
       this.scores = this.store.scores; // -- save the score everytime "Spela" is pressed. (TODO)
       this.playerTurn = this.store.playerTurn;
       this.board.render();
+      this.renderMenu();
+      this.renderStand();
       this.renderTilesLeft();
       this.renderScoreBoard();
+      this.renderHelp();
       if (this.playerTurn === this.playerIndex) {
+        $('.menu').removeClass('gray');
         $('.disabler').remove();
-        this.renderStand();
+        $('body').off();
         this.addClickEvents();
-        // $('#submitButton').prop('disabled', false);
-        // $('#skipButton').prop('disabled', false);
-        // $('#changeTilesButton').prop('disabled', false);
-        // $('#clearButton').prop('disabled', false);
-
       }
       if (this.playerTurn != this.playerIndex) {
         this.renderDisableEventListeners();
+        $('.menu').addClass('gray');
       }
     }
     if (this.store.gameOver === true && !(this.playerIndex === this.store.playerTurn)) {
@@ -874,10 +795,6 @@ export default class Game {
       this.key,
       () => this.listenForNetworkChanges()
     );
-
-    // Now call render to start the main game
-    // if you are player 2
-
   }
 
   getTiles(howMany = 7) {

@@ -685,3 +685,11 @@ body {
 #submitButton:hover {
   border-color: rgba(0, 0, 0, 0.445);
 }
+
+.gray {
+  opacity: .7;
+}
+
+#newGameInputField {
+  width: 400px;
+}

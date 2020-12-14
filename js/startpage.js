@@ -37,7 +37,7 @@ export default class StartPage {
 
     $('.newgame').click(() => {
 
-      $('.btn-container').html('<input type="text" placeholder="Namn:" minlength="2" maxlength="15" class="entername" required style="width: 400px" ></input>');
+      $('.btn-container').html('<input type="text" placeholder="Namn:" minlength="2" maxlength="15" class="entername" id="newGameInputField" spellcheck="false" required></input>');
       // When user types name and presses enter(13), players name gets stored in playerName
       /*$(".entername").keyup(function (e) {
         if (e.keyCode === 13) {
@@ -50,12 +50,12 @@ export default class StartPage {
 
     $('.joingame').click(() => {
       //keyCodeCheckLoop = true;
-      $('.btn-container').html('<input type="text" placeholder="Namn:" minlength="2" maxlength="15" class="enterkey" required></input>');
+      $('.btn-container').html('<input type="text" placeholder="Namn:" minlength="2" maxlength="15" class="enterkey" spellcheck="false" required></input>');
       // When user types name and presses enter (13), players name gets stored in playerName
       $('.enterkey').keyup(function (e) {
         if (e.keyCode === 13) {
           that.playerName = $(this).val();
-          $('.btn-container').html('<input type="text" placeholder="Kodexempel: UTP548" minlength="6" maxlength="6" class="startGame" required></input>');
+          $('.btn-container').html('<input type="text" placeholder="Kodexempel: UTP548" minlength="6" maxlength="6" class="startGame" spellcheck="false" required></input>');
           // ...then, player types in code which gets stored in playerCode
           /*$('.enterkey').keyup(function (e) {
             if (e.keyCode === 13) {
