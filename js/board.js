@@ -235,8 +235,6 @@ export default class Board {
         }
         if (Math.abs(oldY - newY) === 1 && oldX === newX) {
           return true;
-        } else {
-
         }
       }
     }

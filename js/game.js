@@ -222,7 +222,7 @@ export default class Game {
             that.store.bag.tiles = that.bag.tiles;
             //that.renderTilesLeft();
             if (that.bag.tiles.length === 0 && that.player.stand.length === 0) {
-              that.renderGameOver();
+              that.store.gameOver = true;
             }
           }
         });
@@ -250,7 +250,7 @@ export default class Game {
       $('.menu').addClass('gray');
       that.store.skipCounter++;
             if (that.store.skipCounter > 3) {
-        that.renderGameOver();
+        that.store.gameOver = true;
         return;
       }
       that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
@@ -612,8 +612,6 @@ export default class Game {
     // Creates the smaller box with Game Over! text
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
-
-    this.store.gameOver = true;
   }
 
   renderScoreBoard() {
@@ -779,13 +777,15 @@ export default class Game {
         $('.disabler').remove();
         $('body').off();
         this.addClickEvents();
+        console.log("PutTilesThisROund: ", this.board.putTilesThisRound);
+        console.log("PutTiles: ", this.board.putTiles);
       }
       if (this.playerTurn != this.playerIndex) {
         this.renderDisableEventListeners();
         $('.menu').addClass('gray');
       }
     }
-    if (this.store.gameOver === true && !(this.playerIndex === this.store.playerTurn)) {
+    if (this.store.gameOver === true) {
       this.renderGameOver();
     }
   }
