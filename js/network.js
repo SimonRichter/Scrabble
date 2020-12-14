@@ -62,7 +62,7 @@ export default class Network {
       $('body').html("");
       this.game.startWithStoreParameters();
       this.willCreateGame = true;
-      }
+    }
     // this method is called each time someone else
     // changes this.store
     if (this.waitForNameToBeSaved === false) {
@@ -77,7 +77,7 @@ export default class Network {
         this.game.renderStand(); // We might get too many active drag events..? 
       }
       if (this.store.gameOver = true && !(this.playerIndex === this.store.playerTurn)) {
-      this.game.renderGameOver();
+        this.game.renderGameOver();
       }
     }
   }
