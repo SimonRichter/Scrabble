@@ -442,6 +442,7 @@ export default class Board {
       for (let t of this.putTilesThisRound) {  // for tiles put on this round 
         let yIndex = Math.floor(t.boardIndex / 15);  // change coordinates to (Y,X)
         let xIndex = t.boardIndex % 15;
+        if (yIndex === 0) { continue; }
 
         let tileChecker = 0;
         try { if (checkUpDown < 2 && (this.matrix[yIndex + 1][xIndex].tile)) { tileChecker++; } }
@@ -494,15 +495,12 @@ export default class Board {
               letterPoints = 0;   // reset for next loop
               yIndex--; // go down one square
             }
-            points *= wordMultiplyer;  // NOW we mulply the word
-            wordMultiplyer = 1;  // we reset it to 1 again for next loop
           } catch (error) {
             yIndex++;
-
           }
-
         }
-
+        points *= wordMultiplyer;  // NOW we mulply the word
+        wordMultiplyer = 1;  // we reset it to 1 again for next loop
       }
       return points;  // we returned the points counted on Y axis.
     }
@@ -520,13 +518,12 @@ export default class Board {
       for (let t of this.putTilesThisRound) {
         let yIndex = Math.floor(t.boardIndex / 15);
         let xIndex = t.boardIndex % 15;
-
+        if (xIndex === 0) { continue; }
         let tileChecker = 0;
         try { if (checkLeftRight < 2 && (this.matrix[yIndex][xIndex + 1].tile)) { tileChecker++; } }
         catch (error) { }
         try { if (checkLeftRight < 2 && (this.matrix[yIndex][xIndex - 1].tile)) { tileChecker++; } }
         catch (error) { }
-
         if (tileChecker > 0) {
           try {
             while (this.matrix[yIndex][xIndex].tile) {
@@ -569,13 +566,14 @@ export default class Board {
               xIndex--;
             }
 
-            points *= wordMultiplyer;
-            wordMultiplyer = 1;
           } catch (error) {
             xIndex++;
 
           }
+
         }
+        points *= wordMultiplyer;
+        wordMultiplyer = 1;
       }
       return points;  // we return  the points counted on X axis
     }
