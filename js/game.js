@@ -689,6 +689,7 @@ export default class Game {
   }
 
   addEventListeners() {
+    this.amountOfPlayers = 2;
     let that = this;
 
     $('body').off('click');
@@ -737,6 +738,11 @@ export default class Game {
       }
     })
 
+    $('body').on('click', '.playerAmount', () => {
+      that.amountOfPlayers += that.amountOfPlayers === 4 ? -2 : 1;
+      $('.playerAmount').html('AMOUNT OF PLAYERS: ' + that.amountOfPlayers);
+    })
+
     $('body').on('click', '.joingame', () => {
 
       if ($('.startGame').length === 6) {
@@ -772,8 +778,9 @@ export default class Game {
       }
     }
     if (this.store.playerNames) {
-      if (this.store.playerNames.length > 1 && this.willCreateGame === false) {
+      if (this.store.playerNames.length >= this.amountOfPlayers && this.willCreateGame === false) {
         $('.startpage').remove();
+        $('.playerAmount').remove();
         this.startWithStoreParameters();
         this.willCreateGame = true;
       }
@@ -782,6 +789,7 @@ export default class Game {
     // changes this.store
     if (this.waitForNameToBeSaved === false) {
       $('.startpage').remove();
+      $('.playerAmount').remove();
       this.board.matrix = this.store.board.matrix;
       this.board.putTiles = this.store.board.putTiles;
       this.board.putTilesThisRound = this.store.board.putTilesThisRound;

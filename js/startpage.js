@@ -6,6 +6,7 @@ export default class StartPage {
     this.playerName = "";
     //this.playerCode = 0;
     this.renderStartPageButtons = true;
+    this.amountOfPlayers = 2;
   }
 
   render() {
@@ -46,6 +47,10 @@ export default class StartPage {
         }
       });*/
 
+      $('body').append(`
+      <button class="playerAmount">AMOUNT OF PLAYERS: 2</button>
+      `);
+
     })
 
     $('.joingame').click(() => {
@@ -67,6 +72,10 @@ export default class StartPage {
 
         }
       });
+
+    })
+
+    $('.playerAmount').click(() => {
 
     })
 
