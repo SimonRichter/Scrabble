@@ -4,8 +4,7 @@ export default class StartPage {
 
     this.render();
     this.playerName = "";
-    //this.playerCode = 0;
-    this.renderStartPageButtons = true;
+    this.playerCode = 0;
   }
 
   render() {
