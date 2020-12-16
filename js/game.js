@@ -798,6 +798,12 @@ export default class Game {
       this.bag.tiles = this.store.bag.tiles;
       this.scores = this.store.scores; // -- save the score everytime "Spela" is pressed. (TODO)
       this.playerTurn = this.store.playerTurn;
+      $('body').css({
+        'background-image': 'none',
+        'background-color': 'none',
+        'background-image': 'linear-gradient(0deg, rgba(0,8,19,1) 0%, rgb(39, 148, 211) 100%)',
+        'background-size': '100vw 100vh',
+      });
       this.board.render();
       this.renderMenu();
       this.renderStand();
