@@ -60,21 +60,21 @@ export default class StartPage {
     })
 
 
-    this.unclickingButton();
+    // this.unclickingButton();
   }
 
   // Function that lets you "click off" the buttons and return to original startpage options
-  unclickingButton() {
-    let that = this;
-    $(document).mouseup(function (e) {
-      let container = $(".btn-container");
-      // if clicking outside button container, re-renders startpage as is was
-      if (!container.is(e.target) && container.has(e.target).length === 0) {
-        that.render();
-      }
-    });
-
-  }
+  /* unclickingButton() {
+     let that = this;
+     $(document).mouseup(function (e) {
+       let container = $(".btn-container");
+       // if clicking outside button container, re-renders startpage as is was
+       if (!container.is(e.target) && container.has(e.target).length === 0) {
+         that.render();
+       }
+     });
+ 
+   }*/
 }
 
 
