@@ -28,6 +28,8 @@ export default class Game {
     await this.store.scores.push(this.player.score);
     this.store.gameOver = false;
     this.waitForNameToBeSaved = false;
+    this.store.minusPoints = [];
+    this.gameOverCounter = 0;
     this.listenForNetworkChanges();
   }
 
@@ -67,6 +69,8 @@ export default class Game {
     this.store.playerTurn = await this.playerTurn;
     this.store.skipCounter = 0;
     this.store.gameOver = false;
+    this.store.minusPoints = [];
+    this.gameOverCounter = 0;
     this.waitForNameToBeSaved = false;
   }
 
@@ -222,7 +226,8 @@ export default class Game {
             that.store.bag.tiles = that.bag.tiles;
             //that.renderTilesLeft();
             if (that.bag.tiles.length === 0 && that.player.stand.length === 0) {
-              that.renderGameOver();
+              that.store.gameOver = true;
+
             }
           }
         });
@@ -249,8 +254,8 @@ export default class Game {
       }
       $('.menu').addClass('gray');
       that.store.skipCounter++;
-            if (that.store.skipCounter > 3) {
-        that.renderGameOver();
+      if (that.store.skipCounter > 3) {
+        that.store.gameOver = true;
         return;
       }
       that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
@@ -285,17 +290,17 @@ export default class Game {
         // If tiles have been put on the board they go back to the players stand
         if (that.board.putTilesThisRound.length > 0) {
 
-        for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
+          for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
 
-          let squareIndex = that.board.putTilesThisRound[i].boardIndex;
-          let y = Math.floor(squareIndex / 15);
-          let x = squareIndex % 15;
-          delete that.board.matrix[y][x].tile;
-          that.changeBackEmptyTile(that.board.putTilesThisRound[i]);
-          that.player.stand.push(that.board.putTilesThisRound[i]);
-          that.board.putTilesThisRound.splice(i, 1);
+            let squareIndex = that.board.putTilesThisRound[i].boardIndex;
+            let y = Math.floor(squareIndex / 15);
+            let x = squareIndex % 15;
+            delete that.board.matrix[y][x].tile;
+            that.changeBackEmptyTile(that.board.putTilesThisRound[i]);
+            that.player.stand.push(that.board.putTilesThisRound[i]);
+            that.board.putTilesThisRound.splice(i, 1);
 
-        }
+          }
         }
 
         for (let i = $(".redBorder").length - 1; i >= 0; i--) {
@@ -420,7 +425,7 @@ export default class Game {
           let pt = this.player.stand; // Tiles inside the stand
           let tile = pt[indexOfTile]; // The tile that is being dragged
           let newIndex = Math.floor(8 * (pageX - left) / $stand.width()); // New index in stand
-          console.log('pageX: ', pageX, 'left: ', left, 'width: ', $stand.width());
+
 
           // Move tile to the right location in the stand
           pt.splice(indexOfTile, 1, ' ');
@@ -594,6 +599,25 @@ export default class Game {
     document.body.appendChild(div);
   }
 
+  async gameOverPoints() {
+    this.gameOverCounter++;
+
+
+    let points = 0;
+    for (let tile of this.player.stand) {
+      points += tile.points;
+    }
+    await this.store.minusPoints.push(points);
+    let allPoints = 0;
+    for (let point of this.store.minusPoints) {
+      allPoints += point;
+    }
+
+    this.store.scores[this.playerIndex] += points ? (-1 * points) : allPoints;
+
+    this.renderScoreBoard();
+  }
+
   renderGameOver() {
     // for (let score of this.store.scores) {
     //   this.localStore.leaderBoard.push(score);
@@ -612,8 +636,6 @@ export default class Game {
     // Creates the smaller box with Game Over! text
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
-
-    this.store.gameOver = true;
   }
 
   renderScoreBoard() {
@@ -779,13 +801,16 @@ export default class Game {
         $('.disabler').remove();
         $('body').off();
         this.addClickEvents();
+        console.log("PutTilesThisROund: ", this.board.putTilesThisRound);
+        console.log("PutTiles: ", this.board.putTiles);
       }
       if (this.playerTurn != this.playerIndex) {
         this.renderDisableEventListeners();
         $('.menu').addClass('gray');
       }
     }
-    if (this.store.gameOver === true && !(this.playerIndex === this.store.playerTurn)) {
+    if (this.store.gameOver === true && this.gameOverCounter === 0) {
+      this.gameOverPoints();
       this.renderGameOver();
     }
   }
