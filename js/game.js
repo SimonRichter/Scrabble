@@ -26,14 +26,14 @@ export default class Game {
     this.player = new Player(this, this.store, this.playerName); //Are the players added correctly?
     this.store.scores = await this.store.scores || [];
     await this.store.scores.push(this.player.score);
-    this.store.gameOver = false;
-    this.waitForNameToBeSaved = false;
-    this.store.minusPoints = [];
+    this.store.minusPoints = this.store.minusPoints || [];
     this.gameOverCounter = 0;
+    this.waitForInfoToBeLoaded = false;
     this.listenForNetworkChanges();
   }
 
   async start() {
+    this.store.waitForStoreDataToBeSaved = true;
     this.localStore = Store.getLocalStore();
     this.localStore.leaderBoard = this.localStore.leaderBoard || [];
 
@@ -41,8 +41,7 @@ export default class Game {
     this.board.createBoard();
 
     await this.tilesFromFile();
-    await this.connectToStore();
-    let s = this.store;
+    //await this.connectToStore();
     this.store.bag = this.bag;
     this.store.bag.tiles = this.bag.tiles;
     // create players
@@ -51,12 +50,12 @@ export default class Game {
 
     // Push all the info to the store
 
-    s.playerNames = await s.playerNames || [];
-    // Add my name
-    await s.playerNames.push(this.playerName);
-    // Which player am I? (0 or 1)
-    this.playerIndex = s.playerNames.length - 1;
-    this.playerTurn = this.playerIndex;
+    // s.playerNames = await s.playerNames || [];
+    // // Add my name
+    // await s.playerNames.push(this.playerName);
+    // // Which player am I? (0 or 1)
+    // this.playerIndex = s.playerNames.length - 1;
+    // this.playerTurn = this.playerIndex;
     this.store.scores = await this.store.scores || [];
     await this.store.scores.push(this.player.score);
     this.store.board = this.store.board || {};
@@ -66,12 +65,12 @@ export default class Game {
     this.store.board.wordsPlayed = this.board.wordsPlayed;
     this.store.firstRound = this.board.firstRound;
     this.store.board.matrix = this.board.matrix;
-    this.store.playerTurn = await this.playerTurn;
     this.store.skipCounter = 0;
     this.store.gameOver = false;
-    this.store.minusPoints = [];
+    this.store.minusPoints = this.store.minusPoints || [];
     this.gameOverCounter = 0;
-    this.waitForNameToBeSaved = false;
+    this.waitForInfoToBeLoaded = false;
+    this.store.waitForStoreDataToBeSaved = false;
   }
 
   async tilesFromFile() {
@@ -213,6 +212,7 @@ export default class Game {
             that.board.render();
             // We change the player turn to the next player
             that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
+
             that.renderStand();
             that.store.playerTurn = that.playerTurn;
             that.renderDisableEventListeners();
@@ -224,7 +224,7 @@ export default class Game {
             that.store.board.putTilesThisRound = that.board.putTilesThisRound;
             that.store.board.wordsPlayed = that.board.wordsPlayed;
             that.store.bag.tiles = that.bag.tiles;
-            //that.renderTilesLeft();
+            that.renderTilesLeft();
             if (that.bag.tiles.length === 0 && that.player.stand.length === 0) {
               that.store.gameOver = true;
 
@@ -254,7 +254,7 @@ export default class Game {
       }
       $('.menu').addClass('gray');
       that.store.skipCounter++;
-      if (that.store.skipCounter > 3) {
+      if (that.store.skipCounter >= (that.store.amountOfPlayers * 2)) {
         that.store.gameOver = true;
         return;
       }
@@ -483,7 +483,6 @@ export default class Game {
         }
         this.board.render();
         this.renderStand();
-        //this.store.board.matrix = this.board.matrix;
       });
 
     // These variables are declared here so that they can be used
@@ -699,71 +698,53 @@ export default class Game {
       return this.playerName;
     };
 
-    $('body').on('click', '.newgame', async () => {
-      if (!getName()) { return; }
-      that.playerName = $('.entername').val();
-
-      that.key = await Store.createNetworkKey();
-      $('.entername').html("Ge den här nyckeln till din vän: <b>" + that.key + "</b>");
-      that.willCreateGame = false;
-      that.waitForNameToBeSaved = true;
-      await that.connectToStore();
-      let s = that.store;
-      s.playerNames = s.playerNames || [];
-      // Add my name
-      s.playerNames.push(that.playerName);
-      // Which player am I? (0 or 1)
-      that.playerIndex = s.playerNames.length - 1;
-    });
-
     $("body").on('keyup', '.entername', async function (e) {
       if (e.keyCode === 13) {
+        console.log("code running")
         if (!getName()) { return; }
+        $("body").off();
         that.playerName = $('.entername').val();
         that.startPage.renderStartPageButtons = false;
         that.key = await Store.createNetworkKey();
         $('.entername').val("Ge den här nyckeln till din vän: " + that.key);
-        //$('.start').append('<p>get key: ' + this.key + '</p>');
-        //$('.newgame').prop('disabled', true);
-        that.willCreateGame = false;
-        that.waitForNameToBeSaved = true;
         await that.connectToStore();
         let s = that.store;
+        s.amountOfPlayers = that.amountOfPlayers;
         s.playerNames = s.playerNames || [];
         // Add my name
         s.playerNames.push(that.playerName);
+        console.log("pushed name, names:", s.playerNames)
         // Which player am I? (0 or 1)
-        that.playerIndex = s.playerNames.length - 1;
-        $("body").off();
+        that.playerIndex = 0;
+        s.playerTurn = 0;
+        that.playerTurn = 0;
+        that.start();
+        console.log("amountOfPlayers ", s.amountOfPlayers)
       }
     })
 
     $('body').on('click', '.playerAmount', () => {
       that.amountOfPlayers += that.amountOfPlayers === 4 ? -2 : 1;
-      $('.playerAmount').html('AMOUNT OF PLAYERS: ' + that.amountOfPlayers);
+      $('.playerAmount').html('Antal spelare: ' + that.amountOfPlayers);
     })
 
-    $('body').on('click', '.joingame', () => {
-
-      if ($('.startGame').length === 6) {
-        that.playerName = that.startPage.playerName;
-        that.key = $('.startGame').val().toUpperCase();
-        that.willCreateGame = true;
-        that.waitForNameToBeSaved = true;
-        that.start();
-      }
-    });
-
-    $("body").on('keyup', '.startGame', function (e) {
+    $("body").on('keyup', '.startGame', async function (e) {
       if (e.keyCode === 13) {
         that.playerName = that.startPage.playerName;
         if ($('.startGame').val().length === 6) {
           that.startPage.renderStartPageButtons = false;
           that.key = $('.startGame').val().toUpperCase();
-          that.willCreateGame = true;
-          that.waitForNameToBeSaved = true;
-          that.start();
           $("body").off();
+          await that.connectToStore();
+          let s = that.store;
+          that.waitForInfoToBeLoaded = true;
+          s.playerNames = s.playerNames || [];
+          // Add my name
+          s.playerNames.push(that.playerName);
+          console.log("pushed name, names:", s.playerNames)
+          // Which player am I? (0 or 1)
+          that.playerIndex = s.playerNames.length - 1;
+          that.startWithStoreParameters();
         }
       }
     });
@@ -771,61 +752,50 @@ export default class Game {
   }
 
   listenForNetworkChanges() {
-    if (this.store.playerNames) {
-      if (this.store.playerNames.length > 4) {
-        alert('Four players are already playing!');  // TODO: Make a nicer looking alert maybe
-        return;
-      }
-    }
-    if (this.store.playerNames) {
-      if (this.store.playerNames.length >= this.amountOfPlayers && this.willCreateGame === false) {
+    console.log("listenForNetworkChanges() running");
+    if (this.store.playerNames.length === this.store.amountOfPlayers && this.waitForInfoToBeLoaded === false
+      && this.store.waitForStoreDataToBeSaved === false) {
+      console.log("Four players have joined")
+      // this method is called each time someone else
+      // changes this.store
         $('.startpage').remove();
         $('.playerAmount').remove();
-        this.startWithStoreParameters();
-        this.willCreateGame = true;
+        this.board.matrix = this.store.board.matrix;
+        this.board.putTiles = this.store.board.putTiles;
+        this.board.putTilesThisRound = this.store.board.putTilesThisRound;
+        this.board.wordsPlayed = this.store.board.wordsPlayed;
+        this.board.firstRound = this.store.firstRound;
+        this.bag.tiles = this.store.bag.tiles;
+        this.scores = this.store.scores; // -- save the score everytime "Spela" is pressed. (TODO)
+        this.playerTurn = this.store.playerTurn;
+        $('body').css({
+          'background-image': 'none',
+          'background-color': 'none',
+          'background-image': 'linear-gradient(0deg, rgba(0,8,19,1) 0%, rgb(39, 148, 211) 100%)',
+          'background-size': '100vw 100vh',
+        });
+        this.board.render();
+        this.renderMenu();
+        this.renderStand();
+        this.renderTilesLeft();
+        this.renderScoreBoard();
+        this.renderHelp();
+        if (this.playerTurn === this.playerIndex) {
+          $('.menu').removeClass('gray');
+          $('.disabler').remove();
+          $('body').off();
+          this.addClickEvents();
+          console.log("PutTilesThisROund: ", this.board.putTilesThisRound);
+          console.log("PutTiles: ", this.board.putTiles);
+        }
+        if (this.playerTurn != this.playerIndex) {
+          this.renderDisableEventListeners();
+          $('.menu').addClass('gray');
+        }
+      if (this.store.gameOver === true && this.gameOverCounter === 0) {
+        this.gameOverPoints();
+        this.renderGameOver();
       }
-    }
-    // this method is called each time someone else
-    // changes this.store
-    if (this.waitForNameToBeSaved === false) {
-      $('.startpage').remove();
-      $('.playerAmount').remove();
-      this.board.matrix = this.store.board.matrix;
-      this.board.putTiles = this.store.board.putTiles;
-      this.board.putTilesThisRound = this.store.board.putTilesThisRound;
-      this.board.wordsPlayed = this.store.board.wordsPlayed;
-      this.board.firstRound = this.store.firstRound;
-      this.bag.tiles = this.store.bag.tiles;
-      this.scores = this.store.scores; // -- save the score everytime "Spela" is pressed. (TODO)
-      this.playerTurn = this.store.playerTurn;
-      $('body').css({
-        'background-image': 'none',
-        'background-color': 'none',
-        'background-image': 'linear-gradient(0deg, rgba(0,8,19,1) 0%, rgb(39, 148, 211) 100%)',
-        'background-size': '100vw 100vh',
-      });
-      this.board.render();
-      this.renderMenu();
-      this.renderStand();
-      this.renderTilesLeft();
-      this.renderScoreBoard();
-      this.renderHelp();
-      if (this.playerTurn === this.playerIndex) {
-        $('.menu').removeClass('gray');
-        $('.disabler').remove();
-        $('body').off();
-        this.addClickEvents();
-        console.log("PutTilesThisROund: ", this.board.putTilesThisRound);
-        console.log("PutTiles: ", this.board.putTiles);
-      }
-      if (this.playerTurn != this.playerIndex) {
-        this.renderDisableEventListeners();
-        $('.menu').addClass('gray');
-      }
-    }
-    if (this.store.gameOver === true && this.gameOverCounter === 0) {
-      this.gameOverPoints();
-      this.renderGameOver();
     }
   }
 
