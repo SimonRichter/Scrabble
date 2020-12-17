@@ -1,0 +1,197 @@
+
+
+
+@import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  text-decoration: none;
+  color: inherit;
+  
+  
+}
+
+
+body {
+  /*
+  width: 50%;
+  margin-left: 25%;
+  margin-top: 2vh;
+  */
+ font-family: "Oswald", sans-serif;
+  background: rgb(0,8,19);
+  background: linear-gradient(0deg, rgba(0,8,19,1) 0%, rgb(39, 148, 211) 100%);
+  height: 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+}
+
+/* ----------------- BOARD ---------------- */
+.board {
+  
+  height: 100%;
+  width: 370px;
+  position: absolute;
+  border: 5px solid #000000;
+  border-radius: 5px;
+  margin-top: -7px;
+  margin-left: -7px;
+
+  display: inline-block;
+  background-color: rgb(176, 194, 218);
+  background: rgb(217,233,238);
+  background: radial-gradient(circle, rgba(217,233,238,1) 0%, rgba(137,159,166,1) 100%);   
+}
+
+.board > div {
+  border: 1px solid #000000;
+  /* width: 6.2vh;
+  height: 6.2vh; */
+  width:6.6%;
+  height: 6.6%;
+  float: left;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: 60%;
+}
+
+
+.board > div:nth-child(15n + 1) {
+  clear: both;
+}
+
+.board > div::after {
+  display: block;
+  text-align: center;
+}
+
+.board .tile {
+  position: absolute;
+  /* margin: 2px; */
+  margin: 0.2vmin;
+  width: 6%;
+  height: 6%;
+   font-size: 2.1vh;
+}
+.board .tile span {
+  position: absolute;
+  font-size: 1vh;
+  right: 3px;
+  bottom: 3px;
+ 
+
+}
+
+.board > div.hover {
+  opacity: 0.5;
+  background-color: rgb(119, 104, 82);
+}
+
+
+
+/* ----------------- START PAGE ---------------- */
+
+.startpage {
+  background-color: rgba(137, 43, 226, 0);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  position: fixed;
+}
+
+.btn-container > button {
+  color: rgba(255, 255, 255, 0.856);
+  font-size: 25px;
+  font-family: "Oswald", sans-serif;
+  border: solid rgba(0, 0, 0, 0.74) 1px;
+  text-align: center;
+  padding: 5px;
+  width: 100%;
+  margin-top: 18px;
+  cursor: pointer;
+}
+
+.newgame {
+  background-color: #bb9236;
+  float: left;
+}
+
+.joingame {
+  background-color: #9a572d;
+  float: left;
+}
+
+.entername {
+  color: rgba(255, 255, 255, 0.856);
+  background-color: #bb9236;
+  font-size: 25px;
+  font-family: "Oswald", sans-serif;
+  text-align: center;
+}
+
+.enterkey {
+  color: rgba(255, 255, 255, 0.856);
+  background-color: #9a572d;
+  font-size: 25px;
+  font-family: "Oswald", sans-serif;
+  text-align: center;
+}
+
+.startGame {
+  color: rgba(255, 255, 255, 0.856);
+  background-color: #9a572d;
+  font-size: 25px;
+  font-family: "Oswald", sans-serif;
+  text-align: center;
+}
+
+
+/* ----------------- ETC ---------------- */
+
+.TO {
+  background-color: rgb(255, 166, 0);
+}
+.DO {
+  background-color: rgb(197, 32, 32);
+}
+.DB {
+  background-color: rgb(25, 156, 231);
+}
+.TB {
+  background-color: rgb(109, 206, 70);
+}
+.MB {
+  background-color: rgb(195, 0, 255);
+}
+
+
+
+
+#newGameInputField {
+  width: 400px;
+}
+
+.help{
+  font-size: 0;
+  z-index: 0;
+}
+.scoreboard {
+  font-size: 0px;
+ 
+}
+.tpirt{
+
+  font-size: 0px;
+  
+   
+
+  
+}
