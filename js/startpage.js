@@ -48,7 +48,7 @@ export default class StartPage {
       });*/
 
       $('body').append(`
-      <button class="playerAmount">AMOUNT OF PLAYERS: 2</button>
+      <button class="playerAmount">Antal spelare: 2</button>
       `);
 
     })
