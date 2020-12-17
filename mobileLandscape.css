@@ -95,7 +95,6 @@ body {
 }
 
 
-
 /* ----------------- START PAGE ---------------- */
 
 .startpage {
@@ -117,6 +116,33 @@ body {
   width: 100%;
   margin-top: 18px;
   cursor: pointer;
+}
+
+.playerAmount {
+  position: fixed;
+  color: rgba(255, 255, 255, 0.856);
+  font-size: 25px;
+  font-family: "Oswald", sans-serif;
+  border: outset rgb(85, 85, 85) 3px;
+  border-radius: 3px;
+  text-align: center;
+  padding: 5px;
+  margin-left: -90px;
+  width: 180px;
+  bottom: 0%;
+  left: 50%;
+  right: 46%;
+  cursor: pointer;
+  background-color: #bb9236;
+  float: left;
+}
+
+.playerAmount:hover {
+  background: #e2b240;
+}
+
+.playerAmount:focus {
+    outline: none;
 }
 
 .newgame {
