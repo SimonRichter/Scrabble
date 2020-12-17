@@ -27,7 +27,7 @@ body {
 /* ----------------- BOARD ---------------- */
 .board {
   width: 910px;
-  width: 910px;
+  height: 910px;
   position: absolute;
   border: 5px solid #000000;
   border-radius: 5px;
@@ -225,7 +225,7 @@ body {
   top: 370px;
   width: 300px;
   right: 10%;
-  left: 75%;
+  left: 70%;
   line-height: 6px;
   text-align: center;
   font-style: italic;
@@ -279,7 +279,7 @@ body {
   width: 300px;
   height: 230px;
   right: 10%;
-  left: 75%;
+  left: 70%;
   top: 10px;
   background-color: rgba(255, 255, 255, 0.212);
   font-size: 20px;
@@ -460,7 +460,7 @@ body {
   position: absolute;
   top: 250px;
   right: 10%;
-  left: 75%;
+  left: 70%;
   color: rgb(0, 0, 0);
    background-color: rgba(255, 255, 255, 0.212);
   font-size: 25px;
@@ -540,7 +540,7 @@ body {
   font-size: 40px;
   width: 300px;
   right: 10%;
-  left: 75%;
+  left: 70%;
   top: 420px;
   padding-bottom: 57px;
   text-decoration: none ;
@@ -573,10 +573,10 @@ body {
  font-size: 20px;
  position: absolute;
  width: 300px;
-  height: 230px;
-  right: 10%;
-  left: 75%;
-  top: 500px;
+ height: 230px;
+ right: 10%;
+ left: 70%;
+ top: 500px;
  
    
  
