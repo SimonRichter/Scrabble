@@ -15,8 +15,8 @@ export default class Game {
   }
 
   async startWithStoreParameters() {
-    this.localStore = Store.getLocalStore();
-    this.localStore.leaderBoard = this.localStore.leaderBoard || [];
+    //this.localStore = Store.getLocalStore();
+    //this.localStore.leaderBoard = this.localStore.leaderBoard || [];
     this.board = new Board();
     this.store.board = this.store.board || {};
     this.board.matrix = await this.store.board.matrix;
@@ -34,12 +34,10 @@ export default class Game {
   }
 
   async start() {
-    this.localStore = Store.getLocalStore();
-    this.localStore.leaderBoard = this.localStore.leaderBoard || [];
-
+    // this.localStore = Store.getLocalStore();
+    //this.localStore.leaderBoard = this.localStore.leaderBoard || [];
     this.board = new Board();
     this.board.createBoard();
-
     await this.tilesFromFile();
     await this.connectToStore();
     let s = this.store;
@@ -47,10 +45,7 @@ export default class Game {
     this.store.bag.tiles = this.bag.tiles;
     // create players
     this.player = new Player(this, this.store, this.playerName);
-
-
     // Push all the info to the store
-
     s.playerNames = await s.playerNames || [];
     // Add my name
     await s.playerNames.push(this.playerName);
@@ -600,6 +595,9 @@ export default class Game {
   }
 
   async gameOverPoints() {
+    this.localStore = Store.getLocalStore();
+    this.localStore.leaderBoard = this.localStore.leaderBoard || [];
+
     this.gameOverCounter++;
 
 
@@ -615,21 +613,37 @@ export default class Game {
 
     this.store.scores[this.playerIndex] += points ? (-1 * points) : allPoints;
 
+
+    for (let i = 1; i <= 5; i++) {
+      this.localStore.leaderBoard.push(i * 6);
+    }
+
+
+    console.log(this.localStore.leaderBoard);
+    console.log("leader lenght?", this.localStore.leaderBoard.length)
+    let topTen = (this.localStore.leaderBoard.sort((a, b) => { return b - a }));
+    console.log(topTen.splice(0, 10))
+
+
+
     this.renderScoreBoard();
   }
 
-  renderGameOver() {
+  topTen() {
     // for (let score of this.store.scores) {
-    //   this.localStore.leaderBoard.push(score);
-    // }
-    // console.log("leader lenght?", this.localStore.leaderBoard.length)
-    // let topTen = (this.localStore.leaderBoard.sort((a, b) => { return b - a }));
-    // console.log(topTen.splice(0, 10))
+    // await this.localStore.leaderBoard.push(score);
+    //}
+
+
+
+  }
+
+  renderGameOver() {
     // let $leaderBoard = $('<div class="leaderBoard"><h2>Top 10 Scores</h2></div>').appendTo("body");
 
     // for (let bigPoints of topTen) {
-    // $leaderBoard.append(`<h1 class="topTen">${bigPoints}</h1 >`)
-    // }
+    //   $leaderBoard.append(`<h1 class="topTen">${bigPoints}</h1 >`)
+    //}
     // Creates the Game Over div that covers whole page
     let $gameover = $('<div class="game-over"/>').appendTo("body");
 
@@ -801,8 +815,8 @@ export default class Game {
         $('.disabler').remove();
         $('body').off();
         this.addClickEvents();
-        console.log("PutTilesThisROund: ", this.board.putTilesThisRound);
-        console.log("PutTiles: ", this.board.putTiles);
+        //console.log("PutTilesThisROund: ", this.board.putTilesThisRound);
+        //console.log("PutTiles: ", this.board.putTiles);
       }
       if (this.playerTurn != this.playerIndex) {
         this.renderDisableEventListeners();
@@ -811,6 +825,7 @@ export default class Game {
     }
     if (this.store.gameOver === true && this.gameOverCounter === 0) {
       this.gameOverPoints();
+      this.topTen();
       this.renderGameOver();
     }
   }
@@ -828,7 +843,9 @@ export default class Game {
   }
 
   renderPlayer() {
-    return `<div class="stand">
+    return `
+          <div class="pname">${this.playerTurn != this.playerIndex ? "Var snäll och vänta på din tur... &#8987;" : "Din tur att spela !"}</div>
+          <div class="stand">
       ${this.player.stand
         .map(
           (x, i) => `<div 
@@ -842,7 +859,7 @@ export default class Game {
         )
         .join("")}
       </div>
-      <div class="pname">${this.playerTurn != this.playerIndex ? "Var snäll och vänta på din tur... &#8987;" : "Din tur att spela !"}</div>
+
       `;
   }
 
