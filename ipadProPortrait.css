@@ -312,6 +312,33 @@ padding-right: 10px;
   cursor: pointer;
 }
 
+.playerAmount {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.856);
+  font-size: 25px;
+  font-family: "Oswald", sans-serif;
+  border: outset rgb(85, 85, 85) 3px;
+  border-radius: 3px;
+  text-align: center;
+  padding: 5px;
+  margin-left: 0 auto;
+  width: 180px;
+  bottom: 40%;
+  left: 42%;
+  right: 42%;
+  cursor: pointer;
+  background-color: #bb9236;
+  float: left;
+}
+
+.playerAmount:hover {
+  background: #e2b240;
+}
+
+.playerAmount:focus {
+    outline: none;
+}
+
 .newgame {
   background-color: #bb9236;
   float: left;

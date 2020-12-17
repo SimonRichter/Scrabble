@@ -818,7 +818,7 @@ export default class Game {
 
   renderPlayer() {
     return `
-          <div class="pname">${this.playerTurn != this.playerIndex ? "Var snäll och vänta på din tur... &#8987;" : "Din tur att spela !"}</div>
+          
           <div class="stand">
       ${this.player.stand
         .map(
@@ -833,7 +833,7 @@ export default class Game {
         )
         .join("")}
       </div>
-
+          <div class="pname">${this.playerTurn != this.playerIndex ? "Väntar på din tur... &#8987;" : "Din tur att spela !"}</div>
       `;
   }
 
