@@ -703,6 +703,7 @@ export default class Game {
   }
 
   addEventListeners() {
+    this.amountOfPlayers = 2;
     let that = this;
 
     $('body').off('click');
@@ -751,6 +752,11 @@ export default class Game {
       }
     })
 
+    $('body').on('click', '.playerAmount', () => {
+      that.amountOfPlayers += that.amountOfPlayers === 4 ? -2 : 1;
+      $('.playerAmount').html('AMOUNT OF PLAYERS: ' + that.amountOfPlayers);
+    })
+
     $('body').on('click', '.joingame', () => {
 
       if ($('.startGame').length === 6) {
@@ -786,8 +792,9 @@ export default class Game {
       }
     }
     if (this.store.playerNames) {
-      if (this.store.playerNames.length > 1 && this.willCreateGame === false) {
+      if (this.store.playerNames.length >= this.amountOfPlayers && this.willCreateGame === false) {
         $('.startpage').remove();
+        $('.playerAmount').remove();
         this.startWithStoreParameters();
         this.willCreateGame = true;
       }
@@ -796,6 +803,7 @@ export default class Game {
     // changes this.store
     if (this.waitForNameToBeSaved === false) {
       $('.startpage').remove();
+      $('.playerAmount').remove();
       this.board.matrix = this.store.board.matrix;
       this.board.putTiles = this.store.board.putTiles;
       this.board.putTilesThisRound = this.store.board.putTilesThisRound;
@@ -804,6 +812,12 @@ export default class Game {
       this.bag.tiles = this.store.bag.tiles;
       this.scores = this.store.scores; // -- save the score everytime "Spela" is pressed. (TODO)
       this.playerTurn = this.store.playerTurn;
+      $('body').css({
+        'background-image': 'none',
+        'background-color': 'none',
+        'background-image': 'linear-gradient(0deg, rgba(0,8,19,1) 0%, rgb(39, 148, 211) 100%)',
+        'background-size': '100vw 100vh',
+      });
       this.board.render();
       this.renderMenu();
       this.renderStand();

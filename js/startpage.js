@@ -6,6 +6,7 @@ export default class StartPage {
     this.playerName = "";
     //this.playerCode = 0;
     this.renderStartPageButtons = true;
+    this.amountOfPlayers = 2;
   }
 
   render() {
@@ -19,14 +20,14 @@ export default class StartPage {
     </div>
     </div>`);
 
-    /*$('body').css({
+    $('body').css({
       'background-color': '#0e2b3c',
       'background-image': 'url(scrabble_startpage.png)',
-      'background-repeat': 'no-repeat',
-      'background-position': 'center',
-      'background-size': '1020px',
-      'background-attachment': 'fixed'
-    });*/
+      //'background-repeat': 'no-repeat',
+      //'background-position': 'center',
+      'background-size': 'contain',
+      //'background-attachment': 'fixed'
+    });
 
     this.addStartPageClickEvents();
   }
@@ -45,6 +46,10 @@ export default class StartPage {
           // ENTER FUNCTION THAT STARTS GAME HERE (maybe game constructor can take in player name as argument)
         }
       });*/
+
+      $('body').append(`
+      <button class="playerAmount">AMOUNT OF PLAYERS: 2</button>
+      `);
 
     })
 
@@ -67,6 +72,10 @@ export default class StartPage {
 
         }
       });
+
+    })
+
+    $('.playerAmount').click(() => {
 
     })
 

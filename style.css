@@ -20,12 +20,13 @@ body {
   margin-left: 25%;
   margin-top: 2vh;
   */
- font-family: "Oswald", sans-serif;
-  background: rgb(0,8,19);
-  background: linear-gradient(0deg, rgba(0,8,19,1) 0%, rgb(39, 148, 211) 100%);
-  height: 100%;
+  font-family: "Oswald", sans-serif;
+  background-color: #0e2b3c;
+  /*background: linear-gradient(0deg, rgba(0,8,19,1) 0%, rgb(39, 148, 211) 100%);*/
+  /*height: 100%;*/
   background-repeat: no-repeat;
   background-attachment: fixed;
+  background-position: center;
 }
 
 /* ----------------- BOARD ---------------- */
@@ -336,6 +337,20 @@ body {
   width: 100%;
   margin-top: 18px;
   cursor: pointer;
+}
+
+.playerAmount {
+  color: rgba(255, 255, 255, 0.856);
+  font-size: 25px;
+  font-family: "Oswald", sans-serif;
+  border: solid rgba(0, 0, 0, 0.74) 1px;
+  text-align: center;
+  padding: 5px;
+  width: 100%;
+  margin-top: 18px;
+  cursor: pointer;
+  background-color: #bb9236;
+  float: left;
 }
 
 .newgame {
