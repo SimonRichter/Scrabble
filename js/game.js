@@ -15,8 +15,8 @@ export default class Game {
   }
 
   async startWithStoreParameters() {
-    //this.localStore = Store.getLocalStore();
-    //this.localStore.leaderBoard = this.localStore.leaderBoard || [];
+    this.localStore = Store.getLocalStore();
+    this.localStore.leaderBoard = this.localStore.leaderBoard || [];
     this.board = new Board();
     this.store.board = this.store.board || {};
     this.board.matrix = await this.store.board.matrix;
@@ -34,11 +34,8 @@ export default class Game {
 
   async start() {
     this.store.waitForStoreDataToBeSaved = true;
-    //this.localStore = Store.getLocalStore();
-    //this.localStore.leaderBoard = this.localStore.leaderBoard || [];
-
-    // this.localStore = Store.getLocalStore();
-    //this.localStore.leaderBoard = this.localStore.leaderBoard || [];
+    this.localStore = Store.getLocalStore();
+    this.localStore.leaderBoard = this.localStore.leaderBoard || [];
     this.board = new Board();
     this.board.createBoard();
     await this.tilesFromFile();
@@ -598,9 +595,6 @@ export default class Game {
   }
 
   async gameOverPoints() {
-    this.localStore = Store.getLocalStore();
-    this.localStore.leaderBoard = this.localStore.leaderBoard || [];
-
     this.gameOverCounter++;
 
 
@@ -616,43 +610,36 @@ export default class Game {
 
     this.store.scores[this.playerIndex] += points ? (-1 * points) : allPoints;
 
-
-    for (let i = 1; i <= 5; i++) {
-      this.localStore.leaderBoard.push(i * 6);
+    for (let i = 0; i < this.store.scores.length; i++) {
+      await this.localStore.leaderBoard.push(this.store.scores[i]);
     }
-
-
-    console.log(this.localStore.leaderBoard);
-    console.log("leader lenght?", this.localStore.leaderBoard.length)
-    let topTen = (this.localStore.leaderBoard.sort((a, b) => { return b - a }));
-    console.log(topTen.splice(0, 10))
-
 
 
     this.renderScoreBoard();
   }
 
-  topTen() {
-    // for (let score of this.store.scores) {
-    // await this.localStore.leaderBoard.push(score);
-    //}
-
-
-
-  }
 
   renderGameOver() {
-    // let $leaderBoard = $('<div class="leaderBoard"><h2>Top 10 Scores</h2></div>').appendTo("body");
 
-    // for (let bigPoints of topTen) {
-    //   $leaderBoard.append(`<h1 class="topTen">${bigPoints}</h1 >`)
-    //}
+
     // Creates the Game Over div that covers whole page
     let $gameover = $('<div class="game-over"/>').appendTo("body");
 
     // Creates the smaller box with Game Over! text
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
+
+    console.log("leaderBoard.length", this.localStore.leaderBoard.length)
+    console.log("leaderboard conetnt", this.localStore.leaderBoard)
+
+    let topTen = (this.localStore.leaderBoard.sort((a, b) => { return b - a }));
+
+    let $leaderBoard = $('<div class="leaderBoard"><h2>Top 10 Scores</h2></div>').appendTo("body");
+    for (let i = 0; i < 10; i++) {
+      console.log(topTen[i])
+      $leaderBoard.append(`<h3 class="topTen">${topTen[i] ? "???" : topTen[i]}</h3 >`)
+    }
+
   }
 
   renderScoreBoard() {
@@ -776,43 +763,42 @@ export default class Game {
       console.log("Four players have joined")
       // this method is called each time someone else
       // changes this.store
-        $('.startpage').remove();
-        $('.playerAmount').remove();
-        this.board.matrix = this.store.board.matrix;
-        this.board.putTiles = this.store.board.putTiles;
-        this.board.putTilesThisRound = this.store.board.putTilesThisRound;
-        this.board.wordsPlayed = this.store.board.wordsPlayed;
-        this.board.firstRound = this.store.firstRound;
-        this.bag.tiles = this.store.bag.tiles;
-        this.scores = this.store.scores; // -- save the score everytime "Spela" is pressed. (TODO)
-        this.playerTurn = this.store.playerTurn;
-        $('body').css({
-          'background-image': 'none',
-          'background-color': 'none',
-          'background-image': 'linear-gradient(0deg, rgba(0,8,19,1) 0%, rgb(39, 148, 211) 100%)',
-          'background-size': '100vw 100vh',
-        });
-        this.board.render();
-        this.renderMenu();
-        this.renderStand();
-        this.renderTilesLeft();
-        this.renderScoreBoard();
-        this.renderHelp();
-        if (this.playerTurn === this.playerIndex) {
-          $('.menu').removeClass('gray');
-          $('.disabler').remove();
-          $('body').off();
-          this.addClickEvents();
-          console.log("PutTilesThisROund: ", this.board.putTilesThisRound);
-          console.log("PutTiles: ", this.board.putTiles);
-        }
-        if (this.playerTurn != this.playerIndex) {
-          this.renderDisableEventListeners();
-          $('.menu').addClass('gray');
-        }
+      $('.startpage').remove();
+      $('.playerAmount').remove();
+      this.board.matrix = this.store.board.matrix;
+      this.board.putTiles = this.store.board.putTiles;
+      this.board.putTilesThisRound = this.store.board.putTilesThisRound;
+      this.board.wordsPlayed = this.store.board.wordsPlayed;
+      this.board.firstRound = this.store.firstRound;
+      this.bag.tiles = this.store.bag.tiles;
+      this.scores = this.store.scores; // -- save the score everytime "Spela" is pressed. (TODO)
+      this.playerTurn = this.store.playerTurn;
+      $('body').css({
+        'background-image': 'none',
+        'background-color': 'none',
+        'background-image': 'linear-gradient(0deg, rgba(0,8,19,1) 0%, rgb(39, 148, 211) 100%)',
+        'background-size': '100vw 100vh',
+      });
+      this.board.render();
+      this.renderMenu();
+      this.renderStand();
+      this.renderTilesLeft();
+      this.renderScoreBoard();
+      this.renderHelp();
+      if (this.playerTurn === this.playerIndex) {
+        $('.menu').removeClass('gray');
+        $('.disabler').remove();
+        $('body').off();
+        this.addClickEvents();
+        console.log("PutTilesThisROund: ", this.board.putTilesThisRound);
+        console.log("PutTiles: ", this.board.putTiles);
+      }
+      if (this.playerTurn != this.playerIndex) {
+        this.renderDisableEventListeners();
+        $('.menu').addClass('gray');
+      }
       if (this.store.gameOver === true && this.gameOverCounter === 0) {
         this.gameOverPoints();
-        this.topTen();
         this.renderGameOver();
       }
     }
