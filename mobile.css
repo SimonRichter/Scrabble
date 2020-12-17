@@ -522,6 +522,17 @@ padding-right: 10px;
   font-size: 0px;
 }
 
+.wordsOnScreen{
+  font-size: 0px;
+}
+.wordsTitle{
+  font-size: 0px;
+}
+ .box >ul>li{
+   font-size:0px;
+}
+  
+
 .disabler {
   top: 0;
   left: 0;
