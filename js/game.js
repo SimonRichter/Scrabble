@@ -18,10 +18,6 @@ export default class Game {
     this.localStore = Store.getLocalStore();
     this.localStore.leaderBoard = this.localStore.leaderBoard || [];
     this.localStore.myScore = this.localStore.myScore || [];
-    this.store.leaderBoard = await this.store.leaderBoard || [];
-    for (let x of this.localStore.leaderBoard) {
-      await this.store.leaderBoard.push(x)
-    }
 
     this.board = new Board();
     this.store.board = this.store.board || {};
@@ -43,11 +39,6 @@ export default class Game {
     this.localStore = Store.getLocalStore();
     this.localStore.leaderBoard = this.localStore.leaderBoard || [];
     this.localStore.myScore = this.localStore.myScore || [];
-    this.store.leaderBoard = await this.store.leaderBoard || [];
-    for (let x of this.localStore.leaderBoard) {
-      await this.store.leaderBoard.push(x)
-    }
-
     this.board = new Board();
     this.board.createBoard();
     await this.tilesFromFile();
@@ -622,21 +613,35 @@ export default class Game {
 
     this.store.scores[this.playerIndex] += points ? (-1 * points) : allPoints;
 
-    this.renderScoreBoard()
 
-    this.localStore.myScore.push(this.store.scores[this.playerIndex]);
-    console.log("625 my score:", this.localStore.myScore, "player index:", this.playerIndex)
-    for (let i = 0; i < this.store.playerNames.length; i++) {
-      this.localStore.leaderBoard.push(this.store.scores[this.playerIndex]);
+
+    this.renderScoreBoard();
+
+    this.finalResult();
+
+  }
+
+  async finalResult() {
+    this.localStore.myScore.push({ "name": this.store.playerNames[this.playerIndex], "points": this.store.scores[this.playerIndex] });
+    for (let i = 0; i < this.store.scores.length; i++) {
+      this.localStore.leaderBoard.push({ "name": this.store.playerNames[i], "points": this.store.scores[i] });
     }
+
+    this.renderGameOver();
+
   }
 
   async renderGameOver() {
 
 
     let $result = $('<div class="result"><h2>Final Score</h2></div>').appendTo("body");
-    for (let i = 0; i < this.store.playerNames.length; i++) {
-      $result.append(`<h3><span class="indexPlayer">${i + 1}. </span class="playerResult"> ${this.store.playerNames[i]} <span class="scorePlayerResult">${this.store.scores[i]}</span></h3>
+    let temp = [];
+    for (let i = 0; i < this.store.scores.length; i++) {
+      temp.push({ "name": this.store.playerNames[i], "points": this.store.scores[i] });
+    }
+    let temp2 = (temp.sort((a, b) => { return b.points - a.points }));
+    for (let i of temp2) {
+      $result.append(`<h3><span class="indexPlayer"></span class="playerResult"> ${i.name} <span class="scorePlayerResult">${i.points}</span></h3>
 `)
     }
 
@@ -649,20 +654,18 @@ export default class Game {
     $(".game-over").fadeIn(1300);
 
 
-    let topTen = await (this.localStore.myScore.sort((a, b) => { return b - a }));
-    let $leaderBoard = $('<div class="leaderBoard"><h2>Your Top 10 </h2></div>').appendTo("body");
+    let topTen = (this.localStore.myScore.sort((a, b) => { return b.points - a.points }));
+    let $leaderBoard = $('<div class="leaderBoard"><h2>Local Top 10 </h2></div>').appendTo("body");
     for (let i = 0; i < 10; i++) {
-      console.log(topTen[i])
       if (topTen[i] || topTen[i] === 0)
-        $leaderBoard.append(`<h3 class="topTen">${topTen[i]}</h3 >`)
+        $leaderBoard.append(`<h3 class="topTen">${topTen[i].name}  <span class="scorePlayerResult"> ${topTen[i].points}</span></h3 >`)
     }
 
-    let topTenWorld = await (this.localStore.leaderBoard.sort((a, b) => { return b - a }));
+    let topTenWorld = (this.localStore.leaderBoard.sort((a, b) => { return b.points - a.points }));
     let $leaderBoard2 = $('<div class="leaderBoard2"><h2>Top 10 World</h2></div>').appendTo("body");
     for (let i = 0; i < 10; i++) {
-      console.log(topTenWorld[i])
       if (topTenWorld[i] || topTenWorld[i] === 0)
-        $leaderBoard2.append(`<h3 class="topTen">${topTenWorld[i]}</h3 >`)
+        $leaderBoard2.append(`<h3 class="topTen">${topTenWorld[i].name}   <span class="scorePlayerResult">${topTenWorld[i].points}</span></h3 >`)
     }
 
   }
@@ -824,7 +827,7 @@ export default class Game {
       }
       if (this.store.gameOver === true && this.gameOverCounter === 0) {
         this.gameOverPoints();
-        this.renderGameOver();
+        // this.renderGameOver();
       }
     }
   }

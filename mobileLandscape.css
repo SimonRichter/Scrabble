@@ -209,6 +209,15 @@ body {
   font-size: 0;
   z-index: 0;
 }
+.wordsOnScreen{
+  font-size: 0px;
+}
+.wordsTitle{
+  font-size: 0px;
+}
+ .box >ul>li{
+   font-size:0px;
+}
 .scoreboard {
   font-size: 0px;
  
