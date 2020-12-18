@@ -17,11 +17,12 @@ export default class Game {
   async startWithStoreParameters() {
     this.localStore = Store.getLocalStore();
     this.localStore.leaderBoard = this.localStore.leaderBoard || [];
-    console.log("20 this.localStore.leaderBoard", this.localStore.leaderBoard)
+    this.localStore.myScore = this.localStore.myScore || [];
     this.store.leaderBoard = await this.store.leaderBoard || [];
-    console.log("22 this.store.leaderBoard", this.store.leaderBoard)
-    this.store.leaderBoard = this.localStore.leaderBoard;
-    console.log("24 this.store.leaderBoard", this.store.leaderBoard)
+    for (let x of this.localStore.leaderBoard) {
+      await this.store.leaderBoard.push(x)
+    }
+
     this.board = new Board();
     this.store.board = this.store.board || {};
     this.board.matrix = await this.store.board.matrix;
@@ -41,11 +42,12 @@ export default class Game {
     this.store.waitForStoreDataToBeSaved = true;
     this.localStore = Store.getLocalStore();
     this.localStore.leaderBoard = this.localStore.leaderBoard || [];
-    console.log("44 this.localStore.leaderBoard", this.localStore.leaderBoard)
+    this.localStore.myScore = this.localStore.myScore || [];
     this.store.leaderBoard = await this.store.leaderBoard || [];
-    console.log("46 this.store.leaderBoard", this.store.leaderBoard)
-    this.store.leaderBoard = this.localStore.leaderBoard;
-    console.log("48 this.store.leaderBoard", this.store.leaderBoard)
+    for (let x of this.localStore.leaderBoard) {
+      await this.store.leaderBoard.push(x)
+    }
+
     this.board = new Board();
     this.board.createBoard();
     await this.tilesFromFile();
@@ -619,17 +621,17 @@ export default class Game {
     }
 
     this.store.scores[this.playerIndex] += points ? (-1 * points) : allPoints;
-    await this.localStore.leaderBoard.push(this.store.scores[this.playerIndex]);
 
     this.renderScoreBoard()
+
+    this.localStore.myScore.push(this.store.scores[this.playerIndex]);
+    console.log("625 my score:", this.localStore.myScore, "player index:", this.playerIndex)
+    for (let i = 0; i < this.store.playerNames.length; i++) {
+      this.localStore.leaderBoard.push(this.store.scores[this.playerIndex]);
+    }
   }
 
   async renderGameOver() {
-
-    for (let x of this.localStore.leaderBoard) {
-      await this.store.leaderBoard.push(x);
-    }
-    this.localStore.leaderBoard = await this.store.leaderBoard
 
 
     let $result = $('<div class="result"><h2>Final Score</h2></div>').appendTo("body");
@@ -646,13 +648,8 @@ export default class Game {
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
 
-    console.log("local leaderBoard.length", await this.localStore.leaderBoard.length, "player", this.playerIndex, this.store.playerNames[this.playerIndex]);
-    console.log("local leaderboard conetnt", await this.localStore.leaderBoard)
 
-    console.log("store leaderBoard.length", await this.store.leaderBoard.length, "player", this.playerIndex, this.store.playerNames[this.playerIndex]);
-    console.log("store leaderboard conetnt", await this.store.leaderBoard)
-
-    let topTen = await (this.localStore.leaderBoard.sort((a, b) => { return b - a }));
+    let topTen = await (this.localStore.myScore.sort((a, b) => { return b - a }));
     let $leaderBoard = $('<div class="leaderBoard"><h2>Your Top 10 </h2></div>').appendTo("body");
     for (let i = 0; i < 10; i++) {
       console.log(topTen[i])
@@ -660,7 +657,7 @@ export default class Game {
         $leaderBoard.append(`<h3 class="topTen">${topTen[i]}</h3 >`)
     }
 
-    let topTenWorld = await (this.store.leaderBoard.sort((a, b) => { return b - a }));
+    let topTenWorld = await (this.localStore.leaderBoard.sort((a, b) => { return b - a }));
     let $leaderBoard2 = $('<div class="leaderBoard2"><h2>Top 10 World</h2></div>').appendTo("body");
     for (let i = 0; i < 10; i++) {
       console.log(topTenWorld[i])
