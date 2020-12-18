@@ -20,14 +20,12 @@ body {
   margin-left: 25%;
   width: 1200px;
   height: 800px; 
-  /* width: 90wv; */
   background-color: rgba(255, 0, 0, 0);
 }
 
 .left {
   float: left;
   width: 900px;
-  /*width: 75%; */
   background-color: rgba(0, 0, 0, 0);
 }
 
@@ -91,9 +89,6 @@ body {
   text-shadow: 2px 2px 2px #380000;
   color: #d3cfcf;
   background-color: rgba(138, 86, 86, 0.445);
-   /* 
-  background: rgba(143, 90, 83, 0.404);
-  background: linear-gradient(180deg, rgba(75,24,17,1) 0%, rgba(186,63,26,1) 0%, rgba(173,0,0,1) 100%);  */
 }
 
 .btn:hover {
@@ -173,8 +168,6 @@ body {
   height: 100px;
   top: -1px;
   background-color: rgba(255, 255, 255, 0.363);
-  /* font-family: 'Shadows Into Light Two', cursive;
-  font-weight: 600; */
   letter-spacing: 0.04em;
   font-size: 18px;
   text-align: center;
@@ -216,9 +209,6 @@ body {
   position: relative;
   top: -2px;
   background-color: rgba(255, 255, 255, 0.363);
-  /*background-color: rgb(245, 211, 160); 
-  font-family: 'Shadows Into Light Two', cursive;
-  */
   font-weight: 400;
   letter-spacing: 0.04em;
   font-size: 18px;

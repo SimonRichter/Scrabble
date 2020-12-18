@@ -55,7 +55,7 @@ export default class Network {
 
   listenForNetworkChanges() {
     if (this.playerNames.length > 3) {
-      alert('Four players are already playing!');  // TODO: Make a nicer looking alert maybe
+      alert('Four players are already playing!');
       return;
     }
     if (this.playerNames.length > 1 && this.willCreateGame === false) {
@@ -74,7 +74,7 @@ export default class Network {
       this.game.board.render();
       this.renderTilesLeft();
       if (this.game.playerTurn === this.playerIndex) {
-        this.game.renderStand(); // We might get too many active drag events..? 
+        this.game.renderStand(); 
       }
       if (this.store.gameOver = true && !(this.playerIndex === this.store.playerTurn)) {
       this.game.renderGameOver();
@@ -87,9 +87,6 @@ export default class Network {
       this.networkKey,
       () => this.listenForNetworkChanges()
     );
-
-    // Now call render to start the main game
-    // if you are player 2
 
   }
 }

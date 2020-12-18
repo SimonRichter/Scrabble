@@ -48,13 +48,6 @@ export default class Game {
     // create players
     this.player = new Player(this, this.store, this.playerName);
     // Push all the info to the store
-
-    // s.playerNames = await s.playerNames || [];
-    // // Add my name
-    // await s.playerNames.push(this.playerName);
-    // // Which player am I? (0 or 1)
-    // this.playerIndex = s.playerNames.length - 1;
-    // this.playerTurn = this.playerIndex;
     this.store.scores = await this.store.scores || [];
     await this.store.scores.push(this.player.score);
     this.store.board = this.store.board || {};
@@ -170,24 +163,17 @@ export default class Game {
     let that = this;
     $("body").on("click", "#submitButton", (e) => {
       that.board.falseCounter = 1;    // falseCounter resets to 1 (false) at the begging of the round
-
       if (that.board.putTilesThisRound.length) { //if there are tiles on the board
-
         //we put both arrays together into one variable
         let allWords = that.board.findWordsAcrossXaxis().concat(that.board.findWordsAcrossYaxis());
-
         that.board.checkIfWord(that, allWords).then(x => {     //it will wait for Promised to be fullfilled before running the next code.
-
           //check  all functions must be True to be able to go next player after pressing "spela"
           if (that.board.checkMiddleSquare(that) && that.board.checkXYAxisHM(that) && that.board.nextToPutTilesHM(that) && that.board.falseCounter === 0) {
             //that.board.uniqueWordsPlayed(that.board.wordsPlayed); // Updates the list of unique words played in the game.
             that.store.skipCounter = 0; //Skip RESETS when a correct word is written.
             $('.menu').addClass('gray');
-
             // we add the points counted and add them to the Players Score.
             that.store.scores[that.playerTurn] += that.board.countPointsXAxis() + that.board.countPointsYAxis() + that.board.sevenTiles();
-
-
             // Fill the player stand with tiles again after they submit a correct word
             for (let i = 0; i < that.board.putTilesThisRound.length; i++) {
               if (that.bag.tiles.length > 0) {
@@ -207,17 +193,13 @@ export default class Game {
             }
             that.board.goodTimeTorenderwords = true;
             that.renderScoreBoard();
-
             that.board.render();
             // We change the player turn to the next player
             that.playerTurn === (that.store.playerNames.length - 1) ? (that.playerTurn = 0) : (that.playerTurn++);
-
             that.renderStand();
             that.store.playerTurn = that.playerTurn;
             that.renderDisableEventListeners();
-            //that.disableButtons();
             // We then re-render the stand and board
-            //that.board.render();
             that.store.board.matrix = that.board.matrix;
             that.store.board.putTiles = that.board.putTiles;
             that.store.board.putTilesThisRound = that.board.putTilesThisRound;
@@ -238,9 +220,7 @@ export default class Game {
 
     $("body").on("click", "#skipButton", (e) => {
       if (that.board.putTilesThisRound.length) {
-
         for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
-
           let squareIndex = that.board.putTilesThisRound[i].boardIndex;
           let y = Math.floor(squareIndex / 15);
           let x = squareIndex % 15;
@@ -265,8 +245,6 @@ export default class Game {
 
     });
 
-
-
     // Button to shuffle the tiles in the rack. (test)
     $("body").on("click", "#shuffle", (e) => {
       that.player.stand.sort(() => Math.random() - 0.5);
@@ -288,9 +266,7 @@ export default class Game {
       if (that.bag.tiles.length >= $(".redBorder").length) {
         // If tiles have been put on the board they go back to the players stand
         if (that.board.putTilesThisRound.length > 0) {
-
           for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
-
             let squareIndex = that.board.putTilesThisRound[i].boardIndex;
             let y = Math.floor(squareIndex / 15);
             let x = squareIndex % 15;
@@ -298,7 +274,6 @@ export default class Game {
             that.changeBackEmptyTile(that.board.putTilesThisRound[i]);
             that.player.stand.push(that.board.putTilesThisRound[i]);
             that.board.putTilesThisRound.splice(i, 1);
-
           }
         }
 
@@ -333,9 +308,7 @@ export default class Game {
 
     $("body").on("click", "#clearButton", (e) => {
       if (that.board.putTilesThisRound.length) {
-
         for (let i = that.board.putTilesThisRound.length - 1; i >= 0; i--) {
-
           let squareIndex = that.board.putTilesThisRound[i].boardIndex;
           let y = Math.floor(squareIndex / 15);
           let x = squareIndex % 15;
@@ -343,7 +316,6 @@ export default class Game {
           that.changeBackEmptyTile(that.board.putTilesThisRound[i]);
           that.player.stand.push(that.board.putTilesThisRound[i]);
           that.board.putTilesThisRound.splice(i, 1);
-
         }
       }
       that.board.render();
@@ -425,7 +397,6 @@ export default class Game {
           let tile = pt[indexOfTile]; // The tile that is being dragged
           let newIndex = Math.floor(8 * (pageX - left) / $stand.width()); // New index in stand
 
-
           // Move tile to the right location in the stand
           pt.splice(indexOfTile, 1, ' ');
           pt.splice(newIndex + (indexOfTile < newIndex ? 1 : 0), 0, tile); // Make it so you can move tiles to the left as well as right
@@ -457,8 +428,6 @@ export default class Game {
         this.board.matrix[y][x].tile = this.player.stand.splice(tileIndex, 1)[0];
         this.board.matrix[y][x].tile.boardIndex = squareIndex;
         this.board.putTilesThisRound.push(this.board.matrix[y][x].tile);
-        //this.board.render();
-        //this.renderStand();
         let that = this;
         if (this.board.matrix[y][x].tile.char === ' ') {
           $('.letterBox').remove();
@@ -612,13 +581,8 @@ export default class Game {
     }
 
     this.store.scores[this.playerIndex] += points ? (-1 * points) : allPoints;
-
-
-
     this.renderScoreBoard();
-
     this.finalResult();
-
   }
 
   async finalResult() {
@@ -626,14 +590,10 @@ export default class Game {
     for (let i = 0; i < this.store.scores.length; i++) {
       this.localStore.leaderBoard.push({ "name": this.store.playerNames[i], "points": this.store.scores[i] });
     }
-
     this.renderGameOver();
-
   }
 
   async renderGameOver() {
-
-
     let $result = $('<div class="result"><h2>Final Score</h2></div>').appendTo("body");
     let temp = [];
     for (let i = 0; i < this.store.scores.length; i++) {
@@ -645,14 +605,12 @@ export default class Game {
 `)
     }
 
-
     // Creates the Game Over div that covers whole page
     let $gameover = $('<div class="game-over"/>').appendTo("body");
 
     // Creates the smaller box with Game Over! text
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
-
 
     let topTen = (this.localStore.myScore.sort((a, b) => { return b.points - a.points }));
     let $leaderBoard = $('<div class="leaderBoard"><h2>Local Top 10 </h2></div>').appendTo("body");
@@ -667,7 +625,6 @@ export default class Game {
       if (topTenWorld[i] || topTenWorld[i] === 0)
         $leaderBoard2.append(`<h3 class="topTen">${topTenWorld[i].name}   <span class="scorePlayerResult">${topTenWorld[i].points}</span></h3 >`)
     }
-
   }
 
   renderScoreBoard() {
@@ -699,7 +656,6 @@ export default class Game {
     if (m === 7) { $msg.append(`<div>&#128683; Brickor du lägger måste hänga ihop &#128683;</div>`); }
     $(".message").fadeIn(0);
 
-
     //Wait a bit then fade out the message
     setTimeout(function () {
       $(".message").fadeOut(1500);
@@ -709,15 +665,12 @@ export default class Game {
     setTimeout(function () {
       $("div").remove(".message");
     }, 3700);
-
-
   }
 
   renderHelp() {
     $('.help').remove();
     $('body').append(`<div class="help"><a href=" https://www.betapet.se/rules/" target="_blank">? <span class="spelregler">Till spelreglerna</span>
 </div</div>`);
-
   }
 
   addEventListeners() {
@@ -733,7 +686,6 @@ export default class Game {
 
     $("body").on('keyup', '.entername', async function (e) {
       if (e.keyCode === 13) {
-        console.log("code running")
         if (!getName()) { return; }
         $("body").off();
         that.playerName = $('.entername').val();
@@ -746,13 +698,11 @@ export default class Game {
         s.playerNames = s.playerNames || [];
         // Add my name
         s.playerNames.push(that.playerName);
-        console.log("pushed name, names:", s.playerNames)
         // Which player am I? (0 or 1)
         that.playerIndex = 0;
         s.playerTurn = 0;
         that.playerTurn = 0;
         that.start();
-        console.log("amountOfPlayers ", s.amountOfPlayers)
       }
     })
 
@@ -774,7 +724,6 @@ export default class Game {
           s.playerNames = s.playerNames || [];
           // Add my name
           s.playerNames.push(that.playerName);
-          console.log("pushed name, names:", s.playerNames)
           // Which player am I? (0 or 1)
           that.playerIndex = s.playerNames.length - 1;
           that.startWithStoreParameters();
@@ -785,10 +734,8 @@ export default class Game {
   }
 
   listenForNetworkChanges() {
-    console.log("listenForNetworkChanges() running");
     if (this.store.playerNames.length === this.store.amountOfPlayers && this.waitForInfoToBeLoaded === false
       && this.store.waitForStoreDataToBeSaved === false) {
-      console.log("Four players have joined")
       // this method is called each time someone else
       // changes this.store
       $('.startpage').remove();
@@ -799,7 +746,7 @@ export default class Game {
       this.board.wordsPlayed = this.store.board.wordsPlayed;
       this.board.firstRound = this.store.firstRound;
       this.bag.tiles = this.store.bag.tiles;
-      this.scores = this.store.scores; // -- save the score everytime "Spela" is pressed. (TODO)
+      this.scores = this.store.scores;
       this.playerTurn = this.store.playerTurn;
       $('body').css({
         'background-image': 'none',
@@ -818,8 +765,6 @@ export default class Game {
         $('.disabler').remove();
         $('body').off();
         this.addClickEvents();
-        console.log("PutTilesThisROund: ", this.board.putTilesThisRound);
-        console.log("PutTiles: ", this.board.putTiles);
       }
       if (this.playerTurn != this.playerIndex) {
         this.renderDisableEventListeners();
@@ -827,7 +772,6 @@ export default class Game {
       }
       if (this.store.gameOver === true && this.gameOverCounter === 0) {
         this.gameOverPoints();
-        // this.renderGameOver();
       }
     }
   }
@@ -840,13 +784,12 @@ export default class Game {
   }
 
   getTiles(howMany = 7) {
-    // Return a number of tiles (and remove from this.bag.tiles)
+    // Return a number of tiles (and remove from this.store.bag.tiles)
     return this.store.bag.tiles.splice(0, howMany);
   }
 
   renderPlayer() {
-    return `
-          
+    return `    
           <div class="stand">
       ${this.player.stand
         .map(
@@ -868,7 +811,4 @@ export default class Game {
   renderDisableEventListeners() {
     $('<div class="disabler"/>').appendTo("body");
   }
-
 }
-
-

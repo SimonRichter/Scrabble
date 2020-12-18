@@ -100,7 +100,6 @@ export default class Board {
 
   //function for test of real time points in DOM
   testPointInRealTime() {
-
     let x = 0;
     if (this.putTilesThisRound.length) {
       let that = this;
@@ -138,21 +137,17 @@ export default class Board {
       let meaning2 = html.find('.def').text();
       if (meaning) {
         if (meaning.length < 200) {
-          //console.log("LEXEM CLASS meaning", meaning)
           $lis.append(`<li data-tooltip="` + meaning + `" data-tooltip-position="right"> ${w}</li>`);
         }
         else {
-          //console.log("LEXEM CLASS meaning", meaning.substring(0, 100))
           $lis.append(`<li data-tooltip="` + meaning.substring(0, 100) + `" data-tooltip-position="right"> ${w}</li>`); // words too long. find a way to fiter
         }
       }
       else if (meaning2) {
         if (meaning2.length < 200) {
-          // console.log("DEF CLASS  meaning", meaning2)
           $lis.append(`<li data-tooltip="` + meaning2 + `" data-tooltip-position="right"> ${w}</li>`);
         }
         else {
-          //console.log("DEF CLASS  meaning", meaning.substring(0, 100))
           $lis.append(`<li data-tooltip="` + meaning2.substring(0, 100) + `" data-tooltip-position="right"> ${w}</li>`); // words too long. find a way to fiter
         }
       }
@@ -216,9 +211,7 @@ export default class Board {
     return true;
   }
 
-
-
-  // this function is checks if tiles are touching tiles from previous rounds
+  // this function checks if tiles are touching tiles from previous rounds
   nextToPutTilesHM(game) {
     if (!this.putTiles.length) {
       return true;
@@ -241,7 +234,6 @@ export default class Board {
     game.renderMessage(6);
     return false;
   }
-
 
   checkMiddleSquare(game) {
     // If the first round is being played
@@ -394,7 +386,7 @@ export default class Board {
     return uniqueStrings;
   }
 
-  // For later (maybe) list of uniue words played in the game
+  // list of uniue words played in the game
 
   uniqueWordsPlayed(wPlayed) {
     let uniqueStrings = [];
@@ -406,12 +398,8 @@ export default class Board {
 
   }
 
-
-
-
   // array of potencial words from methods  findWordsAcrossYaxis() and
   // findWordsAcrossXaxis() 
-
   async checkIfWord(game, array) {
 
     let word = ""; // we will put each potencial word of the array here.
@@ -430,8 +418,8 @@ export default class Board {
 
     }
   }
-  //Function to count points in the Y axis
 
+  //Function to count points in the Y axis
   countPointsYAxis() {
     if (this.putTilesThisRound.length) {  // if there is a tile on the board.
       let points = 0;                   //variable for points this round.
@@ -580,16 +568,7 @@ export default class Board {
   }
 
   sevenTiles() {
-
     let points = 0;
-
     return this.putTilesThisRound.length === 7 ? points = 50 : points = 0;
-
   }
-
-
-
 }
-
-
-

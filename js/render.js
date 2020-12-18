@@ -2,7 +2,7 @@ export default class Render {
 
   renderUI() {
     //This creates all divs and buttons needed for the ui
-
+    // Doesn't work dynamically though
     //container div
     let container_div = document.createElement("div");
     container_div.setAttribute("class", "container");

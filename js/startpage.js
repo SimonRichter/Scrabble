@@ -1,5 +1,6 @@
 export default class StartPage {
 
+  // Commented out code has been saved as per request of the programmer
   constructor() {
 
     this.render();

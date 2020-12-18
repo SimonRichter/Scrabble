@@ -1,1 +1,1 @@
-# Scrabble
+Who reads these anyways... Well it's Scrabble. Have fun!
