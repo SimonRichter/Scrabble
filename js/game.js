@@ -714,7 +714,7 @@ export default class Game {
   }
 
   renderHelp() {
-
+    $('.help').remove();
     $('body').append(`<div class="help"><a href=" https://www.betapet.se/rules/" target="_blank">? <span class="spelregler">Till spelreglerna</span>
 </div</div>`);
 
