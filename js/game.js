@@ -17,6 +17,12 @@ export default class Game {
   async startWithStoreParameters() {
     this.localStore = Store.getLocalStore();
     this.localStore.leaderBoard = this.localStore.leaderBoard || [];
+    this.localStore.myScore = this.localStore.myScore || [];
+    this.store.leaderBoard = await this.store.leaderBoard || [];
+    for (let x of this.localStore.leaderBoard) {
+      await this.store.leaderBoard.push(x)
+    }
+
     this.board = new Board();
     this.store.board = this.store.board || {};
     this.board.matrix = await this.store.board.matrix;
@@ -36,6 +42,12 @@ export default class Game {
     this.store.waitForStoreDataToBeSaved = true;
     this.localStore = Store.getLocalStore();
     this.localStore.leaderBoard = this.localStore.leaderBoard || [];
+    this.localStore.myScore = this.localStore.myScore || [];
+    this.store.leaderBoard = await this.store.leaderBoard || [];
+    for (let x of this.localStore.leaderBoard) {
+      await this.store.leaderBoard.push(x)
+    }
+
     this.board = new Board();
     this.board.createBoard();
     await this.tilesFromFile();
@@ -610,16 +622,23 @@ export default class Game {
 
     this.store.scores[this.playerIndex] += points ? (-1 * points) : allPoints;
 
-    for (let i = 0; i < this.store.scores.length; i++) {
-      await this.localStore.leaderBoard.push(this.store.scores[i]);
+    this.renderScoreBoard()
+
+    this.localStore.myScore.push(this.store.scores[this.playerIndex]);
+    console.log("625 my score:", this.localStore.myScore, "player index:", this.playerIndex)
+    for (let i = 0; i < this.store.playerNames.length; i++) {
+      this.localStore.leaderBoard.push(this.store.scores[this.playerIndex]);
     }
-
-
-    this.renderScoreBoard();
   }
 
+  async renderGameOver() {
 
-  renderGameOver() {
+
+    let $result = $('<div class="result"><h2>Final Score</h2></div>').appendTo("body");
+    for (let i = 0; i < this.store.playerNames.length; i++) {
+      $result.append(`<h3><span class="indexPlayer">${i + 1}. </span class="playerResult"> ${this.store.playerNames[i]} <span class="scorePlayerResult">${this.store.scores[i]}</span></h3>
+`)
+    }
 
 
     // Creates the Game Over div that covers whole page
@@ -629,15 +648,21 @@ export default class Game {
     $gameover.append(`<div>Game Over!</div>`);
     $(".game-over").fadeIn(1300);
 
-    console.log("leaderBoard.length", this.localStore.leaderBoard.length)
-    console.log("leaderboard conetnt", this.localStore.leaderBoard)
 
-    let topTen = (this.localStore.leaderBoard.sort((a, b) => { return b - a }));
-
-    let $leaderBoard = $('<div class="leaderBoard"><h2>Top 10 Scores</h2></div>').appendTo("body");
+    let topTen = await (this.localStore.myScore.sort((a, b) => { return b - a }));
+    let $leaderBoard = $('<div class="leaderBoard"><h2>Your Top 10 </h2></div>').appendTo("body");
     for (let i = 0; i < 10; i++) {
       console.log(topTen[i])
-      $leaderBoard.append(`<h3 class="topTen">${topTen[i] ? "???" : topTen[i]}</h3 >`)
+      if (topTen[i] || topTen[i] === 0)
+        $leaderBoard.append(`<h3 class="topTen">${topTen[i]}</h3 >`)
+    }
+
+    let topTenWorld = await (this.localStore.leaderBoard.sort((a, b) => { return b - a }));
+    let $leaderBoard2 = $('<div class="leaderBoard2"><h2>Top 10 World</h2></div>').appendTo("body");
+    for (let i = 0; i < 10; i++) {
+      console.log(topTenWorld[i])
+      if (topTenWorld[i] || topTenWorld[i] === 0)
+        $leaderBoard2.append(`<h3 class="topTen">${topTenWorld[i]}</h3 >`)
     }
 
   }
@@ -686,7 +711,7 @@ export default class Game {
   }
 
   renderHelp() {
-
+    $('.help').remove();
     $('body').append(`<div class="help"><a href=" https://www.betapet.se/rules/" target="_blank">? <span class="spelregler">Till spelreglerna</span>
 </div</div>`);
 
