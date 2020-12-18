@@ -314,7 +314,7 @@ body {
   width: 20%;
 
   color: rgb(255, 166, 0);
-  bottom: 15%;
+  bottom: 10%;
   left:25vw;
    border-radius: 20px;
     border: solid black;
@@ -335,7 +335,7 @@ body {
   z-index: 9003;
   width: 20%;
   color: rgb(255, 166, 0);
-  bottom: 15%;
+  bottom: 10%;
   left:50vw;
    border-radius: 20px;
     border: solid black;
