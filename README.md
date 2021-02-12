@@ -6,7 +6,10 @@ School project done in a team enviroment using **Scrum** methodology.
 The game is in Swedish and is playable for 2 to 4 players via local Network (1 player will be the server)
 <hr>
 
-![Scrabble logo home](https://user-images.githubusercontent.com/67017215/107744111-64a05480-6d12-11eb-8bef-86d87275d9e4.png)
+
+<img src="https://user-images.githubusercontent.com/67017215/107744111-64a05480-6d12-11eb-8bef-86d87275d9e4.png">
+
+<hr>
 
 
 
